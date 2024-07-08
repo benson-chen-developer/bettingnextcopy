@@ -9,6 +9,7 @@ import { betterLoadGames, gameLinks } from './data/data';
 import { getLoadedGamesCookie, LoadedObj, setLoadedGamesCookie } from './functions/cookies';
 import { Home } from './components/Home/Home';
 import { Missing } from './components/Missing/Missing';
+import { Trending } from './components/Home/Trending';
 
 function App() {
   const [allGames, setAllGames] = useState<Game[]>([]);
@@ -146,7 +147,7 @@ function App() {
         {/* <button style={{width:'100px', height:'100px', background:'#fff'}} onClick={()=> getLoadedGamesCookie()}>get</button> */}
 
         <Routes>
-          
+
             <Route path="/player/:paramLeague/:paramName" element={
               <Player 
                 allGamesLoaded={allGamesLoaded} 
@@ -158,8 +159,7 @@ function App() {
             } />
 
             <Route path="/" element={
-              <Home 
-              />
+              <Trending />
             } />
 
             <Route path="*" element={<Missing />} />

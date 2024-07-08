@@ -358,6 +358,35 @@ app.get('/mlbSchedule', async (req, res) => {
     }
 });
 
+app.get('/wnbaScedule', async (req, res) => {
+    try {
+        const response = await fetch('https://cdn.wnba.com/static/json/staticData/scheduleLeagueV2_1.json');
+        if (!response.ok) {
+            throw new Error(`Failed to fetch schedule: ${response.statusText}`);
+        }
+
+        const data = await response.json();
+
+        res.json(data);
+    } catch (error) {
+        console.error('Error fetching WNBA schedule:', error);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
+})
+
+app.get("/getPlayersInGame/:urlId", async (req, res) => {
+    try {
+        const apiUrl = 'https://content-api-prod.nba.com/public/1/leagues/wnba/game/' + req.params.urlId;
+        const axiosResponse = await axios.get(apiUrl);
+        const parsedRes = axiosResponse.data;
+
+        res.json(parsedRes);
+    } catch (err) {
+        // console.log("Error fetching data:", err);
+        res.status(500).json({ error: 'Failed to fetch data' });
+    }
+});
+
 
 const getTeamNames = (actions) => {
     let teamNames = [];

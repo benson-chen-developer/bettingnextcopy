@@ -24,11 +24,11 @@ export const Home = () => {
             <h1 style={{color:'#fff', fontWeight:'bold', fontSize: '2em', marginTop: '75px'}}>
                 Trending 🔥
             </h1>
-            <div style={{display:'flex', justifyContent:'space-evenly', width: '50%'}}>
+            {/* <div style={{display:'flex', justifyContent:'space-evenly', width: '50%'}}>
                 {trendings.map((trending, index) => 
-                    <TrendingBox trending={trending}/>
+                    <TrendingBox leagueName={trending.name}/>
                 )}
-            </div>
+            </div> */}
         </div>
     )
 }

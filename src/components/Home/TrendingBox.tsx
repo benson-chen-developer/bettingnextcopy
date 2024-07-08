@@ -1,13 +1,35 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 import { black } from '../../data/colors'
-import { Trending } from './Home'
+import { TrendingPlayer } from './Trending';
 
 interface Props {
-    trending: Trending
+    leagueName: string,
+    player: TrendingPlayer,
+    game: any
 }
 
-const boxSize = '150px'; const iconSize = '50px'
-export const TrendingBox: React.FC<Props> = ({trending}) => {
+const boxSize = '175px'; const iconSize = '50px'
+export const TrendingBox: React.FC<Props> = ({leagueName, player, game}) => {
+    const navigate = useNavigate();
+    
+    const searchPlayer = (playerName: string, league: string) => {
+        let parsedName = playerName.trim(); // Remove whitespace
+        parsedName = parsedName.toLowerCase(); // Convert to lowercase
+        let nameParts = parsedName.split(' '); // Split the name
+    
+        if (nameParts.length >= 2) { // Basically turn Cait Clark to C_Clark
+          let firstName = nameParts[0];
+          let lastName = nameParts[1];
+          parsedName = `${firstName.charAt(0)}_${lastName}`;
+        }
+    
+        if (playerName.trim()) {
+          navigate(`/player/${league}/${parsedName.trim()}`);
+        }
+    }
+
+    console.log(player)
     const imgArr: { [key: string]: JSX.Element } = {
         "MLB": (
             <svg xmlns="http://www.w3.org/2000/svg" width={iconSize} height={iconSize} viewBox="0 0 24 24">
@@ -29,19 +51,45 @@ export const TrendingBox: React.FC<Props> = ({trending}) => {
         )
     }
 
+    const convertToEST = (dateString: string) => {
+        const date = new Date(dateString);
+        date.setHours(date.getHours() + 4); //Is behind by 4hrs for some reason
+    
+        const options: Intl.DateTimeFormatOptions = {
+            timeZone: 'America/New_York',
+            hour: 'numeric',
+            minute: 'numeric',
+            hour12: true
+        };
+    
+        return date.toLocaleTimeString('en-US', options);
+    };
+
     return (
         <div style={{
             width: boxSize,
             height: boxSize,
             background: black,
-            border: '4px solid #fff',
+            border: '2px solid #fff',
             borderRadius: 20,
-            display: 'flex', 
+            display: 'flex', cursor:'pointer',
             justifyContent: 'space-evenly',
             alignItems: 'center', flexDirection:'column'
+        }} onClick={() => {
+            searchPlayer(`${player.firstName[0]}. ${player.lastName}`, leagueName);
         }}>
-            {imgArr[trending.name] || null}
-            <h2 style={{ color: '#fff', margin:0 }}>{trending.name}</h2>
+            {/* {imgArr[leagueName] || null} */}
+            {player.wnbaId !== "" ? 
+                <img src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.wnbaId}.png`} 
+                    style={{width:'80px', height:'60px'}}
+                /> :
+                <svg xmlns="http://www.w3.org/2000/svg" width={iconSize} height={iconSize} viewBox="0 0 256 256">
+                    <path fill="#fff" d="M63.6 46.39a103.5 103.5 0 0 1 52-21.65a4 4 0 0 1 4.45 4V120H95.7a103.77 103.77 0 0 0-32.32-67.56a4 4 0 0 1 .22-6.05M46 64.07a103.5 103.5 0 0 0-21.29 51.46a4 4 0 0 0 4 4.47h50.92a87.86 87.86 0 0 0-27.74-56.41a4 4 0 0 0-5.89.48m146.4-17.68a103.5 103.5 0 0 0-52-21.65a4 4 0 0 0-4.45 4V120h24.3a103.77 103.77 0 0 1 32.32-67.56a4 4 0 0 0-.17-6.05m38.86 69.14A103.5 103.5 0 0 0 210 64.07a4 4 0 0 0-5.86-.48A87.86 87.86 0 0 0 176.37 120h50.91a4 4 0 0 0 3.98-4.47M24.74 140.47A103.5 103.5 0 0 0 46 191.93a4 4 0 0 0 5.86.48A87.86 87.86 0 0 0 79.63 136H28.72a4 4 0 0 0-3.98 4.47M210 191.93a103.5 103.5 0 0 0 21.29-51.46a4 4 0 0 0-4-4.47h-50.92a87.86 87.86 0 0 0 27.74 56.41a4 4 0 0 0 5.89-.48M63.6 209.61a103.5 103.5 0 0 0 52 21.65a4 4 0 0 0 4.45-4V136H95.7a103.77 103.77 0 0 1-32.32 67.56a4 4 0 0 0 .22 6.05M160.3 136H136v91.28a4 4 0 0 0 4.45 4a103.5 103.5 0 0 0 52-21.65a4 4 0 0 0 .22-6.05A103.77 103.77 0 0 1 160.3 136" />
+                </svg>
+            }
+            <p style={{ color: '#fff', margin:0 }}>{game.results.home.abbr} v {game.results.visitor.abbr}</p>
+            <p style={{ color: '#fff', margin:0 }}>{convertToEST(game.results.easternTime)}</p>
+            <h4 style={{ color: '#fff', margin:0 }}>{player.firstName} {player.lastName}</h4>
         </div>
     );
 };
