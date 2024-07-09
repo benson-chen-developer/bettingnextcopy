@@ -10,6 +10,7 @@ import { getLoadedGamesCookie, LoadedObj, setLoadedGamesCookie } from './functio
 import { Home } from './components/Home/Home';
 import { Missing } from './components/Missing/Missing';
 import { Trending } from './components/Home/Trending';
+import { Footer } from './components/Footer/Footer';
 
 function App() {
   const [allGames, setAllGames] = useState<Game[]>([]);
@@ -164,6 +165,8 @@ function App() {
 
             <Route path="*" element={<Missing />} />
         </Routes>
+
+        <Footer />
     </Router>
   );
 }

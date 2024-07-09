@@ -6,6 +6,12 @@ interface Props {
     games: any[]
 }
 const ResponsiveTrendingBoxes: React.FC<Props>  = ({ games }) => {
+    if(games.length === 0) return (
+        <div style={{marginLeft: '50px', marginTop:'20px'}}>
+            <h1 style={{color:'#fff'}}>Starters Not Confirmed Yet</h1>
+        </div>
+    )
+
     return (
         <div className="trending-container">
             {games.map((game, index) => (

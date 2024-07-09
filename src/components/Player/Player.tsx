@@ -119,11 +119,22 @@ export const Player: React.FC<Props> = ({allGames, allGamesLoaded, setAllGames, 
         setGames(newGames);
     }
 
+    if(!isLoading && gamesWithPlayer.length === 0) return (
+        <div style={{
+            width:'100%', minHeight:'100vh', justifyContent:'center', alignItems:'center',
+            display:'flex', flexDirection:'column'
+        }}>
+            <h1>{parsedParamName}</h1>
+            <h1 style={{}}>Player Doesn't Exist or Has No Games</h1>
+        </div>
+    )
+
     if(!isLoading) return (
-        <div>
+        <div style={{minHeight:'100vh'}}>
             <Hero games={gamesWithPlayer} setGames={setGamesWithPlayer}/>
 
             <h1 style={{ marginLeft: '75px', marginBottom:'10px'}}>Games</h1>
+
             <table style={{ width: '80%', borderCollapse: "collapse"}}>
                 <thead>
                     <tr style={{ display: 'flex', marginBottom:'20px', alignItems:'center' }}>
@@ -136,11 +147,12 @@ export const Player: React.FC<Props> = ({allGames, allGamesLoaded, setAllGames, 
                                 <br /> to Compare to Stats
                             </p>
                         </th>
+
                         {Object.entries(chartCompareTo).map(([key, value]) => (
                             <td key={key} style={{ width: '50px', height: '35px' }}>
                                 <input
                                     style={{
-                                        width: '100%',
+                                        width: '90%',
                                         height: '100%',
                                         border: '1px solid #000',
                                         borderRadius: 5,
@@ -175,14 +187,31 @@ export const Player: React.FC<Props> = ({allGames, allGamesLoaded, setAllGames, 
             </table>
 
             {dateLoadedTo >= new Date() || dateLoadedTo <= new Date('May 3, 2024') ?
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
-                    Everything is loaded
+                <div style={{ width: '70%', display: 'flex', justifyContent:'center', marginTop:'25px' }}>
+                    <p style={{color: '#000', fontSize:12, fontWeight:'bold'}}>
+                        Everything is Loaded
+                    </p>
                 </div>
                 :
-                <div style={{ width: '100%', display: 'flex', justifyContent: 'center' }} onClick={() => loadMoreTwo()}>
-                    Load More
+                <div style={{ width: '70%', display: 'flex', justifyContent:'center', marginTop:'25px' }}>
+                    <button 
+                        onClick={() => loadMoreTwo()} 
+                        style={{
+                            width: 100, height:40, borderRadius: 50,
+                            background: '#D9D9D9',
+                            border: '1px solid #000',
+                            display:'flex', justifyContent:'center', alignItems:'center',
+                            cursor:'pointer'
+                        }}
+                    >
+                        <p style={{color: '#000', fontSize:12, fontWeight:'bold'}}>
+                            Load More
+                        </p>
+                    </button>
                 </div>
             }
+
+            <div style={{height:'100px'}} />
 
             {/* {!allGamesLoaded.find(gameLoaded => gameLoaded.league === paramLeague)?.loaded ? (
                 <div style={{
@@ -196,11 +225,9 @@ export const Player: React.FC<Props> = ({allGames, allGamesLoaded, setAllGames, 
 
     return (
         <div style={{
-            width:'100%', height:'100%', justifyContent:'center', alignItems:'center',
+            width:'100%', minHeight:'100vh', justifyContent:'center', alignItems:'center',
             display:'flex'
         }}>
-            <h1 style={{marginTop:'250px'}}>Player Doesn't Exist or Has No Games</h1>
-            
             <ClipLoader
                 color={'#000'}
                 loading={true}

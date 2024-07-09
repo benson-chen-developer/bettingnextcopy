@@ -27,7 +27,7 @@ export const Trending = () => {
     useEffect(() => {
         const fetchTodayGames = async () => {
             let newTrendingGames: any[] = [];
-    
+            
             try {
                 let todayGames = await getTodaysPlayers('WNBA');
     
@@ -102,6 +102,10 @@ export const Trending = () => {
                     </React.Fragment>
                 )}
             </div> */}
+            <div style={{width:'100%', marginTop:'10px', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                <div style={{width:'95%', height:'1px', background:'#545454', borderRadius:'10px'}} />
+            </div>
+
             <div className="trending-box">
                 <ResponsiveTrendingBoxes games={trendingGames}/>
             </div>

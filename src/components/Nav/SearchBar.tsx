@@ -90,7 +90,7 @@ interface SportBtnProps {
 const SportBtn: React.FC<SportBtnProps> = ({ sport, setSport }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const allSports = [
-    "WNBA", "MLB"
+    "WNBA"
   ]
 
   const toggleDropdown = () => {
