@@ -19,8 +19,6 @@ export const Trending = () => {
         {name:'MLB', comingSoon:true},
         {name:'Soccer', comingSoon:true}
     ];
-    const [homeStarters, setHomeStarters] = useState([]);
-    const [awayStarters, setAwayStarters] = useState([]);
     const [trendingGames, setTrendingGames] = useState<any[]>([]);
     const [selectedTab, setSelectedTab] = useState<string>(trendings[0].name);
 
@@ -43,9 +41,6 @@ export const Trending = () => {
                         .filter((player: any) => player.rank === "1");
                     const awayStarters = gameDetailsJson.results.depthCharts[1].players
                         .filter((player: any) => player.rank === "1");
-
-                    setHomeStarters(homeStarters);
-                    setAwayStarters(awayStarters);
 
                     newTrendingGames.push(gameDetailsJson);
                 }
@@ -77,34 +72,6 @@ export const Trending = () => {
                 )}
             </div>
 
-            {/* <div style={{display:'flex', marginLeft: marginLeftSpacing, marginTop: '30px'}}>
-                {trendingGames.map((game, index) => 
-                    <React.Fragment key={index}>
-                        {game.results.projectedStarters.teams[0].players
-                            .filter((_:any, starterIndex: number) => starterIndex === 1 || starterIndex === 3)
-                            .map((starter: any, starterIndex: number) => 
-                                <TrendingBox 
-                                    leagueName={"WNBA"} 
-                                    player={starter} 
-                                    key={starterIndex} 
-                                    game={game}
-                                />
-                            )
-                        }
-                        {game.results.projectedStarters.teams[1].players
-                            .filter((_:any, starterIndex: number) => starterIndex === 1 || starterIndex === 3)
-                            .map((starter: any, starterIndex: number) => 
-                                <TrendingBox 
-                                    leagueName={"WNBA"} 
-                                    player={starter} 
-                                    key={starterIndex} 
-                                    game={game}
-                                />
-                            )
-                        }
-                    </React.Fragment>
-                )}
-            </div> */}
             <div style={{width:'100%', marginTop:'10px', display:'flex', alignItems:'center', justifyContent:'center'}}>
                 <div style={{width:'95%', height:'1px', background:'#545454', borderRadius:'10px'}} />
             </div>

@@ -10,6 +10,22 @@ export const NamesDropDown: React.FC<Props> = ({input}) => {
     const players = useContext(PlayersContext);
     const [similarPlayers, setSimilarPlayers] = useState<PlayerType[]>([]);
 
+    const searchPlayer = (name: string) => {
+        let parsedName = name.trim(); // Remove whitespace
+        parsedName = parsedName.toLowerCase(); // Convert to lowercase
+        let nameParts = parsedName.split(' '); // Split the name
+
+        if (nameParts.length >= 2) { // Basically turn Cait Clark to C_Clark
+            let firstName = nameParts[0];
+            let lastName = nameParts[1];
+            parsedName = `${firstName.charAt(0)}_${lastName}`;
+        }
+
+        if (name.trim()) {
+            window.open(`/player/WNBA/${parsedName.trim()}`, '_blank', 'noopener,noreferrer');
+        }
+    }
+
     useEffect(() => {
         let lastName = input.split(' ')[1];
         if(lastName){
@@ -46,8 +62,8 @@ export const NamesDropDown: React.FC<Props> = ({input}) => {
         }}>
             {similarPlayers.map((player, index) => 
                 <div key={index} style={{
-                    width:'100%', height:'50px', display:'flex', alignItems:'center'
-                }}>
+                    width:'100%', height:'50px', display:'flex', alignItems:'center', cursor:'pointer'
+                }} onClick={() => searchPlayer(`${player.firstName} ${player.lastName}`)}>
                     <img 
                         style={{width:'50px', height:'35px', marginLeft:'10px'}}
                         src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}

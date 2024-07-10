@@ -1,15 +1,24 @@
 import React from 'react';
 import { TrendingBox } from './TrendingBox';
 import './TrendingBox.css';
+import { ClipLoader } from 'react-spinners';
 
 interface Props {
     games: any[]
 }
 
 const ResponsiveTrendingBoxes: React.FC<Props> = ({ games }) => {
+
+    /* Will be loading since we are checking the teams which will always have players */
     if (games.length === 0) return (
         <div style={{ marginLeft: '50px', marginTop: '20px' }}>
-            <h1 style={{ color: '#fff' }}>Starters Not Confirmed Yet</h1>
+            <ClipLoader
+                color={'#fff'}
+                loading={true}
+                size={150}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+            />
         </div>
     );
 
