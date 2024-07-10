@@ -1,5 +1,7 @@
 import React, { useState, FormEvent, Dispatch, SetStateAction } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { InputField } from './InputField';
+import { NamesDropDown } from './NamesDropDown';
 
 interface Props {
   widthSpacing?: string,
@@ -15,6 +17,7 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
     setPlayerName(e.target.value);
   };
 
+  /* Navigates to new page while appending the new player name to the end */
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -29,56 +32,56 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
     }
 
     if (playerName.trim()) {
-      navigate(`/player/${sport}/${parsedName.trim()}`);
+      // navigate(`/player/${sport}/${parsedName.trim()}`);
+      window.open(`/player/${sport}/${parsedName.trim()}`, '_blank', 'noopener,noreferrer');
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ 
-      display: 'flex', background:'#fff', 
+    <div style={{
+      display:'flex', flexDirection:'column', 
       width: widthSpacing ? widthSpacing : '30%',
       marginLeft: marginLeftSpacing ? marginLeftSpacing : 30,
-      borderRadius: 10,border: '2px solid #000', alignItems:'center',
-      justifyContent:'space-between'
+      position: 'relative'
     }}>
+      
+      <form onSubmit={handleSubmit} style={{ 
+        display: 'flex', background:'#fff', 
+        width: "100%",
+        borderRadius: 10,border: '2px solid #000', alignItems:'center',
+        justifyContent:'space-between'
+      }}>
+        <div style={{display:'flex', width:'70%'}}>
 
-      <div style={{display:'flex', width:'70%'}}>
-        <button type="submit" style={{
-            border: 'none', background: 'none', cursor: 'pointer',
-            display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="30px"
-            height="30px"
-            viewBox="0 0 24 24"
-            fill="#000"
-            style={{
-              pointerEvents: 'none', // Ensures the icon doesn't interfere with input interactions
-              color: '#888484' // Adjust the color as needed
-            }}
-          >
-            <path d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
-          </svg>
-        </button>
+          {/* The Magnifying Glass icon */}
+          <button type="submit" style={{
+              border: 'none', background: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center'
+          }}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="30px"
+              height="30px"
+              viewBox="0 0 24 24"
+              fill="#000"
+              style={{pointerEvents: 'none', color: '#888484'}}
+            >
+              <path d="m19.6 21l-6.3-6.3q-.75.6-1.725.95T9.5 16q-2.725 0-4.612-1.888T3 9.5t1.888-4.612T9.5 3t4.613 1.888T16 9.5q0 1.1-.35 2.075T14.7 13.3l6.3 6.3zM9.5 14q1.875 0 3.188-1.312T14 9.5t-1.312-3.187T9.5 5T6.313 6.313T5 9.5t1.313 3.188T9.5 14" />
+            </svg>
+          </button>
 
-        <input
-          type="text"
-          value={playerName}
-          onChange={handleInputChange}
-          placeholder="Enter player name"
-          className="custom-input"
-          maxLength={30}
-          style={{
-            width: '90%', height: 40, border: 'none', outline:'none',
-            fontWeight: 'bold', fontSize: 16, color: '#000' // Regular input text color
-          }}
-        />
-      </div>
+          <InputField value={playerName} handleInputChange={handleInputChange}/>
+        </div>
 
-      {/* <div style={{width:'30%'}}/> */}
-      <SportBtn sport={sport} setSport={setSport}/>
-    </form>
+        {/* League Drop Down */}
+        <SportBtn sport={sport} setSport={setSport}/>
+      </form>
+
+      <NamesDropDown 
+        input={playerName}
+      />
+
+    </div>
   );
 };
 
@@ -103,6 +106,8 @@ const SportBtn: React.FC<SportBtnProps> = ({ sport, setSport }) => {
 
   return (
     <div style={{ position: 'relative', width:'20%' }}>
+      
+      {/*  */}
       <button 
         onClick={toggleDropdown} 
         style={{
@@ -117,6 +122,8 @@ const SportBtn: React.FC<SportBtnProps> = ({ sport, setSport }) => {
           {sport}
         </p>
       </button>
+
+      {/* The League Drop Down */}
       {isDropdownOpen && (
         <div style={{
           position: 'absolute',

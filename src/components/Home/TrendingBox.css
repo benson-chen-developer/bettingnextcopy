@@ -3,6 +3,7 @@
     flex-wrap: wrap;
     gap: 16px; /* Adjust the gap between items as needed */
     justify-content: center; /* Center the items horizontally */
+    margin-top: 30px;
 }
 
 .trending-container .trending-box {

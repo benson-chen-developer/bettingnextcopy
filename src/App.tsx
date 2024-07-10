@@ -11,9 +11,11 @@ import { Home } from './components/Home/Home';
 import { Missing } from './components/Missing/Missing';
 import { Trending } from './components/Home/Trending';
 import { Footer } from './components/Footer/Footer';
+import { PlayersContext, PlayerType } from './Context';
 
 function App() {
   const [allGames, setAllGames] = useState<Game[]>([]);
+  const [players, setPlayers] = useState<PlayerType[]>([]);
   const [allGamesLoaded, setAllGamesLoaded] = useState<LoadedObj[]>([
     {league: 'WNBA', loaded: false},
     {league: 'MLB', loaded: false}
@@ -127,47 +129,49 @@ function App() {
   // }, []);
 
   useEffect(() => {
-    // const fetchGames = async () => {
-    //   const games = await betterLoadGames('WNBA', new Date('May 5, 2024'), 'C. Clark');
-      
-    //   setAllGames(games); // Example of setting games to state
-    // };
+    /* Get a list of all the players */
+    const fetchPlayers = async () => {
+      const res = await fetch(`http://localhost:3001/allPlayers`);
+      const playersArr = await res.json();
+      setPlayers(playersArr);
+    };
   
-    // fetchGames();
+    fetchPlayers();
   }, []);
 
-  // if(allGames.length === 0) return <div>Loading</div>
+  {/* <TicketPopUp /> */}
+  {/* <button style={{width:'100px', height:'100px', background:'#fff', color:'#000'}} onClick={() => setLocalStorageValue('steop')}>
+    <p>set</p>
+  </button> */}
+  {/* <button style={{width:'100px', height:'100px', background:'#fff'}} onClick={()=> getLoadedGamesCookie()}>get</button> */}
 
   return (
-    <Router>
-        <NavBar />
-        {/* <TicketPopUp /> */}
-        {/* <button style={{width:'100px', height:'100px', background:'#fff', color:'#000'}} onClick={() => setLocalStorageValue('steop')}>
-          <p>set</p>
-        </button> */}
-        {/* <button style={{width:'100px', height:'100px', background:'#fff'}} onClick={()=> getLoadedGamesCookie()}>get</button> */}
 
-        <Routes>
+    <PlayersContext.Provider value={players}>
+      <Router>
+          <NavBar />
 
-            <Route path="/player/:paramLeague/:paramName" element={
-              <Player 
-                allGamesLoaded={allGamesLoaded} 
-                setAllGames={setAllGames}
-                setAllGamesLoaded={setAllGamesLoaded}
-                allGames={allGames}
-                useLocalStorage={useLocalStorage}
-              />
-            } />
+          <Routes>
+              <Route path="/player/:paramLeague/:paramName" element={
+                <Player 
+                  allGamesLoaded={allGamesLoaded} 
+                  setAllGames={setAllGames}
+                  setAllGamesLoaded={setAllGamesLoaded}
+                  allGames={allGames}
+                  useLocalStorage={useLocalStorage}
+                />
+              } />
 
-            <Route path="/" element={
-              <Trending />
-            } />
+              <Route path="/" element={
+                <Trending />
+              } />
 
-            <Route path="*" element={<Missing />} />
-        </Routes>
+              <Route path="*" element={<Missing />} />
+          </Routes>
 
-        <Footer />
-    </Router>
+          <Footer />
+      </Router>
+    </PlayersContext.Provider>
   );
 }
 

@@ -28,6 +28,11 @@ export const Hero: React.FC<Props> = ({games, setGames}) => {
     
         setGames(newGames);
     }
+    const picId = games[0].actions
+        .find((action: Action) => 
+            action?.name.toLowerCase() === parsedName.toLowerCase())
+            ?.picId
+    // console.log("picOd", picId) 
 
     // useEffect(() => {
     //     // console.log(parsedName)
@@ -39,7 +44,10 @@ export const Hero: React.FC<Props> = ({games, setGames}) => {
         flexDirection:'column', paddingLeft: '75px'
     }}>
         {/* Player name */}
-        <PlayerHero paramName={paramName} picId={games[0].actions.find((action: Action) => action?.name.toLowerCase() === parsedName.toLowerCase())?.picId}/>
+        <PlayerHero 
+            paramName={paramName} 
+            picId={picId}
+        />
 
         <div style={{
             display:'flex', flexDirection:'column', justifyContent:'space-between'

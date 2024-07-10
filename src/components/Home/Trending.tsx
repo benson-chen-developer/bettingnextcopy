@@ -35,16 +35,19 @@ export const Trending = () => {
                     const gameDetails = await fetch(`http://localhost:3001/getPlayersInGame/${game.gameId}`);
                     const gameDetailsJson = await gameDetails.json();
     
-                    if (gameDetailsJson.results.projectedStarters && Object.keys(gameDetailsJson.results.projectedStarters).length > 0) {
-                        // console.log('Game Details:', gameDetailsJson.results);
-                        const homeStarters = gameDetailsJson.results.projectedStarters.teams[0].players;
-                        const awayStarters = gameDetailsJson.results.projectedStarters.teams[1].players;
-    
-                        setHomeStarters(homeStarters);
-                        setAwayStarters(awayStarters);
-    
-                        newTrendingGames.push(gameDetailsJson);
-                    }
+                    /* 
+                        These are all players that play
+                        We wanna filter via rank as 1 ranks are starters I assume
+                    */
+                    const homeStarters = gameDetailsJson.results.depthCharts[0].players
+                        .filter((player: any) => player.rank === "1");
+                    const awayStarters = gameDetailsJson.results.depthCharts[1].players
+                        .filter((player: any) => player.rank === "1");
+
+                    setHomeStarters(homeStarters);
+                    setAwayStarters(awayStarters);
+
+                    newTrendingGames.push(gameDetailsJson);
                 }
     
                 setTrendingGames(newTrendingGames);

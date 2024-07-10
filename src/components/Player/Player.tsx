@@ -1,10 +1,12 @@
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from 'react'
 import { fillStats, Game, Game2, Stats } from '../../functions/players';
 import { Row } from './Row';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { Hero } from './Hero/Hero';
 import { betterLoadGames, gameLinks, loadGames } from '../../data/data';
 import { ClipLoader } from 'react-spinners';
+import { PlayersContext } from '../../Context';
+import { NotFound } from './NotFound';
 
 interface Props{
     allGames: Game[]
@@ -17,6 +19,8 @@ interface Props{
 export const Player: React.FC<Props> = ({allGames, allGamesLoaded, setAllGames, setAllGamesLoaded, useLocalStorage}) => {
     const { paramName, paramLeague } = useParams<{ paramName: string, paramLeague:string }>();
     const parsedParamName = `${paramName?.split("_")[0]}. ${paramName?.split("_")[1]}`
+    const players = useContext(PlayersContext);
+
     const [localStorageValue, setLocalStorageValue] = useLocalStorage('loadedGames', '');
 
     const [games, setGames] = useState<Game[]>([]);
@@ -31,7 +35,7 @@ export const Player: React.FC<Props> = ({allGames, allGamesLoaded, setAllGames, 
     });
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [dateLoadedTo, setDateLoadedTo] = useState<Date>(new Date());
-    //'May 3, 2024'
+    const location = useLocation();
 
     const fastForwardDays = (oldDate: Date, days: number): Date => {
         const newDate = new Date(oldDate);
@@ -51,15 +55,14 @@ export const Player: React.FC<Props> = ({allGames, allGamesLoaded, setAllGames, 
             const games = await betterLoadGames('WNBA', fastForwardDays(dateLoadedTo, -14), dateLoadedTo, parsedParamName);
             let sortedGames = games.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
             setDateLoadedTo(fastForwardDays(dateLoadedTo, -14));
-
-            // console.log(sortedGames)
             setGamesWithPlayer(sortedGames);
             setIsLoading(false);
         };
         
         setIsLoading(true);
+        console.log(players)
         if(paramName) fetchGames();
-    }, [paramName])
+    }, [paramName, location.pathname, location.search])
 
     const loadMoreTwo = async (): Promise<void> => {
         setIsLoading(true);
@@ -79,54 +82,10 @@ export const Player: React.FC<Props> = ({allGames, allGamesLoaded, setAllGames, 
         }));
     };
 
-    const loadMore = async (): Promise<void> => {
-        const gameIdsLen = gameLinks.find(g => g.name === paramLeague)!.gameIds.length;
-        const ret = await loadGames(paramLeague!, gameIdsLen-1, gameIdsLen)
-        setAllGamesLoaded(prevState =>
-            prevState.map(e =>
-                e.league === paramLeague ? { ...e, loaded: true } : e
-            )
-        );
-        let newAllGames = [...allGames, ...ret];
-        // let newLocalCache = JSON.parse(localStorageValue);
-        // newLocalCache.map((element: any) => {
-        //     if(element.league === paramLeague){
-        //         return element.games = newAllGames;   //Caching code
-        //     } else {
-        //         return element;
-        //     }
-        // });
-
-        // console.log(newLocalCache)
-        // setLocalStorageValue(JSON.stringify(newLocalCache));
-        setAllGames(p => newAllGames);
-
-        let newGames: Game[] = [];
-        ret.forEach((game) => {
-            let foundHome = game.homeTeam.players.find(player => player.toLowerCase() === parsedParamName.toLowerCase());
-            let foundAway = game.awayTeam.players.find(player => player.toLowerCase() === parsedParamName.toLowerCase());
-
-            if(foundAway || foundHome){
-                let newGame = game;
-                newGame.stats = fillStats(
-                    parsedParamName, 
-                    'Whole Game', 
-                    foundHome ? game.homeTeam.actions : game.awayTeam.actions
-                );
-                newGames.push(game);
-            }
-        })
-        setGames(newGames);
-    }
-
     if(!isLoading && gamesWithPlayer.length === 0) return (
-        <div style={{
-            width:'100%', minHeight:'100vh', justifyContent:'center', alignItems:'center',
-            display:'flex', flexDirection:'column'
-        }}>
-            <h1>{parsedParamName}</h1>
-            <h1 style={{}}>Player Doesn't Exist or Has No Games</h1>
-        </div>
+        <NotFound 
+            parsedParamName={parsedParamName}
+        />
     )
 
     if(!isLoading) return (

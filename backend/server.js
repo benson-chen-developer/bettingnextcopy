@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+const cheerio = require('cheerio');
 
 const app = express();
 app.use(cors());
@@ -387,6 +388,52 @@ app.get("/getPlayersInGame/:urlId", async (req, res) => {
     }
 });
 
+/*
+    1629483,     'Collier',
+    'Napheesa',  'napheesa-collier',
+    1611661324,  'lynx',
+    'Minnesota', 'Lynx',
+    'MIN',       '24',
+    'F',         '6-1',
+    '173',       'Connecticut',
+    'USA',       2019,
+    1,           6,
+    1,           '2019',
+    '2024',      pts 20,
+    reb 10.2,        ast 3.7,
+    'Season'
+*/
+app.get("/allPlayers", async (req, res) => {
+    try {
+        const axiosResponse = await axios.get('https://www.wnba.com/players?team=all&position=all&show-historic-players=fal');
+        const html = axiosResponse.data;
+        const $ = cheerio.load(html);
+    
+        const scriptContent = $('#__NEXT_DATA__').html();
+        const jsonData = JSON.parse(scriptContent);
+        const allPlayersData = jsonData.props.pageProps.allPlayersData;
+        
+        let playerArr = [];
+        allPlayersData.forEach(data => {
+            playerArr.push({
+                picId: data[0],
+                lastName: data[1],
+                firstName: data[2],
+                city: data[6],
+                team: data[7],
+                abbr: data[8],
+                position: data[9],
+                ppg: data[21],
+                rpg: data[22],
+                apg: data[23]
+            })
+        })        
+        
+        res.json(playerArr);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch data' });
+    }
+})
 
 const getTeamNames = (actions) => {
     let teamNames = [];

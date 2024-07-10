@@ -1,6 +1,12 @@
 import { fillStats, Game2 } from "../functions/players";
 import wnbaData from './wnba.json';
 
+
+/*
+    Basically we check the past 2 weeks for games 
+    (Not sure if this is a good way since what if they are injured? Need to find a way to find
+    all games players played)
+*/
 export const wnbaParsing = async (
     startDate: Date, endDate: Date, paramName: string
 ): Promise<Game2[]> => {
