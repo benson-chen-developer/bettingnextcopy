@@ -28,14 +28,11 @@ export const getTodaysPlayers = async (league: string): Promise<any[]> => {
         const wnbaData = await fetch('http://localhost:3001/wnbaScedule');
         const parsedData = await wnbaData.json();
         const games = parsedData.leagueSchedule.gameDates;
-
+        
         //Find the dates that is closet to today and the games that are not done
         let closetDateGames = findClosestFutureDate(games);
-
-        let closestGames = closetDateGames.games;
-        let date = closetDateGames.gameDates;
     
-        return closestGames;
+        return closetDateGames;
     }
 
     return [];

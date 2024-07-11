@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import Link  from 'next/link'
 import { green, pink } from '../../data/colors'
 import { Promo } from './Promo'
 import { SearchBar } from './SearchBar'
@@ -11,7 +11,6 @@ interface Props {
 export const NavBar: React.FC<Props> = ({
     
 }) => {
-    const navigate = useNavigate();
     const promoCodes = [
         {
             name:'PrizePicks',
@@ -24,9 +23,16 @@ export const NavBar: React.FC<Props> = ({
             name:'UnderDog',
             url: 'https://play.underdogfantasy.com/goodluck255',
             promo: 'GOODLUCK255',
-            picName: "underdog.png",
+            picName: "underdog.jpeg",
             text: '$250 Bonus!'
         },
+        {
+            name: "Sleeper",
+            url: 'https://sleeper.com/promo/RF-BENSON456',
+            promo: 'BENSON456',
+            picName: "sleeper.jpeg",
+            text: '$100 Bonus!'
+        }
     ]
     return (
         <nav style={{
@@ -39,12 +45,11 @@ export const NavBar: React.FC<Props> = ({
             top: 0, // Stick it to the top
             zIndex: 1000 // Ensure it stays above other content
         }}>
-            <h1 
-                style={{fontWeight:'bold', marginLeft: '30px', cursor:'pointer'}}
-                onClick={() => {navigate('/')}}
-            >
-                Sports Stats
-            </h1>
+            <Link href="/">
+                <h1 style={{ fontWeight: 'bold', marginLeft: '30px', cursor: 'pointer' }}>
+                    Sports Stats
+                </h1>
+            </Link>
 
             <SearchBar />
 

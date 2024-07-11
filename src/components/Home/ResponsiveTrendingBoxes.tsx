@@ -1,6 +1,5 @@
 import React from 'react';
 import { TrendingBox } from './TrendingBox';
-import './TrendingBox.css';
 import { ClipLoader } from 'react-spinners';
 
 interface Props {

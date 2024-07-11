@@ -1,7 +1,7 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom';
 import { black } from '../../data/colors'
-import { TrendingPlayer } from './Trending';
+import { TrendingPlayer } from '../../pages';
+import { searchPlayer } from '../Nav/SearchBar';
 
 interface Props {
     leagueName: string,
@@ -11,25 +11,6 @@ interface Props {
 
 const boxSize = '175px'; const iconSize = '50px'
 export const TrendingBox: React.FC<Props> = ({leagueName, player, game}) => {
-    const navigate = useNavigate();
-    
-    const searchPlayer = (playerName: string, league: string) => {
-        let parsedName = playerName.trim(); // Remove whitespace
-        parsedName = parsedName.toLowerCase(); // Convert to lowercase
-        let nameParts = parsedName.split(' '); // Split the name
-    
-        if (nameParts.length >= 2) { // Basically turn Cait Clark to C_Clark
-          let firstName = nameParts[0];
-          let lastName = nameParts[1];
-          parsedName = `${firstName.charAt(0)}_${lastName}`;
-        }
-    
-        if (playerName.trim()) {
-          navigate(`/player/${league}/${parsedName.trim()}`);
-        }
-    }
-
-    // console.log(player)
     const imgArr: { [key: string]: JSX.Element } = {
         "MLB": (
             <svg xmlns="http://www.w3.org/2000/svg" width={iconSize} height={iconSize} viewBox="0 0 24 24">

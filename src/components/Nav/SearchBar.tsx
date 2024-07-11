@@ -1,5 +1,4 @@
 import React, { useState, FormEvent, Dispatch, SetStateAction } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { InputField } from './InputField';
 import { NamesDropDown } from './NamesDropDown';
 
@@ -8,34 +7,36 @@ interface Props {
   marginLeftSpacing?: string
 }
 
+/* Navigates to new page while appending the new player name to the end */
+export const searchPlayer = (input: string, league: string) => {
+  let parsedName = input.trim(); // Remove whitespace
+  parsedName = parsedName.toLowerCase(); // Convert to lowercase
+  let nameParts = parsedName.split(' '); // Split the name
+
+  if (nameParts.length >= 2) { // Basically turn Cait Clark to C_Clark
+    let firstName = nameParts[0];
+    let lastName = nameParts[1];
+    parsedName = `${firstName.charAt(0)}_${lastName}`;
+  }
+
+  if (input.trim()) {
+    window.open(`/player/${league}/${parsedName.trim()}`, '_blank', 'noopener,noreferrer');
+  }
+};
+
+
 export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) => {
   const [playerName, setPlayerName] = useState<string>('');
   const [sport, setSport] = useState<string>('WNBA');
-  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlayerName(e.target.value);
   };
-
-  /* Navigates to new page while appending the new player name to the end */
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
-    let parsedName = playerName.trim(); // Remove whitespace
-    parsedName = parsedName.toLowerCase(); // Convert to lowercase
-    let nameParts = parsedName.split(' '); // Split the name
-
-    if (nameParts.length >= 2) { // Basically turn Cait Clark to C_Clark
-      let firstName = nameParts[0];
-      let lastName = nameParts[1];
-      parsedName = `${firstName.charAt(0)}_${lastName}`;
-    }
-
-    if (playerName.trim()) {
-      // navigate(`/player/${sport}/${parsedName.trim()}`);
-      window.open(`/player/${sport}/${parsedName.trim()}`, '_blank', 'noopener,noreferrer');
-    }
+    searchPlayer(playerName, sport);
   };
+
 
   return (
     <div style={{
