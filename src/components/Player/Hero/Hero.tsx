@@ -2,7 +2,6 @@ import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { StatBtn } from "../StatBtn";
 import { useParams } from 'react-router-dom';
 import { Action, fillStats, Game, Game2 } from "../../../functions/players";
-import { PlayerHero } from "./PlayerHero";
 
 type Props = {
     games: Game2[],
@@ -11,7 +10,7 @@ type Props = {
   
 
 export const Hero: React.FC<Props> = ({games, setGames}) => {
-    const { paramName } = useParams<{ paramName: string }>();
+    const { paramName, paramLeague } = useParams<{ paramName: string, paramLeague: string }>();
     const [pickedBtn, setPickedBtn] = useState<string>('Whole Game')
     const parsedName = `${paramName?.split("_")[0].toLocaleUpperCase()}. ${paramName?.split("_")[1].toUpperCase()}`;
     const periodSort = (period: string) => {
@@ -39,15 +38,37 @@ export const Hero: React.FC<Props> = ({games, setGames}) => {
     // }, [])
 
     return <div style={{
-        width:'100%', height: "330px", background: '#1D1D1D',
+        width:'100%', height: "370px", background: '#1D1D1D',
         display:'flex', justifyContent:'flex-end',
         flexDirection:'column', paddingLeft: '75px'
     }}>
-        {/* Player name */}
-        <PlayerHero 
-            paramName={paramName} 
-            picId={picId}
-        />
+
+        <div style={{
+            width:'100%', height:'300px', display:'flex', alignItems:'flex-end'
+        }}>
+            {/* Player name */}
+            <div style={{display:'flex', alignItems:'flex-end'}}>
+                <div style={{
+                    width: '120px', 
+                    height: '120px', 
+                    background: '#fff', 
+                    borderRadius: '50%', 
+                    display: 'flex', overflow:'hidden',
+                    justifyContent: 'center', alignItems: 'flex-end'
+                }}>
+                    <img 
+                        src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${picId}.png`}
+                        style={{width: '150px', height: '110px'}}
+                    />
+                </div>
+
+                <div style={{marginLeft:'25px', height:100}}>
+                    <h1 style={{color:'#fff', fontSize: 50}}>
+                        {`${paramName?.split("_")[0].toLocaleUpperCase()}. ${paramName?.split("_")[1].toUpperCase()}`}
+                    </h1>
+                </div>
+            </div>
+        </div>
 
         <div style={{
             display:'flex', flexDirection:'column', justifyContent:'space-between'
