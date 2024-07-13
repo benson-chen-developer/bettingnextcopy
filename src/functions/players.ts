@@ -10,25 +10,27 @@ export type Action = {
 
 export type Stats = {
     "PTS": number, "REB": number, "AST":number,
-    "STL": number, "BLK": number, "TO": number,
+    "STL": number, "BLK": number, "TO": number, "PF": number,
     "3PM": number, "3PA": number, 
     "FGM":  number, "FGA": number,
     "FTA": number, "FTM": number,
     "FAN": number
 }
-
-export type Game = {
-    date: string,
-    homeTeam: Team,
-    awayTeam: Team,
-    stats: Stats,
-    actions: Action[]
+export const emptyStats = {
+    "PTS": 0, "REB": 0, "AST":0,
+    "STL": 0, "BLK": 0, "TO": 0, "PF": 0,
+    "FGM":  0, "FGA": 0,
+    "3PM": 0, "3PA": 0, 
+    "FTM": 0, "FTA": 0,
+    "FAN": 0
 }
+
 export type Game2 = {
     date: string,
     teams: [string, string],
     stats: Stats,
-    actions: Action[]
+    actions: Action[],
+    id: string
 }
 
 type Team = {
@@ -46,66 +48,6 @@ const FantasyScoring = (stat: string): number => {
     else if(stat === "BLK") return 3;
     else if(stat === "TO") return -1;
     else return 0;
-}
-export const emptyStats = {
-    "PTS": 0, "REB": 0, "AST":0,
-    "STL": 0, "BLK": 0, "TO": 0,
-    "FGM":  0, "FGA": 0,
-    "3PM": 0, "3PA": 0, 
-    "FTM": 0, "FTA": 0,
-    "FAN": 0
-}
-
-/*
-    Gets the
-        - 2 teams
-        - all players on each team
-        - and intial whole game stats 
-            - (we loop through everything so it makes sense to might as well get this)
-*/
-export const intialGameParse = (actions: Action[]): Team[] => {
-    let i = 0; let teams: Team[] = [];
-
-    actions.forEach(action => {
-        /* This is to find both teams */
-        if(teams.length < 2){
-            if(action.teamTricode){
-                const teamTriCode = teams.find(team => team.name === action.teamTricode);
-                if(teamTriCode === undefined){
-                    teams.push({
-                        name: action.teamTricode,
-                        stats: {
-                            "PTS": 0, "REB": 0, "AST":0,
-                            "STL": 0, "BLK": 0, "TO": 0,
-                            "3PM": 0, "3PA": 0, 
-                            "FGM":  0, "FGA": 0,
-                            "FTA": 0, "FTM": 0,
-                            "FAN": 0
-                        },
-                        actions: actions,
-                        players: []
-                    })
-                }
-            }
-            i++;
-        }
-
-        /* Add up the total stats for each team */
-        const team = teams.find(t => t.name === action.teamTricode);
-        if(team){
-            team.stats[action.actionType] += action.amount;
-            team.stats["FAN"] += FantasyScoring(action.actionType);
-        }
-
-        /* Find all the players on this team */
-        let teamOfCurrentPlayer = teams.find(team => team.name === action.teamTricode);
-        if(!teamOfCurrentPlayer?.players.find(p => p === action.name) && action.name){
-            teamOfCurrentPlayer?.players.push(action.name);
-        }
-    })
-
-    // console.log(teams)
-    return teams;
 }
 
 /*

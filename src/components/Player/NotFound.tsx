@@ -1,8 +1,13 @@
-import React, { useContext } from 'react'
-import { PlayersContext, PlayerType } from '../../Context';
+import React from 'react'
+import Image from 'next/image';
+import { PlayerType, useGlobalContext } from '../../Context/store';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useState } from 'react';
+import { ClipLoader } from 'react-spinners';
+import { useEffect } from 'react';
 
 interface Props{
-    parsedParamName: string
 }
 
 /*
@@ -36,17 +41,59 @@ const levenshteinDistance = (a: string, b: string): number => {
 /*
     Returns all the player names that are similar to the one we searched
 */
-export const findSimilarLastNames = (players: PlayerType[], searchName: string, maxAllowedDistance: number): PlayerType[] => {
-    return players.filter(player => levenshteinDistance(player.lastName, searchName) <= maxAllowedDistance);
+export const findSimilarLastNames = (players: PlayerType[], input: string, maxAllowedDistance: number): PlayerType[] => {
+    const trimmedInput = input.trim();
+    console.log(trimmedInput)
+
+    let firstName = ''; let lastName = ''; let foundPlayers = new Set<PlayerType>();
+
+    /* This means if the user has used a space while typing */
+    if (trimmedInput.split(' ').length > 1) {
+        firstName = trimmedInput.split(' ')[0];
+        lastName = trimmedInput.split(' ')[1];
+    
+        players.forEach(player => {
+            if (levenshteinDistance(player.firstName, firstName) <= maxAllowedDistance) {
+                foundPlayers.add(player);
+            }
+            if (levenshteinDistance(player.lastName, lastName) <= maxAllowedDistance) {
+                foundPlayers.add(player);
+            }
+        });
+    } else {
+        players.forEach(player => {
+            if (levenshteinDistance(player.firstName, trimmedInput) <= maxAllowedDistance) {
+                foundPlayers.add(player);
+            }
+            if (levenshteinDistance(player.lastName, trimmedInput) <= maxAllowedDistance) {
+                foundPlayers.add(player);
+            }
+        });
+        firstName = trimmedInput;
+    }
+    
+    return Array.from(foundPlayers);
 };
 
-export const NotFound: React.FC<Props> = ({parsedParamName}) => {
-    const players = useContext(PlayersContext);
-    const lastName = parsedParamName.split(". ")[1];
+export const NotFound: React.FC<Props> = ({}) => {
+    const {players} = useGlobalContext();
+    const router = useRouter();
+    const { paramPlayer, paramLeague } = router.query;
+    const [isLoading, setIsLoading] = useState<boolean>(true);
+    const [similarPlayers, setSimilarPlayers] = useState<PlayerType[]>([]);
 
-    const similarPlayers = findSimilarLastNames((players as PlayerType[]), lastName, 2);
+    useEffect(() => {
+        setSimilarPlayers(findSimilarLastNames(players, paramPlayer as string, 2));
+        setIsLoading(false);
+    }, [])
 
-    // console.log(similarPlayers)
+    if(isLoading) return <ClipLoader
+        color={'#000'}
+        loading={true}
+        size={150}
+        aria-label="Loading Spinner"
+        data-testid="loader"
+    />
 
     return(
         <div style={{
@@ -55,16 +102,18 @@ export const NotFound: React.FC<Props> = ({parsedParamName}) => {
         }}>
             {similarPlayers.length === 0 ?
                 <>
-                    <h1>{parsedParamName}</h1>
+                    <h1>{paramPlayer as string}</h1>
                     <h1 style={{}}>Player Doesn't Exist or Has No Games</h1>
                 </> 
                     :
-                <div>
+                <div style={{display:'flex', alignItems:'center', flexDirection:'column', width:'100%'}}>
                     <h2>Did You Mean</h2>
                     
-                    {similarPlayers.map((player, index) => 
-                        <PlayerBox player={player} key={index}/>
-                    )}
+                    <div style={{display:'flex'}}>
+                        {similarPlayers.map((player, index) => 
+                            <PlayerBox player={player} key={index}/>
+                        )}
+                    </div>
                 </div>
             }
         </div>
@@ -77,16 +126,19 @@ type PlayerBoxProps = {
   
 const PlayerBox: React.FC<PlayerBoxProps> = ({ player }) => {
     return(
-        <div style={{
-            width:'200px', height:'100px', border:'2px solid #1E1E1E', borderRadius:20,
-            display:'flex', alignItems:'center', justifyContent:'space-evenly'
-        }}>
-            <img 
-                style={{width:'100px', height:'80px'}}
-                src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}
-                alt="Player Picture"
-            />
-            <p>{player.firstName} {player.lastName}</p>
-        </div>
+        <Link href={`/player/WNBA/${player.firstName[0]}_${player.lastName}`} style={{textDecoration: 'none', color:'black'}}>
+            <div style={{
+                width:'200px', height:'100px', border:'2px solid #1E1E1E', borderRadius:20,
+                display:'flex', alignItems:'center', margin:'20px',
+                cursor:'pointer'
+            }}>
+                <Image
+                    src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}
+                    style={{width: '50%', height: '75%'}}
+                    alt={`Pic of ${player.firstName} ${player.lastName}`} width={90} height={75}
+                />
+                <p>{player.firstName} {player.lastName}</p>
+            </div>
+        </Link>
     )
 }

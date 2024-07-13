@@ -1,8 +1,7 @@
 import React from 'react'
-import { Game, Game2, Stats } from '../../functions/players'
+import {  Game2, Stats } from '../../functions/players'
 
 interface Props {
-    // game: Game,
     game: Game2,
     chartCompareTo: Stats
 }

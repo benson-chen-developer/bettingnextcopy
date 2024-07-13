@@ -1,5 +1,6 @@
 import React from 'react'
 import { black } from '../../data/colors'
+import Image from 'next/image';
 
 interface Props {
     picName: string
@@ -18,9 +19,10 @@ export const Promo: React.FC<Props> = ({picName, name, text, promo, url}) => {
             margin: '0px 10px 0px 0px', display:'flex', cursor:'pointer'
         }} onClick={() => handleClick()}>
             <div style={{width:'25%', height:'100%',display:'flex', justifyContent:'center', alignItems:'center'}}>
-                <img 
+                <Image
                     src={`/promos/${picName}`}
-                    style={{width: '40px', height:'40px', borderRadius:20}}
+                    alt={`Pic of ${picName}`} width={40} height={40}
+                    style={{borderRadius:20}}
                 />
             </div>
 

@@ -8,7 +8,7 @@ import wnbaData from './wnba.json';
     all games players played)
 */
 export const wnbaParsing = async (
-    startDate: Date, endDate: Date, paramName: string
+    games: Game2[], startDate: Date, endDate: Date, paramName: string
 ): Promise<Game2[]> => {
     let newGames: Game2[] = [];
     const wnbaDataSliced = wnbaData.slice(wnbaData.findIndex(day => new Date(day.gameDate) >= startDate));
@@ -23,7 +23,11 @@ export const wnbaParsing = async (
         // This date has passed so we can parse (unless it is the same day)
         if (currDate < endDate) {
             for (const game of day.games) {
-                // Push each fetch promise into the fetchPromises array
+                /* 
+                    Look through our games array and if a game with that id is already here then
+                    don't reparse it
+                */
+                if(!games.find(parsedGame => parsedGame.id === game.gameId))
                 fetchPromises.push(
                     fetch(`https://content-api-prod.nba.com/public/1/leagues/wnba/game/${game.gameId}`)
                         .then(res => res.json())
@@ -52,7 +56,8 @@ export const wnbaParsing = async (
                                         const gameData = await gameDataRes.json();
                                         newGames.push({
                                             ...gameData,
-                                            stats: fillStats(parsedName, "Whole Game", gameData.actions)
+                                            stats: fillStats(parsedName, "Whole Game", gameData.actions),
+                                            id: game.gameId
                                         });
                                     }
                                     break;

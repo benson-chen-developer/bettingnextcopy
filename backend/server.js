@@ -159,6 +159,17 @@ app.get("/parseGame", async (req, res) => {
                     picId: action.personIdsFilter[0],
                 });
             }
+            if (action.actionType === "foul") {
+                parsedActions.push({
+                    name: action.playerNameI,
+                    period: action.period,
+                    clock: action.clock,
+                    teamTricode: action.teamTricode,
+                    actionType: "PF",
+                    amount: 1,
+                    picId: action.personIdsFilter[0],
+                });
+            }
         });
 
         res.json({

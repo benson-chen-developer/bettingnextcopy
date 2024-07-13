@@ -1,8 +1,9 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { StatBtn } from "../StatBtn";
-import { useParams } from 'react-router-dom';
-import { Action, fillStats, Game, Game2 } from "../../../functions/players";
-import { PlayersContext } from "../../../Context";
+import { useRouter } from 'next/router';
+import { Action, fillStats, Game2 } from "../../../functions/players";
+import Image from 'next/image';
+import { useGlobalContext } from "../../../Context/store";
 
 type Props = {
     games: Game2[],
@@ -11,12 +12,15 @@ type Props = {
   
 
 export const Hero: React.FC<Props> = ({games, setGames}) => {
-    const { paramName, paramLeague } = useParams<{ paramName: string, paramLeague: string }>();
+    const router = useRouter();
+    const { paramPlayer, paramLeague } = router.query;
+    const playerName = paramPlayer as string;
+
     const [pickedBtn, setPickedBtn] = useState<string>('Whole Game')
-    const players = useContext(PlayersContext);
+    const {players} = useGlobalContext();
 
     const periodSort = (period: string) => {
-        let parsedParamName = `${paramName?.split("_")[0]}. ${paramName?.split("_")[1]}`
+        let parsedParamName = `${playerName?.split("_")[0]}. ${playerName.split("_")[1]}`
         setPickedBtn(period)
 
         let newGames: any = [];
@@ -30,8 +34,8 @@ export const Hero: React.FC<Props> = ({games, setGames}) => {
         setGames(newGames);
     }
     const currPlayer = players?.find(player => 
-        `${player.firstName[0]}_${player.lastName}`.toLowerCase() === paramName?.toLowerCase()
-    )
+        `${player.firstName[0]}_${player.lastName}`.toLowerCase() === playerName.toLowerCase().toLowerCase()
+    );
 
     return <div style={{
         width:'100%', height: "370px", background: '#1D1D1D',
@@ -52,9 +56,10 @@ export const Hero: React.FC<Props> = ({games, setGames}) => {
                     display: 'flex', overflow:'hidden',
                     justifyContent: 'center', alignItems: 'flex-end'
                 }}>
-                    <img 
+                    <Image
                         src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${currPlayer?.picId}.png`}
                         style={{width: '150px', height: '110px'}}
+                        alt={`Pic of ${currPlayer?.firstName} ${currPlayer?.lastName}`} width={150} height={110}
                     />
                 </div>
 

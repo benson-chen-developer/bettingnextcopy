@@ -1,13 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { PlayersContext, PlayerType } from '../../Context'
+import React, { useEffect, useState } from 'react'
 import { findSimilarLastNames } from '../Player/NotFound';
+import Image from 'next/image';
+import { PlayerType, useGlobalContext } from '../../Context/store';
 
 interface Props {
     input: string
 }
 
 export const NamesDropDown: React.FC<Props> = ({input}) => {
-    const players = useContext(PlayersContext);
+    const {players} = useGlobalContext();
     const [similarPlayers, setSimilarPlayers] = useState<PlayerType[]>([]);
 
     const searchPlayer = (name: string) => {
@@ -27,11 +28,8 @@ export const NamesDropDown: React.FC<Props> = ({input}) => {
     }
 
     useEffect(() => {
-        let lastName = input.split(' ')[1];
-        if(lastName){
-            let similarPlayers = findSimilarLastNames((players as PlayerType[]), lastName, 2);
-            setSimilarPlayers(similarPlayers)
-        }
+        let similarPlayers = findSimilarLastNames(players, input, 2);
+        setSimilarPlayers(similarPlayers)
     }, [input])
 
     if(input.trim() === '') return null;
@@ -64,10 +62,11 @@ export const NamesDropDown: React.FC<Props> = ({input}) => {
                 <div key={index} style={{
                     width:'100%', height:'50px', display:'flex', alignItems:'center', cursor:'pointer'
                 }} onClick={() => searchPlayer(`${player.firstName} ${player.lastName}`)}>
-                    <img 
-                        style={{width:'50px', height:'35px', marginLeft:'10px'}}
+                    <Image
                         src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}
-                        alt="Picture"
+                        alt={`Headshot of ${player.firstName} ${player.lastName}`}
+                        width={50} height={35}
+                        style={{marginLeft:'10px'}}
                     />
                     <p style={{marginLeft: '15px'}}>{player.firstName} {player.lastName}</p>
                 </div>
