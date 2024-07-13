@@ -20,7 +20,7 @@ export const Hero: React.FC<Props> = ({games, setGames}) => {
     const {players} = useGlobalContext();
 
     const periodSort = (period: string) => {
-        let parsedParamName = `${playerName?.split("_")[0]}. ${playerName.split("_")[1]}`
+        let parsedParamName = `${playerName?.split("_")[0][0]}. ${playerName.split("_")[1]}`
         setPickedBtn(period)
 
         let newGames: any = [];
