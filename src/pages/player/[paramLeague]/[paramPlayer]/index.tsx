@@ -11,8 +11,8 @@ import { useGlobalContext } from '../../../../Context/store';
 import { loadGamesByTeam } from '../../../../data/wnbaParsing';
 
 interface Props{
-    allGamesLoaded: {league: string, loaded: boolean}[]
-    setAllGamesLoaded: Dispatch<SetStateAction<{league: string, loaded: boolean}[]>>
+    // allGamesLoaded: {league: string, loaded: boolean}[]
+    // setAllGamesLoaded: Dispatch<SetStateAction<{league: string, loaded: boolean}[]>>
     useLocalStorage: any
 }
 
@@ -22,7 +22,7 @@ interface Props{
     The name has to be perfect or else it doesn't work
 */
 
-const Player: React.FC<Props> = ({allGamesLoaded, setAllGamesLoaded, useLocalStorage}) => {
+const Player: React.FC<Props> = ({useLocalStorage}) => {
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
     const parsedParamName = `${(paramPlayer as string)?.split("_")[0]}. ${(paramPlayer as string)?.split("_")[1]}`
@@ -39,6 +39,7 @@ const Player: React.FC<Props> = ({allGamesLoaded, setAllGamesLoaded, useLocalSto
     });
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [dateLoadedTo, setDateLoadedTo] = useState<Date>(new Date());
+    const [allLoaded, setAllLoaded] = useState<boolean>(false);
 
     const fastForwardDays = (oldDate: Date, days: number): Date => {
         const newDate = new Date(oldDate);
@@ -73,7 +74,7 @@ const Player: React.FC<Props> = ({allGamesLoaded, setAllGamesLoaded, useLocalSto
             let parsedName = `${(paramPlayer as string).split('_')[0]} ${(paramPlayer as string).split('_')[1]}`;
             let playerTeam =  players.find(player => `${player.firstName} ${player.lastName}`.toLowerCase() === parsedName.toLowerCase())?.team;
 
-            const gotGames = await loadGamesByTeam([], parsedName, playerTeam as string);
+            const gotGames = await loadGamesByTeam(gamesWithPlayer, parsedName, playerTeam as string);
             let sortedGames = gotGames.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
             setGames(prevGames => {
@@ -82,7 +83,7 @@ const Player: React.FC<Props> = ({allGamesLoaded, setAllGamesLoaded, useLocalSto
                 );
                 return [...prevGames, ...uniqueNewGames];
             });
-            // setDateLoadedTo(fastForwardDays(dateLoadedTo, -14));
+
             setGamesWithPlayer(sortedGames);
             setIsLoading(false);
         }
@@ -106,11 +107,26 @@ const Player: React.FC<Props> = ({allGamesLoaded, setAllGamesLoaded, useLocalSto
     }
     const loadMoreByTeam = async (): Promise<void> => {
         setIsLoading(true);
-        const newGames = await loadGamesByTeam([], 'Li Yueru', 'Sparks');
-        let sortedGames = [...gamesWithPlayer, ...newGames].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-        
+
+        let parsedName = `${(paramPlayer as string).split('_')[0]} ${(paramPlayer as string).split('_')[1]}`;
+        let playerTeam =  players.find(player => `${player.firstName} ${player.lastName}`.toLowerCase() === parsedName.toLowerCase())?.team;
+
+        const gotGames = await loadGamesByTeam(gamesWithPlayer, parsedName, playerTeam as string);
+        let sortedGames = gotGames.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+        setGames(prevGames => {
+            const uniqueNewGames = sortedGames.filter(
+                newGame => !prevGames.some(prevGame => prevGame.id === newGame.id)
+            );
+            return [...prevGames, ...uniqueNewGames];
+        });
+
+        /* 
+            We do this as if we load more games and the same length returns that means
+            we don't have any more games to add
+        */
+        if(sortedGames.length === gamesWithPlayer.length) setAllLoaded(true);
         setGamesWithPlayer(sortedGames);
-        setDateLoadedTo(fastForwardDays(dateLoadedTo, -14));
         setIsLoading(false);
     }
 
@@ -187,7 +203,7 @@ const Player: React.FC<Props> = ({allGamesLoaded, setAllGamesLoaded, useLocalSto
                 <Fantasy paramLeague={paramLeague as string} />
             </div>
 
-            {dateLoadedTo >= new Date() || dateLoadedTo <= new Date('May 3, 2024') ?
+            {allLoaded ?
                 <div style={{ width: '70%', display: 'flex', justifyContent:'center', marginTop:'25px' }}>
                     <p style={{color: '#000', fontSize:12, fontWeight:'bold'}}>
                         Everything is Loaded

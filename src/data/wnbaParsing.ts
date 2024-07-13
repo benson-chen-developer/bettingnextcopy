@@ -101,18 +101,26 @@ export const loadGamesByTeam = async (oldGames: Game2[], playerName: string, tea
     let schedule = await fetch('http://localhost:3001/wnbaScedule');
     let parsedWbna = await schedule.json();
     let gameDatesArray = parsedWbna.leagueSchedule.gameDates;
-    gameDatesArray = gameDatesArray.filter((newGame: any) => !oldGames.find(oldGame => oldGame.id === newGame.gameId))
 
     let loadIndex = 0; let maxLoad = 5; /* We load 5 games at a time */
     for (let i = gameDatesArray.length-1; (i > 0 && loadIndex < maxLoad); i--) {
             const currData = gameDatesArray[i];
 
+            /*
+                At this step all the items look like this
+                gameDate: "05/03/2024 00:00:00"
+                games : [{…}, {…}]
+            */
             for (const game of currData.games) {
                 if(loadIndex >= maxLoad) break; /* Only load 5 games at a time */
 
+                /*
+                    We take only the games that are finsihed, has our team, and isn't already in the old teams array
+                */
                 if(
                     game.gameStatusText === "Final" && 
-                    (game.homeTeam.teamName === teamName || game.awayTeam.teamName === teamName)
+                    (game.homeTeam.teamName === teamName || game.awayTeam.teamName === teamName) &&
+                    !oldGames.find(oldGame => oldGame.id === game.gameId)
                 ){
                     loadIndex++;
                     fetchPromises.push(
@@ -158,5 +166,5 @@ export const loadGamesByTeam = async (oldGames: Game2[], playerName: string, tea
 
     await Promise.all(fetchPromises);
 
-    return newGames;
+    return [...oldGames, ...newGames];
 }
