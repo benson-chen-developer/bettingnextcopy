@@ -8,22 +8,29 @@ interface Props {
 }
 
 /* Navigates to new page while appending the new player name to the end */
-export const searchPlayer = (input: string, league: string) => {
-  let parsedName = input.trim(); // Remove whitespace
-  parsedName = parsedName.toLowerCase(); // Convert to lowercase
-  let nameParts = parsedName.split(' '); // Split the name
+export const searchPlayer = (input: string, league: string, correctName?: boolean) => {
 
-  if (nameParts.length >= 2) { // Basically turn Cait Clark to C_Clark
-    let firstName = nameParts[0];
-    let lastName = nameParts[1];
-    parsedName = `${firstName.charAt(0)}_${lastName}`;
-  }
+  /* Correct Name means the name is already parsed so we can just navigate
+     Name must be in jonquel_jones format
+  */
+  if(correctName){
+    window.open(`/player/${league}/${input.trim()}`, '_blank', 'noopener,noreferrer');
+  } else {
+    let parsedName = input.trim(); // Remove whitespace
+    parsedName = parsedName.toLowerCase(); // Convert to lowercase
+    let nameParts = parsedName.split(' '); // Split the name
 
-  if (input.trim()) {
-    window.open(`/player/${league}/${parsedName.trim()}`, '_blank', 'noopener,noreferrer');
+    if (nameParts.length >= 2) { // Basically turn Cait Clark to C_Clark
+      let firstName = nameParts[0];
+      let lastName = nameParts[1];
+      parsedName = `${firstName.charAt(0)}_${lastName}`;
+    }
+
+    if (input.trim()) {
+      window.open(`/player/${league}/${parsedName.trim()}`, '_blank', 'noopener,noreferrer');
+    }
   }
 };
-
 
 export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) => {
   const [playerName, setPlayerName] = useState<string>('');

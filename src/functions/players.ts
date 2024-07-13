@@ -40,8 +40,8 @@ type Team = {
     actions: Action[]
 }
 
-const FantasyScoring = (stat: string): number => {
-    if(stat === "PTS") return 1;
+const FantasyScoring = (stat: string, amount: number): number => {
+    if(stat === "PTS") return 1*amount;
     else if(stat === "REB") return 1.2;
     else if(stat === "AST") return 1.5;
     else if(stat === "STL") return 3;
@@ -78,7 +78,7 @@ export const fillStats = (playerName: string, condition: string, actions: Action
         if(conditionMet && playerConditionMet){
             didPlay = true;
             intialStats[action.actionType] += action.amount;
-            intialStats["FAN"] += FantasyScoring(action.actionType);
+            intialStats["FAN"] += FantasyScoring(action.actionType, action.amount);
         }
     })
 

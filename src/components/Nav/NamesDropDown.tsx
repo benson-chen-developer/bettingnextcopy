@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { findSimilarLastNames } from '../Player/NotFound';
 import Image from 'next/image';
 import { PlayerType, useGlobalContext } from '../../Context/store';
+import { searchPlayer } from './SearchBar';
 
 interface Props {
     input: string
@@ -10,22 +11,6 @@ interface Props {
 export const NamesDropDown: React.FC<Props> = ({input}) => {
     const {players} = useGlobalContext();
     const [similarPlayers, setSimilarPlayers] = useState<PlayerType[]>([]);
-
-    const searchPlayer = (name: string) => {
-        let parsedName = name.trim(); // Remove whitespace
-        parsedName = parsedName.toLowerCase(); // Convert to lowercase
-        let nameParts = parsedName.split(' '); // Split the name
-
-        if (nameParts.length >= 2) { // Basically turn Cait Clark to C_Clark
-            let firstName = nameParts[0];
-            let lastName = nameParts[1];
-            parsedName = `${firstName.charAt(0)}_${lastName}`;
-        }
-
-        if (name.trim()) {
-            window.open(`/player/WNBA/${parsedName.trim()}`, '_blank', 'noopener,noreferrer');
-        }
-    }
 
     useEffect(() => {
         let similarPlayers = findSimilarLastNames(players, input, 2);
@@ -61,7 +46,7 @@ export const NamesDropDown: React.FC<Props> = ({input}) => {
             {similarPlayers.map((player, index) => 
                 <div key={index} style={{
                     width:'100%', height:'50px', display:'flex', alignItems:'center', cursor:'pointer'
-                }} onClick={() => searchPlayer(`${player.firstName} ${player.lastName}`)}>
+                }} onClick={() => searchPlayer(`${player.firstName}_${player.lastName}`, 'WNBA', true)}>
                     <Image
                         src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}
                         alt={`Headshot of ${player.firstName} ${player.lastName}`}

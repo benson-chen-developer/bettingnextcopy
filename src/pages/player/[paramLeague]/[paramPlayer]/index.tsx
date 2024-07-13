@@ -75,7 +75,7 @@ const Player: React.FC<Props> = ({allGamesLoaded, setAllGamesLoaded, useLocalSto
 
             const gotGames = await loadGamesByTeam([], parsedName, playerTeam as string);
             let sortedGames = gotGames.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-            // console.log(sortedGames)
+            console.log(sortedGames)
 
             setGames(prevGames => {
                 const uniqueNewGames = sortedGames.filter(

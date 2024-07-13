@@ -86,7 +86,7 @@ export const TrendingBox: React.FC<Props> = ({leagueName, player, game}) => {
             justifyContent: 'space-evenly',
             alignItems: 'center', flexDirection:'column'
         }} onClick={() => {
-            searchPlayer(`${player.firstName[0]}. ${player.lastName}`, leagueName);
+            searchPlayer(`${player.firstName}_${player.lastName}`, leagueName, true);
         }}>
             {/* {imgArr[leagueName] || null} */}
             {player.wnbaId !== "" ? 

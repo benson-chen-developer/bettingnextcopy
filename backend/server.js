@@ -22,7 +22,10 @@ app.get("/parseGame", async (req, res) => {
     try {
         const apiToCall = req.headers.url.replace('urlMe', req.headers.gameid);
         const axiosResponse = await axios.get(apiToCall);
-        const gameDate = axiosResponse.data.meta.time.split(" ")[0];
+        const gameDate = axiosResponse.data.meta.time.split(" ")[0]; /* Game is ahead by 1 day for some reason */
+        const subOneDay = new Date(gameDate);
+        subOneDay.setDate(subOneDay.getDate() - 1);
+
         const actions = axiosResponse.data.game.actions;
         
         const parsedActions = [];
@@ -174,7 +177,7 @@ app.get("/parseGame", async (req, res) => {
 
         res.json({
             actions: parsedActions,
-            date: gameDate,
+            date: subOneDay,
             teams: getTeamNames(axiosResponse.data.game.actions)
         });
     } catch (err) {
