@@ -1,7 +1,7 @@
 import React from 'react'
 import { SearchBar } from '../components/Nav/SearchBar'
 
-export const Missing = () => {
+const Missing = () => {
     return (
         <div style={{
             minWidth:'100vw', minHeight:'100vh', display:'flex',
@@ -14,3 +14,5 @@ export const Missing = () => {
         </div>
     )
 }
+
+export default Missing;
