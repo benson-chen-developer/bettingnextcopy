@@ -125,7 +125,7 @@ type PlayerBoxProps = {
   
 const PlayerBox: React.FC<PlayerBoxProps> = ({ player }) => {
     return(
-        <Link href={`/player/WNBA/${player.firstName[0]}_${player.lastName}`} style={{textDecoration: 'none', color:'black'}}>
+        <Link href={`/player/WNBA/${player.firstName}_${player.lastName}`} style={{textDecoration: 'none', color:'black'}}>
             <div style={{
                 width:'200px', height:'100px', border:'2px solid #1E1E1E', borderRadius:20,
                 display:'flex', alignItems:'center', margin:'20px',
