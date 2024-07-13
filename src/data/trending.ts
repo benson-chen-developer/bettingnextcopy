@@ -31,8 +31,18 @@ export const getTodaysPlayers = async (league: string): Promise<any[]> => {
         
         //Find the dates that is closet to today and the games that are not done
         let closetDateGames = findClosestFutureDate(games);
-    
-        return closetDateGames;
+
+        /* Sometimes this returns an array and sometimes it returns 
+            gameDate: "07/14/2024 00:00:00"
+            games : (4) [{…}, {…}, {…}, {…}] as an obj
+
+            so we have to make sure it always returns a games array
+        */
+        if (Array.isArray(closetDateGames)) { 
+            return closetDateGames;
+        } else {
+            return closetDateGames.games;
+        }
     }
 
     return [];

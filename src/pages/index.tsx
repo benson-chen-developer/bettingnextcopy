@@ -27,12 +27,11 @@ const Trending = () => {
             let newTrendingGames: any[] = [];
             try {
                 let todayGames = await getTodaysPlayers('WNBA');
-                console.log(todayGames)
     
                 for (const game of todayGames) {
                     const gameDetails = await fetch(`http://localhost:3001/getPlayersInGame/${game.gameId}`);
                     const gameDetailsJson = await gameDetails.json();
-    
+                    
                     /* 
                         These are all players that play
                         We wanna filter via rank as 1 ranks are starters I assume
