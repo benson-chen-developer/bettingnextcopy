@@ -46,4 +46,3 @@ export const betterLoadGames = async (games: Game2[], leagueName: string, startD
     
     return newGames;
 }
-

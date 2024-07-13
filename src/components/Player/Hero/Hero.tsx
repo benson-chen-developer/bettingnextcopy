@@ -34,7 +34,7 @@ export const Hero: React.FC<Props> = ({games, setGames}) => {
         setGames(newGames);
     }
     const currPlayer = players?.find(player => 
-        `${player.firstName[0]}_${player.lastName}`.toLowerCase() === playerName.toLowerCase().toLowerCase()
+        `${player.firstName}_${player.lastName}`.toLowerCase() === playerName.toLowerCase()
     );
 
     return <div style={{

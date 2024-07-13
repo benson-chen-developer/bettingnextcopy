@@ -43,7 +43,6 @@ const levenshteinDistance = (a: string, b: string): number => {
 */
 export const findSimilarLastNames = (players: PlayerType[], input: string, maxAllowedDistance: number): PlayerType[] => {
     const trimmedInput = input.trim();
-    console.log(trimmedInput)
 
     let firstName = ''; let lastName = ''; let foundPlayers = new Set<PlayerType>();
 

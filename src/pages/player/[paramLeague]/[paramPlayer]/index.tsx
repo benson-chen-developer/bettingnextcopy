@@ -8,12 +8,19 @@ import { ClipLoader } from 'react-spinners';
 import { NotFound } from '../../../../components/Player/NotFound';
 import { Fantasy } from '../../../../components/Player/Fantasy';
 import { useGlobalContext } from '../../../../Context/store';
+import { loadGamesByTeam } from '../../../../data/wnbaParsing';
 
 interface Props{
     allGamesLoaded: {league: string, loaded: boolean}[]
     setAllGamesLoaded: Dispatch<SetStateAction<{league: string, loaded: boolean}[]>>
     useLocalStorage: any
 }
+
+/*
+    This page is in the url form of http://localhost:3000/player/WNBA/Caitlyn_clark
+
+    The name has to be perfect or else it doesn't work
+*/
 
 const Player: React.FC<Props> = ({allGamesLoaded, setAllGamesLoaded, useLocalStorage}) => {
     const router = useRouter();
@@ -62,15 +69,45 @@ const Player: React.FC<Props> = ({allGamesLoaded, setAllGamesLoaded, useLocalSto
             setGamesWithPlayer(sortedGames);
             setIsLoading(false);
         };
+        const fetchGamesByTeam = async () => {
+            let parsedName = `${(paramPlayer as string).split('_')[0]} ${(paramPlayer as string).split('_')[1]}`;
+            let playerTeam =  players.find(player => `${player.firstName} ${player.lastName}`.toLowerCase() === parsedName.toLowerCase())?.team;
+
+            const gotGames = await loadGamesByTeam([], parsedName, playerTeam as string);
+            let sortedGames = gotGames.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+            // console.log(sortedGames)
+
+            setGames(prevGames => {
+                const uniqueNewGames = sortedGames.filter(
+                    newGame => !prevGames.some(prevGame => prevGame.id === newGame.id)
+                );
+                return [...prevGames, ...uniqueNewGames];
+            });
+            // setDateLoadedTo(fastForwardDays(dateLoadedTo, -14));
+            setGamesWithPlayer(sortedGames);
+            setIsLoading(false);
+        }
         
         // console.log(players)
         setIsLoading(true);
-        if(paramPlayer) fetchGames();
-    }, [paramPlayer])
+        if(paramPlayer && players.length > 0) {
+            fetchGamesByTeam();
+        }
+        // fetchGames();
+    }, [paramPlayer, players])
 
     const loadMoreTwo = async (): Promise<void> => {
         setIsLoading(true);
         const newGames = await betterLoadGames(games, paramLeague as string, fastForwardDays(dateLoadedTo, -14), dateLoadedTo, parsedParamName);
+        let sortedGames = [...gamesWithPlayer, ...newGames].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        
+        setGamesWithPlayer(sortedGames);
+        setDateLoadedTo(fastForwardDays(dateLoadedTo, -14));
+        setIsLoading(false);
+    }
+    const loadMoreByTeam = async (): Promise<void> => {
+        setIsLoading(true);
+        const newGames = await loadGamesByTeam([], 'Li Yueru', 'Sparks');
         let sortedGames = [...gamesWithPlayer, ...newGames].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
         
         setGamesWithPlayer(sortedGames);
@@ -160,7 +197,7 @@ const Player: React.FC<Props> = ({allGamesLoaded, setAllGamesLoaded, useLocalSto
                 :
                 <div style={{ width: '70%', display: 'flex', justifyContent:'center', marginTop:'25px' }}>
                     <button 
-                        onClick={() => loadMoreTwo()} 
+                        onClick={() => loadMoreByTeam()} 
                         style={{
                             width: 100, height:40, borderRadius: 50,
                             background: '#D9D9D9',

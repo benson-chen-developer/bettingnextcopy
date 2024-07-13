@@ -79,3 +79,84 @@ export const wnbaParsing = async (
 
     return newGames;
 };
+
+/*
+    We check what team the player is on and look at the schedule for games with that team
+
+    Can be used in loadmore since it only loads new stuff and not on top of oldGames
+
+    playerName should be in Caitlyn Clark format
+    TeamName is just Wings (if for Dallas Wings) 
+*/
+export const loadGamesByTeam = async (oldGames: Game2[], playerName: string, teamName: string): Promise<Game2[]> => {
+    let newGames: Game2[] = [];
+    let firstName = playerName.split(' ')[0][0];
+    let lastName = playerName.split(' ')[1];
+
+    let fetchPromises: Promise<void>[] = [];
+
+    /*
+        We get the schedule and remove and games that we already have in the oldGames
+    */
+    let schedule = await fetch('http://localhost:3001/wnbaScedule');
+    let parsedWbna = await schedule.json();
+    let gameDatesArray = parsedWbna.leagueSchedule.gameDates;
+    gameDatesArray = gameDatesArray.filter((newGame: any) => !oldGames.find(oldGame => oldGame.id === newGame.gameId))
+
+    let loadIndex = 0; let maxLoad = 5; /* We load 5 games at a time */
+    for (let i = 0; (i < gameDatesArray.length && loadIndex < maxLoad); i++) {
+            const currData = gameDatesArray[i];
+
+            for (const game of currData.games) {
+                if(loadIndex >= maxLoad) break; /* Only load 5 games at a time */
+
+                if(
+                    game.gameStatusText === "Final" && 
+                    (game.homeTeam.teamName === teamName || game.awayTeam.teamName === teamName)
+                ){
+                    loadIndex++;
+                    fetchPromises.push(
+                        fetch(`https://content-api-prod.nba.com/public/1/leagues/wnba/game/${game.gameId}`)
+                            .then(res => res.json())
+                            .then(async (gamesRes) => {
+                                const players = [...gamesRes.results.depthCharts[0].players, ...gamesRes.results.depthCharts[1].players];
+                                
+                                const foundPlayer = players.find(player => `${player.firstName} ${player.lastName}`.toLowerCase() === playerName.toLowerCase());
+
+                                /* Player name is found so we add it */
+                                if (foundPlayer) {
+                                    const gameDataRes = await fetch(`http://localhost:3001/parseGame`, { //Load Game data
+                                        method: 'GET',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'url': 'https://cdn.wnba.com/static/json/liveData/playbyplay/playbyplay_urlMe.json',
+                                            'gameid': game.gameId
+                                        }
+                                    })
+
+                                    if(gameDataRes.status === 500){ 
+                                        //This game hasn't happened yet. Should never get to this point
+                                        //as we never pass in an end date above the current day so something
+                                        // went wrong
+                                    } else {
+                                        const gameData = await gameDataRes.json();
+                                        newGames.push({
+                                            ...gameData,
+                                            stats: fillStats(`${firstName}. ${lastName}`, "Whole Game", gameData.actions),
+                                            id: game.gameId
+                                        });
+                                    }
+                                }
+                            })
+                            .catch(err => {
+                                console.log('betterLoadGames err', err);
+                            })
+                    );
+                }
+            }
+    }
+
+    await Promise.all(fetchPromises);
+
+    return newGames;
+}
