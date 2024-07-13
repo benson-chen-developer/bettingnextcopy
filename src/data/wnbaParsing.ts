@@ -104,7 +104,7 @@ export const loadGamesByTeam = async (oldGames: Game2[], playerName: string, tea
     gameDatesArray = gameDatesArray.filter((newGame: any) => !oldGames.find(oldGame => oldGame.id === newGame.gameId))
 
     let loadIndex = 0; let maxLoad = 5; /* We load 5 games at a time */
-    for (let i = 0; (i < gameDatesArray.length && loadIndex < maxLoad); i++) {
+    for (let i = gameDatesArray.length-1; (i > 0 && loadIndex < maxLoad); i--) {
             const currData = gameDatesArray[i];
 
             for (const game of currData.games) {
