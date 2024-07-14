@@ -107,7 +107,7 @@ export const TrendingBox: React.FC<Props> = ({leagueName, player, game}) => {
                 <p style={{ color: '#fff', margin:0, fontSize:'14px' }}>{convertToEST(game.results.easternTime)}</p>
             </div>
             
-            <h4 style={{ color: '#fff', margin:0 }}>{player.firstName} {player.lastName}</h4>
+            <h3 style={{ color: '#fff', margin:0, fontSize:'16px' }}>{player.firstName} {player.lastName}</h3>
         </div>
     );
 };

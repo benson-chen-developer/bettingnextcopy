@@ -9,6 +9,7 @@ import { NotFound } from '../../../../components/Player/NotFound';
 import { Fantasy } from '../../../../components/Player/Fantasy';
 import { useGlobalContext } from '../../../../Context/store';
 import { loadGamesByTeam } from '../../../../data/wnbaParsing';
+import Head from 'next/head';
 
 interface Props{
     // allGamesLoaded: {league: string, loaded: boolean}[]
@@ -16,12 +17,15 @@ interface Props{
     useLocalStorage: any
 }
 
+export const metadate = {
+    title: 'Player Stats Page'
+}
+
 /*
     This page is in the url form of http://localhost:3000/player/WNBA/Caitlyn_clark
 
     The name has to be perfect or else it doesn't work
 */
-
 const Player: React.FC<Props> = ({useLocalStorage}) => {
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
@@ -143,6 +147,14 @@ const Player: React.FC<Props> = ({useLocalStorage}) => {
     )
 
     if(!isLoading) return (
+        <>
+
+        <Head>
+            <title>{paramPlayer ? `${(paramPlayer as string).split('_').join(' ')} | Sports Stats` : 'Player Stats Page'}</title>
+            <meta name="description" content={paramPlayer ? `Check out the latest stats for ${(paramPlayer as string).split('_').join(' ')}` : 'Player Stats Page'} />
+            <meta name="keywords" content={`WNBA, fantasy, rebounds, points, assists, steals, blocks`} />
+        </Head>
+
         <div style={{minHeight:'100vh'}}>
             <Hero games={gamesWithPlayer} setGames={setGamesWithPlayer}/>
 
@@ -230,6 +242,8 @@ const Player: React.FC<Props> = ({useLocalStorage}) => {
 
             <div style={{height:'100px'}} />
         </div>
+
+        </>
     )
 
     return (
