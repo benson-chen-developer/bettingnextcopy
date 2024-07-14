@@ -45,8 +45,8 @@ export const NavBar: React.FC<Props> = ({
             top: 0, // Stick it to the top
             zIndex: 1000 // Ensure it stays above other content
         }}>
-            <Link href="/">
-                <h1 style={{ fontWeight: 'bold', marginLeft: '30px', cursor: 'pointer' }}>
+            <Link href="/" style={{textDecoration: 'none'}}>
+                <h1 style={{ fontWeight: 'bold', marginLeft: '30px', cursor: 'pointer', textDecoration:'none', color:"#fff" }}>
                     Sports Stats
                 </h1>
             </Link>
