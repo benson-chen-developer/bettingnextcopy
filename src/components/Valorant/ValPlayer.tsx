@@ -5,6 +5,7 @@ import { ValorantGame, ValorantPlayer } from '../../Context/PlayerTypes';
 import { ClipLoader } from 'react-spinners';
 import { Hero } from '../Player/Hero';
 import { Row } from './Row';
+import { StatCompartor } from '../Player/StatCompartor';
 
 /*
     For this page the games array is like this 
@@ -29,15 +30,25 @@ export const ValPlayer = () => {
     const [displayedGames, setDisplayedGames] = useState<ValorantGame[]>([]);
 
     const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2", "Map 1+3", "Map 2+3"];
+    const statsHeader = ["K", "D", "A"];
+    const [chartCompareTo, setChartCompareTo] = useState<{kills: number, deaths: number, assists: number}>({
+        "kills": -1, "deaths": -1, "assists": -1
+    })
     const [pickedBtn, setPickedBtn] = useState<string>('All Maps')
 
+    /*
+        If (`http://localhost:3001/valorant/${foundPlayer?.id}/${foundPlayer?.name}`); crashes it means ussually that
+        foundPlayer isn't defined (make sure nodemon crashing restarts)
+    */
     useEffect(() => {
         const fetchPlayer = async () => {
             const allValPlayers = await fetchValorantPlayers();
+            // console.log(allValPlayers)
             setAllPlayers(allValPlayers);
 
             const foundPlayer = allValPlayers.find(player => player.name.toLowerCase() === (paramPlayer as string).toLowerCase());
             setPlayer(foundPlayer);
+            // console.log(foundPlayer)
 
             const res = await fetch(`http://localhost:3001/valorant/${foundPlayer?.id}/${foundPlayer?.name}`);
             let gamesWithOutMapsOrPlayers = await res.json();
@@ -74,51 +85,22 @@ export const ValPlayer = () => {
             <div style={{display:'flex', marginLeft:'50px'}}>
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
-                        {/* <tr style={{ display: 'flex', marginBottom:'20px', alignItems:'center' }}>
-                            <th style={{ width: '200px', display:'flex', justifyContent:'center', alignItems:'center' }}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24">
-                                    <path fill="#666363" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10s10-4.48 10-10S17.52 2 12 2m0 15c-.55 0-1-.45-1-1v-4c0-.55.45-1 1-1s1 .45 1 1v4c0 .55-.45 1-1 1m1-8h-2V7h2z" />
-                                </svg>
-                                <p style={{color:'#666363', fontSize:'12px', margin:0}}>
-                                    Type a Number 
-                                    <br /> to Compare to Stats
-                                </p>
-                            </th>
 
-                            {Object.entries(chartCompareTo).map(([key, value]) => (
-                                <td key={key} style={{ width: '50px', height: '35px' }}>
-                                    <input
-                                        style={{
-                                            width: '90%',
-                                            height: '100%',
-                                            border: '1px solid #000',
-                                            borderRadius: 5,
-                                            textAlign: 'center',
-                                            fontSize: '16px',
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }}
-                                        type="number"
-                                        onChange={(e) => handleCompareToChange(key, Number(e.target.value))}
-                                        value={value}
-                                    />
-                                </td>
-                            ))}
-                        </tr> */}
+                        <StatCompartor chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} />
 
-                        {/* <tr style={{ display: 'flex' }}>
+                        {/* Stats Header */}
+                        <tr style={{ display: 'flex' }}>
                             <th style={{ width: '200px' }}>Team</th>
-                            {Object.entries(chartCompareTo).map(([key, value]) => (
-                                <th style={{ width: '50px' }} key={key}>
-                                    {key}
+                            {statsHeader.map((value, index) => (
+                                <th style={{ width: '50px' }} key={index}>
+                                    {value}
                                 </th>
                             ))}
-                        </tr> */}
+                        </tr>
                     </thead>
                     <tbody>
                         {displayedGames.map((game, index) => (
-                            <Row key={index} game={game} playerName={player.name} pickedBtn={pickedBtn}/>
+                            <Row key={index} chartCompareTo={chartCompareTo} game={game} playerName={player.name} pickedBtn={pickedBtn}/>
                         ))}
                     </tbody>
                 </table>

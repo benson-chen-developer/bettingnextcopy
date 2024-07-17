@@ -5,7 +5,7 @@ interface Props {
     game: ValorantGame,
     pickedBtn: string,
     playerName: string
-    // chartCompareTo: Stats
+    chartCompareTo: {kills: number, deaths: number, assists: number}
 }
 const formatDate = (dateString: string): string => {
   const [year, month, day] = dateString.split('/');
@@ -14,7 +14,7 @@ const formatDate = (dateString: string): string => {
   return `${year}-${formattedMonth}-${formattedDay}`;
 }
 
-export const Row:React.FC<Props> = ({game, playerName, pickedBtn}) => {
+export const Row:React.FC<Props> = ({game, playerName, pickedBtn, chartCompareTo}) => {
     const player = game.players.find(player => player.name === playerName);
 
     /* The player stats array is seperated into many portions and each number is the selected portion */
@@ -66,12 +66,15 @@ export const Row:React.FC<Props> = ({game, playerName, pickedBtn}) => {
             </th>
 
             <Square 
+                compareAmount={chartCompareTo.kills}
                 amount={playerAmount.kills} 
             />
             <Square 
+                compareAmount={chartCompareTo.deaths}
                 amount={playerAmount.deaths} 
             />
             <Square 
+                compareAmount={chartCompareTo.assists}
                 amount={playerAmount.assists} 
             />
         </tr>
@@ -80,17 +83,17 @@ export const Row:React.FC<Props> = ({game, playerName, pickedBtn}) => {
 
 interface PropsTwo {
   amount: number,
-//   compareAmount: number
+  compareAmount: number
 }
 
-const Square: React.FC<PropsTwo> = ({amount}) => {
+const Square: React.FC<PropsTwo> = ({amount, compareAmount}) => {
   let bgColor = '#D9D9D9';
   let amountParsed = amount % 1 !== 0 ? amount.toFixed(1) : amount;
 
-//   if(amount > compareAmount) bgColor = '#B1DEA3';
-//   if(amount === compareAmount) bgColor = '#f7f259';
-//   if(amount < compareAmount) bgColor = '#f94352';
-//   else if(compareAmount < 0) bgColor = '#D9D9D9';
+  if(amount > compareAmount) bgColor = '#B1DEA3';
+  if(amount === compareAmount) bgColor = '#f7f259';
+  if(amount < compareAmount) bgColor = '#f94352';
+  else if(compareAmount < 0) bgColor = '#D9D9D9';
 
   return(
     <th style={{display:'flex', justifyContent:'center'}}>
