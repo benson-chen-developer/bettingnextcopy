@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { findSimilarLastNames } from '../Player/NotFound';
 import Image from 'next/image';
-import { PlayerType, useGlobalContext } from '../../Context/store';
+import { useGlobalContext } from '../../Context/store';
 import { searchPlayer } from './SearchBar';
+import { WNBAPlayer } from '../../Context/PlayerTypes';
 
 interface Props {
     input: string
@@ -10,7 +11,7 @@ interface Props {
 
 export const NamesDropDown: React.FC<Props> = ({input}) => {
     const {players} = useGlobalContext();
-    const [similarPlayers, setSimilarPlayers] = useState<PlayerType[]>([]);
+    const [similarPlayers, setSimilarPlayers] = useState<WNBAPlayer[]>([]);
 
     useEffect(() => {
         let similarPlayers = findSimilarLastNames(players, input, 2);

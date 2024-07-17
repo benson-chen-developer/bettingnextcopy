@@ -1,11 +1,12 @@
 import React from 'react'
 import Image from 'next/image';
-import { PlayerType, useGlobalContext } from '../../Context/store';
+import { useGlobalContext } from '../../Context/store';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { useEffect } from 'react';
+import { WNBAPlayer } from '../../Context/PlayerTypes';
 
 interface Props{
 }
@@ -41,10 +42,10 @@ const levenshteinDistance = (a: string, b: string): number => {
 /*
     Returns all the player names that are similar to the one we searched
 */
-export const findSimilarLastNames = (players: PlayerType[], input: string, maxAllowedDistance: number): PlayerType[] => {
+export const findSimilarLastNames = (players: WNBAPlayer[], input: string, maxAllowedDistance: number): WNBAPlayer[] => {
     const trimmedInput = input.trim();
 
-    let firstName = ''; let lastName = ''; let foundPlayers = new Set<PlayerType>();
+    let firstName = ''; let lastName = ''; let foundPlayers = new Set<WNBAPlayer>();
 
     /* This means if the user has used a space while typing */
     if (trimmedInput.split(' ').length > 1) {
@@ -79,7 +80,7 @@ export const NotFound: React.FC<Props> = ({}) => {
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [similarPlayers, setSimilarPlayers] = useState<PlayerType[]>([]);
+    const [similarPlayers, setSimilarPlayers] = useState<WNBAPlayer[]>([]);
 
     useEffect(() => {
         setSimilarPlayers(findSimilarLastNames(players, paramPlayer as string, 2));
@@ -120,7 +121,7 @@ export const NotFound: React.FC<Props> = ({}) => {
 }
 
 type PlayerBoxProps = {
-    player: PlayerType;
+    player: WNBAPlayer;
 };
   
 const PlayerBox: React.FC<PlayerBoxProps> = ({ player }) => {
