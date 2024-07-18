@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { black } from '../data/colors'
-import { getTodaysPlayers } from '../data/trending';
 import ResponsiveTrendingBoxes from '../components/Home/ResponsiveTrendingBoxes';
 import { Tab } from '../components/Home/Tab';
 import { TrendingBox } from '../components/Home/TrendingBox';
 import Head from 'next/head';
+import { fetchTodayWNBAGames } from '../components/WNBA/functions';
 
 const marginLeftSpacing = '50px';
 
@@ -22,31 +22,17 @@ const Trending = () => {
     ];
     const [trendingGames, setTrendingGames] = useState<any[]>([]);
     const [selectedTab, setSelectedTab] = useState<string>(trendings[0].name);
+    const [homePlayersLoaded, setHomePlayersLoad] = useState<boolean>(false);
 
     useEffect(() => {
         const fetchTodayGames = async () => {
-            let newTrendingGames: any[] = [];
             try {
-                let todayGames = await getTodaysPlayers('WNBA');
-    
-                for (const game of todayGames) {
-                    const gameDetails = await fetch(`http://localhost:3001/getPlayersInGame/${game.gameId}`);
-                    const gameDetailsJson = await gameDetails.json();
-                    
-                    /* 
-                        These are all players that play
-                        We wanna filter via rank as 1 ranks are starters I assume
-                    */
-                    const homeStarters = gameDetailsJson.results.depthCharts[0].players
-                        .filter((player: any) => player.rank === "1");
-                    const awayStarters = gameDetailsJson.results.depthCharts[1].players
-                        .filter((player: any) => player.rank === "1");
-
-                    newTrendingGames.push(gameDetailsJson);
-                }
-    
+                const newTrendingGames = await fetchTodayWNBAGames();
+                setHomePlayersLoad(true);
                 setTrendingGames(newTrendingGames);
-            } catch (error) {
+            }
+            catch (error) {
+                setHomePlayersLoad(true);
                 console.error('Error fetching today\'s games:', error);
             }
         };
@@ -85,7 +71,7 @@ const Trending = () => {
             </div>
 
             <div className="trending-box">
-                <ResponsiveTrendingBoxes games={trendingGames}/>
+                <ResponsiveTrendingBoxes games={trendingGames} homePlayersLoaded={homePlayersLoaded}/>
             </div>
         </div>
 
