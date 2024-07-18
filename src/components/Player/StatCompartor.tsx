@@ -2,17 +2,22 @@ import React, { Dispatch, SetStateAction } from 'react'
 
 interface Props{
     chartCompareTo: Object,
-    setChartCompareTo: Dispatch<SetStateAction<{kills: number, deaths: number, assists: number}>>
+    setChartCompareTo: Dispatch<SetStateAction<{kills: string, deaths: string, assists: string}>>
 }
 
 export const StatCompartor: React.FC<Props>  = ({chartCompareTo, setChartCompareTo}) => {
-    const handleCompareToChange = (key: string, value: number) => {
-        if(value <= -1) value = -1;
-        
-        setChartCompareTo(prevState => ({
-          ...prevState,
-          [key]: value
-        }));
+    const handleCompareToChange = (key: string, value: string) => {
+        const valToNum = parseFloat(value);
+        if (isNaN(valToNum)) {
+            
+        } else {
+            if(valToNum <= -1) value = '-1';
+            
+            setChartCompareTo(prevState => ({
+              ...prevState,
+              [key]: valToNum
+            }));
+        }
     };
 
     return (
@@ -41,8 +46,8 @@ export const StatCompartor: React.FC<Props>  = ({chartCompareTo, setChartCompare
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}
-                        type="number"
-                        onChange={(e) => handleCompareToChange(key, Number(e.target.value))}
+                        type="text"
+                        onChange={(e) => handleCompareToChange(key, String(e.target.value))}
                         value={value}
                     />
                 </td>

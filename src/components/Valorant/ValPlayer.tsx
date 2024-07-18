@@ -31,8 +31,8 @@ export const ValPlayer = () => {
 
     const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2", "Map 1+3", "Map 2+3"];
     const statsHeader = ["K", "D", "A"];
-    const [chartCompareTo, setChartCompareTo] = useState<{kills: number, deaths: number, assists: number}>({
-        "kills": -1, "deaths": -1, "assists": -1
+    const [chartCompareTo, setChartCompareTo] = useState<{kills: string, deaths: string, assists: string}>({
+        "kills": '-1', "deaths": '-1', "assists": '-1'
     })
     const [pickedBtn, setPickedBtn] = useState<string>('All Maps')
 
