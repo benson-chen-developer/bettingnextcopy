@@ -22,6 +22,12 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-#next
+# Ignore build cache
 .next/cache/
+
+# Ignore build artifacts
+.next/server/pages/player/[paramLeague]/[paramPlayer].js
+.next/static/chunks/pages/player/[paramLeague]/[paramPlayer].js
+.next/static/chunks/webpack.js
+.next/trace
 
