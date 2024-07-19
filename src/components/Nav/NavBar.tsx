@@ -47,9 +47,9 @@ export const NavBar: React.FC<Props> = ({
             zIndex: 1000 // Ensure it stays above other content
         }}>
             <Link href="/" style={{textDecoration: 'none', height:'100%', display:'flex', alignItems:'center'}}>
-                <Image src="/favicon.svg" alt="Sports Stats Icon" width={40} height={40} style={{margin: '0px 5px 0px 20px'}}/>
+                <Image src="/favicon.svg" alt="Sports Stats Icon" width={30} height={30} style={{margin: '0px 15px 0px 20px'}}/>
                 <h1 style={{ fontWeight: 'bold', cursor: 'pointer', textDecoration:'none', color:"#fff" }}>
-                    Sports Stats
+                    Pro Stats
                 </h1>
             </Link>
 

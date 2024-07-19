@@ -4,12 +4,14 @@ import { ClipLoader } from 'react-spinners';
 
 interface Props {
     games: any[]
+    homePlayersLoaded: boolean
 }
 
-const ResponsiveTrendingBoxes: React.FC<Props> = ({ games }) => {
+const ResponsiveTrendingBoxes: React.FC<Props> = ({ games, homePlayersLoaded }) => {
+    console.log(games)
 
     /* Will be loading since we are checking the teams which will always have players */
-    if (games.length === 0) return (
+    if (!homePlayersLoaded) return (
         <div style={{ marginLeft: '50px', marginTop: '20px' }}>
             <ClipLoader
                 color={'#fff'}
@@ -18,6 +20,13 @@ const ResponsiveTrendingBoxes: React.FC<Props> = ({ games }) => {
                 aria-label="Loading Spinner"
                 data-testid="loader"
             />
+        </div>
+    );
+
+    /* All star games */
+    if (homePlayersLoaded && games.length === 0) return (
+        <div style={{ marginLeft: '50px', marginTop: '20px' }}>
+            <h1 style={{color:'#fff'}}>No Games Currently</h1>
         </div>
     );
 

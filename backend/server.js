@@ -450,6 +450,185 @@ app.get("/allPlayers", async (req, res) => {
     }
 })
 
+app.get('/valorant/getAllPlayers', async (req, res) => {
+    try {
+        const axiosResponse = await axios.get('https://www.vlr.gg/stats');
+        const axiosHtml = axiosResponse.data;
+        
+        const $ = cheerio.load(axiosHtml);
+
+        let playersArr = [];
+        $('tbody tr').each((index, element) => {
+            const playerLink = $(element).find('.mod-player a').attr('href');
+            const playerId = playerLink ? playerLink.split('/')[2] : null;
+
+            const playerData = {
+                id: playerId,
+                name: $(element).find('.mod-player .text-of').text().trim(),
+                firstName: $(element).find('.mod-player .text-of').text().trim(),
+                lastName: '',
+                picId: '',
+                rnd: parseInt($(element).find('.mod-rnd').text().trim(), 10),
+                r: parseFloat($(element).find('.mod-color-sq').eq(0).text().trim()),
+                acs: parseFloat($(element).find('.mod-color-sq.mod-acs').text().trim()),
+                kd: parseFloat($(element).find('.mod-color-sq').eq(2).text().trim()),
+                kast: $(element).find('.mod-color-sq').eq(3).text().trim(),
+                adr: parseFloat($(element).find('.mod-color-sq').eq(4).text().trim()),
+                kpr: parseFloat($(element).find('.mod-color-sq').eq(5).text().trim()),
+                apr: parseFloat($(element).find('.mod-color-sq').eq(6).text().trim()),
+                fkpr: parseFloat($(element).find('.mod-color-sq').eq(7).text().trim()),
+                kdpr: parseFloat($(element).find('.mod-color-sq').eq(8).text().trim()),
+                hs: $(element).find('.mod-color-sq').eq(9).text().trim(),
+                cl: $(element).find('.mod-cl').text().trim(),
+                k: parseInt($(element).find('td').eq(14).text().trim(), 10),
+                d: parseInt($(element).find('td').eq(15).text().trim(), 10),
+                a: parseInt($(element).find('td').eq(16).text().trim(), 10),
+                fk: parseInt($(element).find('td').eq(17).text().trim(), 10),
+                fd: parseInt($(element).find('td').eq(18).text().trim(), 10),
+                team:  $(element).find('div.stats-player-country').text().trim()
+            };
+            playersArr.push(playerData);
+        });
+
+        res.json(playersArr);
+    } catch (error) {
+        console.error('Error fetching data:', error);
+        res.status(500).send('Error fetching data');
+    }
+});
+
+app.get("/valorant/:id/:username", async (req, res) => {
+    if(req.params.id === undefined || req.params.username === undefined) res.error(500, "The name or id is undefined");
+
+    const axiosResponse = await axios.get(`https://www.vlr.gg/player/matches/${req.params.id}/${req.params.username}`);
+    const axiosHtml = axiosResponse.data;
+    const $ = cheerio.load(axiosHtml);
+
+    let matches = [];
+    $('div.mod-dark').children('div').each((index, element) => {
+        const match = {};
+        
+        // Gets the url link
+        const aTag = $(element).find('a').attr('href');
+        if (aTag) {
+            match.url = aTag;
+        }
+
+        // Gets the opposing team
+        const teamTags = $(element).find('span.m-item-team-tag');
+        if (teamTags.length > 1) {
+            match.oppTeam = $(teamTags[1]).text().trim();
+        }
+
+        // Get the date
+        const dateDiv = $(element).find('div.m-item-date');
+        if (dateDiv.length > 0) {
+            const date = dateDiv.children('div').first().text().trim();
+            match.date = date;
+        }
+
+        matches.push({...match, players: [], maps: []});
+    });
+
+    res.json(matches);
+})
+
+/*
+    mapId is a number or all for all 3 maps
+*/
+app.get("/valorant/game", async (req, res) => {
+    const axiosResponse = await axios.get(`https://www.vlr.gg${req.headers["url"]}`);
+    const axiosHtml = axiosResponse.data;
+    const $ = cheerio.load(axiosHtml);
+
+    const maps = [];
+    $('div[style="margin-bottom: 2px; text-align: center; line-height: 1.5;"]').each((index, element) => {
+        const fullText = $(element).text().trim();
+        const words = fullText.split(/\s+/);
+        const lastWord = words[words.length - 1]; /* This is the name of the map */
+
+        maps.push(lastWord);
+    });
+
+
+    /* 
+        There are 4 maps (all, map1, map2, map3). Each map is in one tbody
+            - each tr is a player with there stats
+            - each stat will be all, attack, or def
+    */
+    const playersMap = new Map();
+    $('tbody').each((tbodyIndex, tbodyElement) => {
+        // Loop through each tr within the current tbody
+        $(tbodyElement).find('tr').each((trIndex, trElement) => {
+            const playerName = $(trElement).find('div.text-of').first().text().trim(); /* Name */
+            const team = $(trElement).find('div.ge-text-light').first().text().trim(); /* Team */
+
+            let kills = [0, 0, 0];
+            const killsTd = $(trElement).find('td.mod-stat.mod-vlr-kills').first(); /* Kills */
+            if (killsTd.length) {
+                const spans = killsTd.find('span.side');
+                kills[0] = parseInt(spans.filter('.mod-both').text().trim()) || 0;
+                kills[1] = parseInt(spans.filter('.mod-t').text().trim()) || 0;
+                kills[2] = parseInt(spans.filter('.mod-ct').text().trim()) || 0;
+            }
+
+            let deaths = [0, 0, 0];
+            const deathsTd = $(trElement).find('td.mod-stat.mod-vlr-deaths').first(); /* Deaths */
+            if (deathsTd.length) {
+                const spans = deathsTd.find('span.side');
+                deaths[0] = parseInt(spans.filter('.mod-both').text().trim()) || 0;
+                deaths[1] = parseInt(spans.filter('.mod-t').text().trim()) || 0;
+                deaths[2] = parseInt(spans.filter('.mod-ct').text().trim()) || 0;
+            }
+
+            let assists = [0, 0, 0];
+            const assistsTd = $(trElement).find('td.mod-stat.mod-vlr-assists').first(); /* Assists */
+            if (assistsTd.length) {
+                const spans = assistsTd.find('span.side');
+                assists[0] = parseInt(spans.filter('.mod-both').text().trim()) || 0;
+                assists[1] = parseInt(spans.filter('.mod-t').text().trim()) || 0;
+                assists[2] = parseInt(spans.filter('.mod-ct').text().trim()) || 0;
+            }
+
+            // If the player already exists, update their stats
+            if (playersMap.has(playerName)) {
+                const existingPlayer = playersMap.get(playerName);
+                existingPlayer.kills = [...existingPlayer.kills, ...kills];
+                existingPlayer.deaths = [...existingPlayer.deaths, ...deaths];
+                existingPlayer.assists = [...existingPlayer.assists, ...assists];
+            } else {
+                // Otherwise, add a new entry for the player
+                playersMap.set(playerName, {
+                    name: playerName,
+                    team: team,
+                    kills: kills,
+                    deaths: deaths,
+                    assists: assists
+                });
+            }
+        });
+    });
+
+    /* If kills/assists/deaths is less than length 12 then that means not all 3 maps were played so we append 0,0,0 */
+    const players = Array.from(playersMap.values());
+    const ensureLength = (arr, length, fillValue) => {
+        while (arr.length < length) {
+            arr.push(fillValue);
+        }
+        return arr;
+    };
+    players.forEach(player => {
+        player.kills = ensureLength(player.kills, 12, 0);
+        player.deaths = ensureLength(player.deaths, 12, 0);
+        player.assists = ensureLength(player.assists, 12, 0);
+    });
+
+    res.json({
+        players: players, maps: maps
+    });
+})
+
+
 const getTeamNames = (actions) => {
     let teamNames = [];
     let i = 0;

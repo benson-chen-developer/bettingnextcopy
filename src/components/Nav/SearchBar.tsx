@@ -1,6 +1,7 @@
-import React, { useState, FormEvent, Dispatch, SetStateAction } from 'react';
+import React, { useState, FormEvent, Dispatch, SetStateAction, useEffect } from 'react';
 import { InputField } from './InputField';
 import { NamesDropDown } from './NamesDropDown';
+import { useRouter } from 'next/router';
 
 interface Props {
   widthSpacing?: string,
@@ -9,6 +10,10 @@ interface Props {
 
 /* Navigates to new page while appending the new player name to the end */
 export const searchPlayer = (input: string, league: string, correctName?: boolean) => {
+  /* Esports Players Only have firstname so remove the _ (name will be sent as faker_) */
+  if (input.charAt(input.length - 1) === '_') {
+    input = input.slice(0, -1);
+  }
 
   /* Correct Name means the name is already parsed so we can just navigate
      Name must be in jonquel_jones format
@@ -33,6 +38,8 @@ export const searchPlayer = (input: string, league: string, correctName?: boolea
 };
 
 export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) => {
+  const router = useRouter();
+  const { paramPlayer, paramLeague } = router.query;
   const [playerName, setPlayerName] = useState<string>('');
   const [sport, setSport] = useState<string>('WNBA');
 
@@ -43,6 +50,12 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
     event.preventDefault();
     searchPlayer(playerName, sport);
   };
+
+  useEffect(() => {
+    if (paramLeague) {
+      setSport(paramLeague as string);
+    }
+  }, [paramLeague, paramPlayer]);
 
 
   return (
@@ -86,7 +99,7 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
       </form>
 
       <NamesDropDown 
-        input={playerName}
+        input={playerName} sport={sport}
       />
 
     </div>
@@ -98,24 +111,36 @@ interface SportBtnProps {
   sport: string, 
   setSport: Dispatch<SetStateAction<string>>
 }
+
 const SportBtn: React.FC<SportBtnProps> = ({ sport, setSport }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const allSports = [
-    "WNBA"
-  ]
+  const allSports = ["WNBA", "Valorant"];
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
   const handleSportSelect = (sport: string) => {
     setSport(sport);
     setIsDropdownOpen(false);
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.sport-dropdown') && isDropdownOpen) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
   return (
-    <div style={{ position: 'relative', width:'20%' }}>
-      
-      {/*  */}
+    <div style={{ position: 'relative', width:'20%' }} className="sport-dropdown">
       <button 
         onClick={toggleDropdown} 
         style={{
@@ -124,14 +149,14 @@ const SportBtn: React.FC<SportBtnProps> = ({ sport, setSport }) => {
           border: 'none',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
           margin: 3, cursor: 'pointer'
-        }} type="button"
+        }} 
+        type="button"
       >
         <p style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>
           {sport}
         </p>
       </button>
 
-      {/* The League Drop Down */}
       {isDropdownOpen && (
         <div style={{
           position: 'absolute',
@@ -144,15 +169,17 @@ const SportBtn: React.FC<SportBtnProps> = ({ sport, setSport }) => {
           boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
           zIndex: 1
         }}>
-          {allSports.map((sportName, index) => { return <div key={index}
+          {allSports.map((sportName, index) => (
+            <div 
+              key={index}
               onClick={() => handleSportSelect(sportName)} 
               style={{ padding: 10, cursor: 'pointer', backgroundColor: sport === sportName ? '#f0f0f0' : '#fff' }}
             >
               {sportName}
             </div>
-          })}
+          ))}
         </div>
       )}
     </div>
   );
-}
+};
