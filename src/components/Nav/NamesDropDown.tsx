@@ -22,6 +22,7 @@ export const NamesDropDown: React.FC<Props> = ({input, sport}) => {
     */
     const [similarPlayers, setSimilarPlayers] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
+    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
     /*
         Make the getAllPlayer calls to the respective league
@@ -35,20 +36,33 @@ export const NamesDropDown: React.FC<Props> = ({input, sport}) => {
         else if(sport === "Valorant"){
             const valorantPlayers = await fetchValorantPlayers();
             similarPlayers = findSimilarLastNames(valorantPlayers, input, 2);
-            // console.log(similarPlayers)
         }
 
         setSimilarPlayers(similarPlayers);
     }
 
     useEffect(() => {
+        setIsDropdownOpen(true);
         getSimilarPlayers();
         setLoading(false);
     }, [input, sport])
 
-    if(input.trim() === '') return null;
+    const handleClickOutside = (event: MouseEvent) => {
+        const target = event.target as HTMLElement;
+        if (!target.closest('.sport-dropdown') && isDropdownOpen) {
+          setIsDropdownOpen(false);
+        }
+    };
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+          document.removeEventListener('click', handleClickOutside);
+        };
+    }, [isDropdownOpen]);
+
+    if(!isDropdownOpen) return null;
     
-    if(loading) return (
+    if(loading && isDropdownOpen) return (
         <div style={{
             width: '100%', minHeight:'50px', background:'#eaeaea', position:'absolute',
             top: '100%', left: 0, borderBottomLeftRadius: 10, borderBottomRightRadius: 10,
@@ -66,7 +80,7 @@ export const NamesDropDown: React.FC<Props> = ({input, sport}) => {
         </div>
     )
 
-    if(similarPlayers.length === 0) return (
+    if(loading && isDropdownOpen && similarPlayers.length === 0) return (
         <div style={{
             width: '100%', minHeight:'50px', background:'#eaeaea', position:'absolute',
             top: '100%', left: 0, borderBottomLeftRadius: 10, borderBottomRightRadius: 10,

@@ -111,24 +111,36 @@ interface SportBtnProps {
   sport: string, 
   setSport: Dispatch<SetStateAction<string>>
 }
+
 const SportBtn: React.FC<SportBtnProps> = ({ sport, setSport }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const allSports = [
-    "WNBA", "Valorant"
-  ]
+  const allSports = ["WNBA", "Valorant"];
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
   const handleSportSelect = (sport: string) => {
     setSport(sport);
     setIsDropdownOpen(false);
   };
 
+  const handleClickOutside = (event: MouseEvent) => {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.sport-dropdown') && isDropdownOpen) {
+      setIsDropdownOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, [isDropdownOpen]);
+
   return (
-    <div style={{ position: 'relative', width:'20%' }}>
-      
-      {/*  */}
+    <div style={{ position: 'relative', width:'20%' }} className="sport-dropdown">
       <button 
         onClick={toggleDropdown} 
         style={{
@@ -137,14 +149,14 @@ const SportBtn: React.FC<SportBtnProps> = ({ sport, setSport }) => {
           border: 'none',
           display: 'flex', justifyContent: 'center', alignItems: 'center',
           margin: 3, cursor: 'pointer'
-        }} type="button"
+        }} 
+        type="button"
       >
         <p style={{ color: '#fff', fontSize: 12, fontWeight: 'bold' }}>
           {sport}
         </p>
       </button>
 
-      {/* The League Drop Down */}
       {isDropdownOpen && (
         <div style={{
           position: 'absolute',
@@ -157,15 +169,17 @@ const SportBtn: React.FC<SportBtnProps> = ({ sport, setSport }) => {
           boxShadow: '0 8px 16px rgba(0, 0, 0, 0.2)',
           zIndex: 1
         }}>
-          {allSports.map((sportName, index) => { return <div key={index}
+          {allSports.map((sportName, index) => (
+            <div 
+              key={index}
               onClick={() => handleSportSelect(sportName)} 
               style={{ padding: 10, cursor: 'pointer', backgroundColor: sport === sportName ? '#f0f0f0' : '#fff' }}
             >
               {sportName}
             </div>
-          })}
+          ))}
         </div>
       )}
     </div>
   );
-}
+};

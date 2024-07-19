@@ -53,25 +53,32 @@ export const findSimilarLastNames = (players: any[], input: string, maxAllowedDi
         firstName = trimmedInput.split(' ')[0];
         lastName = trimmedInput.split(' ')[1];
     
-        players.forEach(player => {
+        for (const player of players) {
             if (levenshteinDistance(player.firstName, firstName) <= maxAllowedDistance) {
                 foundPlayers.add(player);
             }
+            if (foundPlayers.size >= 5) break;
+
             if (levenshteinDistance(player.lastName, lastName) <= maxAllowedDistance) {
                 foundPlayers.add(player);
             }
-        });
+            if (foundPlayers.size >= 5) break;
+        }
     } else {
-        players.forEach(player => {
+        for (const player of players) {
             if (levenshteinDistance(player.firstName, trimmedInput) <= maxAllowedDistance) {
                 foundPlayers.add(player);
             }
+            if (foundPlayers.size >= 5) break;
+
             if (levenshteinDistance(player.lastName, trimmedInput) <= maxAllowedDistance) {
                 foundPlayers.add(player);
             }
-        });
+            if (foundPlayers.size >= 5) break;
+        }
         firstName = trimmedInput;
     }
+    console.log(foundPlayers)
     
     return Array.from(foundPlayers);
 };
