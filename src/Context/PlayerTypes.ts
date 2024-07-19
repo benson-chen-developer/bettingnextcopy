@@ -15,6 +15,9 @@ export type WNBAPlayer = {
 export type ValorantPlayer = {
     id: string,
     name: string,
+    firstName: string,
+    lastName: string,
+    picId: string,
     rnd: number,
     r: number,
     acs: number,
@@ -32,7 +35,7 @@ export type ValorantPlayer = {
     a: number,
     fk: number,
     fd: number,
-    team:string
+    team:string,
 }
 export type ValorantGame = {
     url: string,

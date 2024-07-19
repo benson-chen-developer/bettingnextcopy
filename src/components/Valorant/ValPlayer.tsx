@@ -28,13 +28,67 @@ export const ValPlayer = () => {
     const [player, setPlayer] = useState<ValorantPlayer | undefined>(undefined);
     const [allGames, setAllGames] = useState<ValorantGame[]>([]);
     const [displayedGames, setDisplayedGames] = useState<ValorantGame[]>([]);
+    
+    const [allGamesLoaded, setAllGamesLoaded] = useState<boolean>(false);
+    const [loading, setLoading] = useState<boolean>(true);
 
     const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2", "Map 1+3", "Map 2+3"];
     const statsHeader = ["K", "D", "A"];
-    const [chartCompareTo, setChartCompareTo] = useState<{kills: string, deaths: string, assists: string}>({
-        "kills": '-1', "deaths": '-1', "assists": '-1'
+    const [chartCompareTo, setChartCompareTo] = useState<{kills: number, deaths: number, assists: number}>({
+        "kills": -1, "deaths": -1, "assists": -1
     })
     const [pickedBtn, setPickedBtn] = useState<string>('All Maps')
+
+    /* Utility function to remove the non updated maps/players in allGames with updated ones */
+    const updatedAllGames = (allGames: ValorantGame[], newGames: ValorantGame[]): ValorantGame[] => {
+        return allGames.map(game => {
+            const updatedGame = newGames.find(newGame => newGame.url === game.url);
+            return updatedGame ? updatedGame : game;
+        })
+    };
+
+    /* 
+        We loop through each game and each one with an empty map and player needs data so we fill it 
+            - Returns only the new games and not old ones (make sure to append to displayedGames current state)
+            - Make sure to upadte the allGames to have the maps and players updated with this info
+            - Will also check if all 50 games are loaded
+    */
+    const loadMore = async (allGames: ValorantGame[], loadThisMuch: number): Promise<ValorantGame[]> => {
+        let newGames: ValorantGame[] = [];
+        let loadIndex = 0;
+    
+        for (const game of allGames) {
+            if (game.maps.length === 0 && game.players.length === 0 && loadIndex < loadThisMuch) {
+                try {
+                    const mapRes = await fetch(`http://localhost:3001/valorant/game`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'url': game.url
+                        }
+                    });
+                    const playersAndMaps = await mapRes.json();
+                    const players = playersAndMaps.players;
+                    const maps = playersAndMaps.maps;
+    
+                    newGames.push({
+                        ...game, maps: maps, players: players
+                    });
+                    loadIndex++;
+                } catch (error) {
+                    console.error(`Error fetching data for game at ${game.url}:`, error);
+                }
+            }
+        }
+    
+        /* Check to see if every game is loaded */
+        const updatedGames = updatedAllGames(allGames, newGames);
+        console.log(updatedGames)
+        const allGamesFound = updatedGames.every((game: ValorantGame) => game.players.length > 0);
+        setAllGamesLoaded(allGamesFound);
+
+        return newGames;
+    };
 
     /*
         If (`http://localhost:3001/valorant/${foundPlayer?.id}/${foundPlayer?.name}`); crashes it means ussually that
@@ -43,33 +97,28 @@ export const ValPlayer = () => {
     useEffect(() => {
         const fetchPlayer = async () => {
             const allValPlayers = await fetchValorantPlayers();
-            // console.log(allValPlayers)
             setAllPlayers(allValPlayers);
 
+            /* Found the player in the load all players array */
             const foundPlayer = allValPlayers.find(player => player.name.toLowerCase() === (paramPlayer as string).toLowerCase());
             setPlayer(foundPlayer);
-            // console.log(foundPlayer)
 
+            /* Get the maps from the player */
             const res = await fetch(`http://localhost:3001/valorant/${foundPlayer?.id}/${foundPlayer?.name}`);
             let gamesWithOutMapsOrPlayers = await res.json();
 
-            const mapRes = await fetch(`http://localhost:3001/valorant/123`);
-            const playersAndMaps = await mapRes.json();
+            /* Parse the first map to get that games stats */
+            let newGames = await loadMore(gamesWithOutMapsOrPlayers, 5);
 
-            const players = playersAndMaps.players; const maps = playersAndMaps.maps;
-            gamesWithOutMapsOrPlayers[0].players = players; gamesWithOutMapsOrPlayers[0].maps = maps;
-
-            // console.log(gamesWithOutMapsOrPlayers)
-            setAllGames(gamesWithOutMapsOrPlayers);
-            setDisplayedGames(gamesWithOutMapsOrPlayers.filter((game: ValorantGame) => 
-                game.maps.length > 0 && game.players.length > 0)
-            )
+            setAllGames(updatedAllGames(gamesWithOutMapsOrPlayers, newGames).slice(0,10));
+            setDisplayedGames(newGames)
+            setLoading(false);
         }
 
         if(paramLeague && paramPlayer) fetchPlayer();
     }, [])
 
-    if(player && allPlayers.length > 0 && displayedGames.length > 0) return (
+    if(!loading && player && allPlayers.length > 0 && displayedGames.length > 0) return (
         <div>
             <Hero 
                 playerName={player.name}
@@ -82,7 +131,9 @@ export const ValPlayer = () => {
                 allPickedBtns={allPickedBtns}
             />
 
-            <div style={{display:'flex', marginLeft:'50px'}}>
+            <h1 style={{ marginLeft: '75px', marginBottom:'10px'}}>Games</h1>
+
+            <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%'}}>
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
 
@@ -104,6 +155,41 @@ export const ValPlayer = () => {
                         ))}
                     </tbody>
                 </table>
+
+                {allGamesLoaded ?
+                    <div style={{ width: '70%', display: 'flex', justifyContent:'center', marginTop:'25px' }}>
+                        <p style={{color: '#000', fontSize:12, fontWeight:'bold'}}>
+                            Everything is Loaded
+                        </p>
+                    </div>
+                        :
+                    <div style={{ width: '70%', display: 'flex', justifyContent:'center', marginTop:'25px' }}>
+                        <button 
+                             onClick={() => {
+                                const loadGames = async () => {
+                                    const newGames = await loadMore(allGames, 5);
+                                    setDisplayedGames(p => [...p, ...newGames]);
+                                    setAllGames(p => updatedAllGames(p, newGames))
+                                    setLoading(false);
+                                };
+                        
+                                setLoading(true);
+                                loadGames();
+                            }} 
+                            style={{
+                                width: 100, height:40, borderRadius: 50,
+                                background: '#D9D9D9',
+                                border: '1px solid #000',
+                                display:'flex', justifyContent:'center', alignItems:'center',
+                                cursor:'pointer', marginBottom:'50px'
+                            }}
+                        >
+                            <p style={{color: '#000', fontSize:12, fontWeight:'bold'}}>
+                                Load More
+                            </p>
+                        </button>
+                    </div>
+                }
             </div>
 
         </div>

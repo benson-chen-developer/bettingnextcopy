@@ -42,10 +42,11 @@ const levenshteinDistance = (a: string, b: string): number => {
 /*
     Returns all the player names that are similar to the one we searched
 */
-export const findSimilarLastNames = (players: WNBAPlayer[], input: string, maxAllowedDistance: number): WNBAPlayer[] => {
+export const findSimilarLastNames = (players: any[], input: string, maxAllowedDistance: number): any[] => {
     const trimmedInput = input.trim();
 
-    let firstName = ''; let lastName = ''; let foundPlayers = new Set<WNBAPlayer>();
+    let firstName = ''; let lastName = ''; 
+    let foundPlayers = new Set<any>();
 
     /* This means if the user has used a space while typing */
     if (trimmedInput.split(' ').length > 1) {

@@ -26,7 +26,6 @@ export const metadate = {
 export const WNBAPlayer: React.FC<Props> = ({}) => {
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
-    const parsedParamName = `${(paramPlayer as string)?.split("_")[0]}. ${(paramPlayer as string)?.split("_")[1]}`
     const {players, games, setGames} = useGlobalContext();
 
     const [gamesWithPlayer, setGamesWithPlayer] = useState<Game2[]>([]);
@@ -39,21 +38,7 @@ export const WNBAPlayer: React.FC<Props> = ({}) => {
         "FAN": -1
     });
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [dateLoadedTo, setDateLoadedTo] = useState<Date>(new Date());
     const [allLoaded, setAllLoaded] = useState<boolean>(false);
-
-    const fastForwardDays = (oldDate: Date, days: number): Date => {
-        const newDate = new Date(oldDate);
-        newDate.setDate(newDate.getDate() + days);
-
-        if(newDate >= new Date()){
-            return new Date();
-        } else if (newDate < new Date("May 3, 2024")) { //Start of WNBA Season
-            return new Date("May 3, 2024");
-        }
-
-        return newDate;
-    }
 
     useEffect(() => {
         const fetchGamesByTeam = async () => {

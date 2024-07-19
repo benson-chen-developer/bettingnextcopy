@@ -465,6 +465,9 @@ app.get('/valorant/getAllPlayers', async (req, res) => {
             const playerData = {
                 id: playerId,
                 name: $(element).find('.mod-player .text-of').text().trim(),
+                firstName: $(element).find('.mod-player .text-of').text().trim(),
+                lastName: '',
+                picId: '',
                 rnd: parseInt($(element).find('.mod-rnd').text().trim(), 10),
                 r: parseFloat($(element).find('.mod-color-sq').eq(0).text().trim()),
                 acs: parseFloat($(element).find('.mod-color-sq.mod-acs').text().trim()),
@@ -533,8 +536,8 @@ app.get("/valorant/:id/:username", async (req, res) => {
 /*
     mapId is a number or all for all 3 maps
 */
-app.get("/valorant/:gameId", async (req, res) => {
-    const axiosResponse = await axios.get(`https://www.vlr.gg/353200/loud-vs-100-thieves-champions-tour-2024-americas-stage-2-w4/`);
+app.get("/valorant/game", async (req, res) => {
+    const axiosResponse = await axios.get(`https://www.vlr.gg${req.headers["url"]}`);
     const axiosHtml = axiosResponse.data;
     const $ = cheerio.load(axiosHtml);
 
@@ -606,11 +609,19 @@ app.get("/valorant/:gameId", async (req, res) => {
         });
     });
 
-    // Convert the map to an array of players
+    /* If kills/assists/deaths is less than length 12 then that means not all 3 maps were played so we append 0,0,0 */
     const players = Array.from(playersMap.values());
-    // console.log(players)
-    // console.log(maps)
-
+    const ensureLength = (arr, length, fillValue) => {
+        while (arr.length < length) {
+            arr.push(fillValue);
+        }
+        return arr;
+    };
+    players.forEach(player => {
+        player.kills = ensureLength(player.kills, 12, 0);
+        player.deaths = ensureLength(player.deaths, 12, 0);
+        player.assists = ensureLength(player.assists, 12, 0);
+    });
 
     res.json({
         players: players, maps: maps

@@ -5,7 +5,7 @@ interface Props {
     game: ValorantGame,
     pickedBtn: string,
     playerName: string
-    chartCompareTo: {kills: string, deaths: string, assists: string}
+    chartCompareTo: {kills: number, deaths: number, assists: number}
 }
 const formatDate = (dateString: string): string => {
   const [year, month, day] = dateString.split('/');
@@ -61,8 +61,8 @@ export const Row:React.FC<Props> = ({game, playerName, pickedBtn, chartCompareTo
     return (
         <tr style={{display:'flex'}}>
             <th style={{width:'200px', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
-                <h4>{formatDate(game.date)}</h4>
-                <h4>@{game.oppTeam}</h4>
+                <h4 style={{margin:0}}>{formatDate(game.date)}</h4>
+                <h4 style={{margin:0}}>@{game.oppTeam}</h4>
             </th>
 
             <Square 
@@ -83,17 +83,17 @@ export const Row:React.FC<Props> = ({game, playerName, pickedBtn, chartCompareTo
 
 interface PropsTwo {
   amount: number,
-  compareAmount: string
+  compareAmount: number
 }
 
 const Square: React.FC<PropsTwo> = ({amount, compareAmount}) => {
   let bgColor = '#D9D9D9';
   let amountParsed = amount % 1 !== 0 ? amount.toFixed(1) : amount;
 
-//   if(amount > compareAmount) bgColor = '#B1DEA3';
-//   if(amount === compareAmount) bgColor = '#f7f259';
-//   if(amount < compareAmount) bgColor = '#f94352';
-//   else if(compareAmount < 0) bgColor = '#D9D9D9';
+  if(amount > compareAmount) bgColor = '#B1DEA3';
+  if(amount === compareAmount) bgColor = '#f7f259';
+  if(amount < compareAmount) bgColor = '#f94352';
+  else if(compareAmount < 0) bgColor = '#D9D9D9';
 
   return(
     <th style={{display:'flex', justifyContent:'center'}}>

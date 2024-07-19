@@ -1,6 +1,7 @@
-import React, { useState, FormEvent, Dispatch, SetStateAction } from 'react';
+import React, { useState, FormEvent, Dispatch, SetStateAction, useEffect } from 'react';
 import { InputField } from './InputField';
 import { NamesDropDown } from './NamesDropDown';
+import { useRouter } from 'next/router';
 
 interface Props {
   widthSpacing?: string,
@@ -9,6 +10,10 @@ interface Props {
 
 /* Navigates to new page while appending the new player name to the end */
 export const searchPlayer = (input: string, league: string, correctName?: boolean) => {
+  /* Esports Players Only have firstname so remove the _ (name will be sent as faker_) */
+  if (input.charAt(input.length - 1) === '_') {
+    input = input.slice(0, -1);
+  }
 
   /* Correct Name means the name is already parsed so we can just navigate
      Name must be in jonquel_jones format
@@ -33,6 +38,8 @@ export const searchPlayer = (input: string, league: string, correctName?: boolea
 };
 
 export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) => {
+  const router = useRouter();
+  const { paramPlayer, paramLeague } = router.query;
   const [playerName, setPlayerName] = useState<string>('');
   const [sport, setSport] = useState<string>('WNBA');
 
@@ -43,6 +50,12 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
     event.preventDefault();
     searchPlayer(playerName, sport);
   };
+
+  useEffect(() => {
+    if (paramLeague) {
+      setSport(paramLeague as string);
+    }
+  }, [paramLeague, paramPlayer]);
 
 
   return (
@@ -86,7 +99,7 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
       </form>
 
       <NamesDropDown 
-        input={playerName}
+        input={playerName} sport={sport}
       />
 
     </div>
