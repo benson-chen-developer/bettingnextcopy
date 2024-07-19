@@ -110,7 +110,7 @@ export const ValPlayer = () => {
             /* Parse the first map to get that games stats */
             let newGames = await loadMore(gamesWithOutMapsOrPlayers, 5);
 
-            setAllGames(updatedAllGames(gamesWithOutMapsOrPlayers, newGames).slice(0,10));
+            setAllGames(updatedAllGames(gamesWithOutMapsOrPlayers, newGames).slice(0,25));
             setDisplayedGames(newGames)
             setLoading(false);
         }

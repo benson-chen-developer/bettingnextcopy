@@ -60,7 +60,7 @@ export const NamesDropDown: React.FC<Props> = ({input, sport}) => {
         };
     }, [isDropdownOpen]);
 
-    if(!isDropdownOpen) return null;
+    if(!isDropdownOpen || input.trim().length === 0) return null;
     
     if(loading && isDropdownOpen) return (
         <div style={{
