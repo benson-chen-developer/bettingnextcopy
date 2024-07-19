@@ -30,6 +30,5 @@ yarn-error.log*
 .next/static/chunks/pages/player/[paramLeague]/[paramPlayer].js
 .next/static/chunks/webpack.js
 .next/trace
-.next/cache/
 .next/server/
 .next/static/chunks/
