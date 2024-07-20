@@ -124,7 +124,7 @@ export const loadGamesByTeam = async (oldGames: Game2[], playerName: string, tea
                 ){
                     loadIndex++;
                     fetchPromises.push(
-                        fetch(`https://content-api-prod.nba.com/public/1/leagues/wnba/game/${game.gameId}`)
+                        fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/wnba/gameStatsBigPicture.${game.gameId}`)
                             .then(res => res.json())
                             .then(async (gamesRes) => {
                                 const players = [...gamesRes.results.depthCharts[0].players, ...gamesRes.results.depthCharts[1].players];
