@@ -30,7 +30,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const fetchPlayers = async () => {
     try {
-      const response = await fetch('http://localhost:3001/allPlayers');
+      const response = await fetch('bettingnext-hioa.vercel.app/allPlayers');
       if (!response.ok) {
         throw new Error('Failed to fetch players');
       }
