@@ -83,7 +83,7 @@ export const ValPlayer = () => {
     
         /* Check to see if every game is loaded */
         const updatedGames = updatedAllGames(allGames, newGames);
-        console.log(updatedGames)
+        // console.log(updatedGames)
         const allGamesFound = updatedGames.every((game: ValorantGame) => game.players.length > 0);
         setAllGamesLoaded(allGamesFound);
 
@@ -104,7 +104,7 @@ export const ValPlayer = () => {
             setPlayer(foundPlayer);
 
             /* Get the maps from the player */
-            const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/${foundPlayer?.id}/${foundPlayer?.name}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/${foundPlayer?.id}/${foundPlayer?.name}`);
             let gamesWithOutMapsOrPlayers = await res.json();
 
             /* Parse the first map to get that games stats */
