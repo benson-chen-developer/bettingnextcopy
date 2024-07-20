@@ -2,16 +2,7 @@ import { Game2, Stats } from "../functions/players";
 import { mlbParsing } from "./mlbParsing";
 import { wnbaParsing } from "./wnbaParsing";
 
-const deadAction = {
-    name: '',
-    period: -1,
-    clock: '',
-    teamTricode: '',
-    actionType: 'dead' as keyof Stats,
-    amount: -1,
-    picId: -1
-}
-
+export const apiUrl = "bettingnext-hioa.vercel.app";
 export const gameLinks = [
     {
         name: 'WNBA', 

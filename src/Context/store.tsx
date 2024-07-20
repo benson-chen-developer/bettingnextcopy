@@ -2,6 +2,7 @@
 import React, { createContext, useContext, Dispatch, SetStateAction, useState, useEffect, ReactNode } from 'react';
 import { Game2 } from '../functions/players';
 import { ValorantPlayer, WNBAPlayer } from './PlayerTypes';
+import {apiUrl} from '../data/data';
 
 interface ContextProps {
   players: WNBAPlayer[];
@@ -30,7 +31,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
 
   const fetchPlayers = async () => {
     try {
-      const response = await fetch('bettingnext-hioa.vercel.app/allPlayers');
+      const response = await fetch(`${apiUrl}/allPlayers`);
       if (!response.ok) {
         throw new Error('Failed to fetch players');
       }
@@ -48,7 +49,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     } else {
       try {
         console.log("Not Cached Valorant");
-        const response = await fetch('http://localhost:3001/valorant/getAllPlayers');
+        const response = await fetch(`${apiUrl}/getAllPlayers`);
         if (!response.ok) throw new Error('Failed to fetch Valorant players');
 
         const data = await response.json();

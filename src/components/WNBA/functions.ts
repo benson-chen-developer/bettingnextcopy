@@ -1,3 +1,4 @@
+import { apiUrl } from "../../data/data";
 
 /*
     Should return a games array like this
@@ -28,7 +29,7 @@ export const getTodaysPlayers = async (): Promise<any[]> => {
     }
 
     //Get the Schedule
-    const wnbaData = await fetch('http://localhost:3001/wnbaScedule');
+    const wnbaData = await fetch(`${apiUrl}/wnbaScedule`);
     const parsedData = await wnbaData.json();
     const games = parsedData.leagueSchedule.gameDates;
     
