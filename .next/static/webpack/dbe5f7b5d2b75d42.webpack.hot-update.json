@@ -1,0 +1,1 @@
+{"c":["pages/_app","pages/index","pages/player/[paramLeague]/[paramPlayer]","webpack"],"r":[],"m":["./src/data/trending.ts","./src/components/Player/Hero/Hero.tsx","./src/components/Player/Row.tsx","./src/data/data.ts","./src/data/mlbParsing.ts"]}
