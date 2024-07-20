@@ -93,7 +93,7 @@ export const mlbParsing = async (
 ): Promise<Game2[]> => {
     let newGames: Game2[] = [];
     try {
-        const res = await fetch('http://localhost:3001/mlbSchedule/', {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/mlbSchedule/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

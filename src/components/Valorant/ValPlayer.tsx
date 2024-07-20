@@ -60,7 +60,7 @@ export const ValPlayer = () => {
         for (const game of allGames) {
             if (game.maps.length === 0 && game.players.length === 0 && loadIndex < loadThisMuch) {
                 try {
-                    const mapRes = await fetch(`http://localhost:3001/valorant/game`, {
+                    const mapRes = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/game`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',

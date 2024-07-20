@@ -98,7 +98,7 @@ export const loadGamesByTeam = async (oldGames: Game2[], playerName: string, tea
     /*
         We get the schedule and remove and games that we already have in the oldGames
     */
-    let schedule = await fetch('http://localhost:3001/wnbaScedule');
+    let schedule = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/wnbaScedule`);
     let parsedWbna = await schedule.json();
     let gameDatesArray = parsedWbna.leagueSchedule.gameDates;
 
@@ -133,7 +133,7 @@ export const loadGamesByTeam = async (oldGames: Game2[], playerName: string, tea
 
                                 /* Player name is found so we add it */
                                 if (foundPlayer) {
-                                    const gameDataRes = await fetch(`http://localhost:3001/parseGame`, { //Load Game data
+                                    const gameDataRes = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/parseGame`, { //Load Game data
                                         method: 'GET',
                                         headers: {
                                             'Content-Type': 'application/json',
