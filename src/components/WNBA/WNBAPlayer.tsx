@@ -19,7 +19,7 @@ export const metadate = {
 }
 
 /*
-    This page is in the url form of http://localhost:3000/player/WNBA/Caitlyn_clark
+    This page is in the url form of /player/WNBA/Caitlyn_clark
 
     The name has to be perfect or else it doesn't work
 */

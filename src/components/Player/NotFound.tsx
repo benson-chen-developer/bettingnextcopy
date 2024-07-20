@@ -78,7 +78,7 @@ export const findSimilarLastNames = (players: any[], input: string, maxAllowedDi
         }
         firstName = trimmedInput;
     }
-    console.log(foundPlayers)
+    // console.log(foundPlayers)
     
     return Array.from(foundPlayers);
 };

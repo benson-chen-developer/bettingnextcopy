@@ -8,7 +8,6 @@ interface Props {
 }
 
 const ResponsiveTrendingBoxes: React.FC<Props> = ({ games, homePlayersLoaded }) => {
-    console.log(games)
 
     /* Will be loading since we are checking the teams which will always have players */
     if (!homePlayersLoaded) return (

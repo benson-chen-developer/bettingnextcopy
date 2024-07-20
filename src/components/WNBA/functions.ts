@@ -29,7 +29,7 @@ export const getTodaysPlayers = async (): Promise<any[]> => {
     }
 
     //Get the Schedule
-    const wnbaData = await fetch(`/wnbaScedule`);
+    const wnbaData = await fetch(`https://bettingnext-hioa.vercel.app/wnbaScedule`);
     const parsedData = await wnbaData.json();
     const games = parsedData.leagueSchedule.gameDates;
     
@@ -56,7 +56,7 @@ export const fetchTodayWNBAGames = async () => {
         let todayGames = await getTodaysPlayers();
 
         for (const game of todayGames) {
-            const gameDetails = await fetch(`http://localhost:3001/getPlayersInGame/${game.gameId}`);
+            const gameDetails = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/getPlayersInGame/${game.gameId}`);
             const gameDetailsJson = await gameDetails.json();
             
             /* 

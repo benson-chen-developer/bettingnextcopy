@@ -39,7 +39,7 @@ export const wnbaParsing = async (
                                 let parsedName = `${players[playerIndex].firstName[0]}. ${players[playerIndex].lastName}`;
                 
                                 if (paramName.toLocaleLowerCase() === parsedName.toLocaleLowerCase()) {
-                                    const gameDataRes = await fetch(`http://localhost:3001/parseGame`, { //Load Game data
+                                    const gameDataRes = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/parseGame`, { //Load Game data
                                         method: 'GET',
                                         headers: {
                                             'Content-Type': 'application/json',

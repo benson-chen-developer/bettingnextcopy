@@ -91,7 +91,7 @@ export const ValPlayer = () => {
     };
 
     /*
-        If (`http://localhost:3001/valorant/${foundPlayer?.id}/${foundPlayer?.name}`); crashes it means ussually that
+        If (`/${foundPlayer?.id}/${foundPlayer?.name}`); crashes it means ussually that
         foundPlayer isn't defined (make sure nodemon crashing restarts)
     */
     useEffect(() => {
@@ -104,7 +104,7 @@ export const ValPlayer = () => {
             setPlayer(foundPlayer);
 
             /* Get the maps from the player */
-            const res = await fetch(`http://localhost:3001/valorant/${foundPlayer?.id}/${foundPlayer?.name}`);
+            const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/${foundPlayer?.id}/${foundPlayer?.name}`);
             let gamesWithOutMapsOrPlayers = await res.json();
 
             /* Parse the first map to get that games stats */
