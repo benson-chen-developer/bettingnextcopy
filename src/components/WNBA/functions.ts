@@ -29,7 +29,7 @@ export const getTodaysPlayers = async (): Promise<any[]> => {
     }
 
     //Get the Schedule
-    const wnbaData = await fetch(`${apiUrl}/wnbaScedule`);
+    const wnbaData = await fetch(`/wnbaScedule`);
     const parsedData = await wnbaData.json();
     const games = parsedData.leagueSchedule.gameDates;
     
