@@ -220,7 +220,7 @@ app.get('/mlbSchedule', async (req, res) => {
 
 app.get('/wnba/gameStatsBigPicture/:id', async (req, res) => {
     try {
-        const response = await fetch(`https://content-api-prod.nba.com/public/1/leagues/wnba/game/${req.params.gameId}`);
+        const response = await fetch(`https://content-api-prod.nba.com/public/1/leagues/wnba/game/${req.params.id}`);
         if (!response.ok) {
             throw new Error(`Failed to fetch schedule: ${response.statusText}`);
         }
@@ -228,22 +228,6 @@ app.get('/wnba/gameStatsBigPicture/:id', async (req, res) => {
 
         res.json(data);
     } catch (error) {
-        console.error('Error fetching WNBA schedule:', error);
-        res.status(500).json({ error: 'Something went wrong' });
-    }
-})
-
-app.get('/wnba/gameStatsBigPicture/:id', async (req, res) => {
-    try {
-        const response = await fetch(`https://content-api-prod.nba.com/public/1/leagues/wnba/game/${req.params.gameId}`);
-        if (!response.ok) {
-            throw new Error(`Failed to fetch schedule: ${response.statusText}`);
-        }
-        const data = await response.json();
-
-        res.json(data);
-    } catch (error) {
-        console.error('Error fetching WNBA schedule:', error);
         res.status(500).json({ error: 'Something went wrong' });
     }
 })
