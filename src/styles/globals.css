@@ -11,3 +11,32 @@ body {
     /* Might need this on mobile not sure when ima do */
     /* Prevent horizontal scrolling */
 }
+
+/* TableHeader.tsx */
+.dropdown-container {
+  position: relative;
+}
+
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: white;
+  min-width: 100px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  background: black;
+  border-radius: 10px;
+}
+
+.dropdown-content {
+  padding: 10px;
+  color: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.dropdown-container:hover .dropdown {
+  display: block;
+  border-radius: '50px';
+}

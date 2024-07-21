@@ -6,6 +6,7 @@ import { ClipLoader } from 'react-spinners';
 import { Hero } from '../Player/Hero';
 import { Row } from './Row';
 import { StatCompartor } from '../Player/StatCompartor';
+import { TableHeader } from '../Player/TableHeader';
 
 export type StatCompartorValorant = {
     kills: number, 
@@ -42,12 +43,34 @@ export const ValPlayer = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2", "Map 1+3", "Map 2+3"];
-    const statsHeader = ["K", "D", "A", "FK", "FD"];
+    const statsHeader = [
+        {name: "K", underName: "Kills"},
+        {name: "D", underName: "Deaths"},
+        {name: "A", underName: "Assists"},
+        {name: "FK", underName: "First Kills"},
+        {name: "FD", underName: "First Deaths"},
+    ];
     const [chartCompareTo, setChartCompareTo] = useState<StatCompartorValorant>({
         "kills": -1, "deaths": -1, "assists": -1, "firstKills": -1, "firstDeaths": -1, 
         // "headshots": -1
     })
     const [pickedBtn, setPickedBtn] = useState<string>('All Maps')
+
+    /* Drop down for the stats (So PTS would be Points) */
+    const showDropdown = (e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
+        const target = e.target as HTMLTableCellElement;
+        const dropdown = target.querySelector('.dropdown') as HTMLElement;
+        if (dropdown) {
+            dropdown.style.display = 'block';
+        }
+    };
+    const hideDropdown = (e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
+        const target = e.target as HTMLTableCellElement;
+        const dropdown = target.querySelector('.dropdown') as HTMLElement;
+        if (dropdown) {
+            dropdown.style.display = 'none';
+        }
+    };
 
     /* Utility function to remove the non updated maps/players in allGames with updated ones */
     const updatedAllGames = (allGames: ValorantGame[], newGames: ValorantGame[]): ValorantGame[] => {
@@ -151,14 +174,7 @@ export const ValPlayer = () => {
                         <StatCompartor chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} />
 
                         {/* Stats Header */}
-                        <tr style={{ display: 'flex' }}>
-                            <th style={{ width: '200px' }}>Team</th>
-                            {statsHeader.map((value, index) => (
-                                <th style={{ width: '50px' }} key={index}>
-                                    {value}
-                                </th>
-                            ))}
-                        </tr>
+                        <TableHeader statsHeader={statsHeader} />
                     </thead>
                     <tbody>
                         {displayedGames.map((game, index) => (
