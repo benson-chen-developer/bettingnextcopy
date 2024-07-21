@@ -409,7 +409,6 @@ app.get("/valorant/game", async (req, res) => {
         maps.push(lastWord);
     });
 
-
     /* 
         There are 4 maps (all, map1, map2, map3). Each map is in one tbody
             - each tr is a player with there stats
@@ -449,12 +448,43 @@ app.get("/valorant/game", async (req, res) => {
                 assists[2] = parseInt(spans.filter('.mod-ct').text().trim()) || 0;
             }
 
+            let firstKills = [0, 0, 0];
+            const firstKillsTd = $(trElement).find('td.mod-stat.mod-fb').first(); /* First Kills */
+            if (firstKillsTd.length) {
+                const spans = firstKillsTd.find('span.side');
+                firstKills[0] = parseInt(spans.filter('.mod-both').text().trim()) || 0;
+                firstKills[1] = parseInt(spans.filter('.mod-t').text().trim()) || 0;
+                firstKills[2] = parseInt(spans.filter('.mod-ct').text().trim()) || 0;
+            }
+
+            let firstDeaths = [0, 0, 0];
+            const firstDeathsTd = $(trElement).find('td.mod-stat.mod-fd').first(); /* First Kills */
+            if (firstDeathsTd.length) {
+                const spans = firstDeathsTd.find('span.side');
+                firstDeaths[0] = parseInt(spans.filter('.mod-both').text().trim()) || 0;
+                firstDeaths[1] = parseInt(spans.filter('.mod-t').text().trim()) || 0;
+                firstDeaths[2] = parseInt(spans.filter('.mod-ct').text().trim()) || 0;
+            }
+
+            // let headshots = [0, 0, 0];
+            // const headshotsTd = $(trElement).find('td.mod-stat').eq(8); /* First Kills (3rd mod stat contains this)*/
+            // if (headshotsTd.length) {
+            //     const spans = headshotsTd.find('stats-sq');
+            //     console.log(spans.filter('.mod-both'))
+            //     headshots[0] = (spans.filter('.mod-both').text().trim()) || 0;
+            //     headshots[1] = (spans.filter('.mod-t').text().trim()) || 0;
+            //     headshots[2] = (spans.filter('.mod-ct').text().trim()) || 0;
+            // }
+
             // If the player already exists, update their stats
             if (playersMap.has(playerName)) {
                 const existingPlayer = playersMap.get(playerName);
                 existingPlayer.kills = [...existingPlayer.kills, ...kills];
                 existingPlayer.deaths = [...existingPlayer.deaths, ...deaths];
                 existingPlayer.assists = [...existingPlayer.assists, ...assists];
+                existingPlayer.firstKills = [...existingPlayer.firstKills, ...firstKills];
+                existingPlayer.firstDeaths = [...existingPlayer.firstDeaths, ...firstDeaths];
+                // existingPlayer.headshots = [...existingPlayer.headshots, ...headshots];
             } else {
                 // Otherwise, add a new entry for the player
                 playersMap.set(playerName, {
@@ -462,7 +492,10 @@ app.get("/valorant/game", async (req, res) => {
                     team: team,
                     kills: kills,
                     deaths: deaths,
-                    assists: assists
+                    assists: assists,
+                    firstKills: firstKills,
+                    firstDeaths: firstDeaths,
+                    // headshots: headshots
                 });
             }
         });

@@ -2,14 +2,14 @@ import React, { Dispatch, SetStateAction } from 'react'
 
 interface Props{
     chartCompareTo: Object,
-    setChartCompareTo: Dispatch<SetStateAction<{kills: number, deaths: number, assists: number}>>
+    setChartCompareTo: Dispatch<SetStateAction<any>>
 }
 
 export const StatCompartor: React.FC<Props>  = ({chartCompareTo, setChartCompareTo}) => {
     const handleCompareToChange = (key: string, value: number) => {
         if(value <= -1) value = -1;
         
-        setChartCompareTo(prevState => ({
+        setChartCompareTo((prevState: any) => ({
             ...prevState,
             [key]: value
         }));

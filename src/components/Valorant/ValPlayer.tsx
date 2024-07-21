@@ -7,6 +7,15 @@ import { Hero } from '../Player/Hero';
 import { Row } from './Row';
 import { StatCompartor } from '../Player/StatCompartor';
 
+export type StatCompartorValorant = {
+    kills: number, 
+    deaths: number,
+    assists: number,
+    firstKills: number,
+    firstDeaths: number,
+    // headshots: number
+}
+
 /*
     For this page the games array is like this 
 
@@ -33,9 +42,10 @@ export const ValPlayer = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2", "Map 1+3", "Map 2+3"];
-    const statsHeader = ["K", "D", "A"];
-    const [chartCompareTo, setChartCompareTo] = useState<{kills: number, deaths: number, assists: number}>({
-        "kills": -1, "deaths": -1, "assists": -1
+    const statsHeader = ["K", "D", "A", "FK", "FD"];
+    const [chartCompareTo, setChartCompareTo] = useState<StatCompartorValorant>({
+        "kills": -1, "deaths": -1, "assists": -1, "firstKills": -1, "firstDeaths": -1, 
+        // "headshots": -1
     })
     const [pickedBtn, setPickedBtn] = useState<string>('All Maps')
 
@@ -110,6 +120,7 @@ export const ValPlayer = () => {
             /* Parse the first map to get that games stats */
             let newGames = await loadMore(gamesWithOutMapsOrPlayers, 5);
 
+            console.log(newGames)
             setAllGames(updatedAllGames(gamesWithOutMapsOrPlayers, newGames).slice(0,25));
             setDisplayedGames(newGames)
             setLoading(false);

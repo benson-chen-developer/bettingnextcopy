@@ -21,11 +21,11 @@ export const StatBtn: React.FC<StatBtnProps> = ({ text, pickedBtn, onClick }) =>
                 cursor:'pointer'
             }}
         >
-            <p style={{
+            <h2 style={{
                 color: pickedBtn === text ? '#000' : '#fff', fontSize:12, fontWeight:'bold'
             }}>
                 {text}
-            </p>
+            </h2>
         </button>
     );
 }

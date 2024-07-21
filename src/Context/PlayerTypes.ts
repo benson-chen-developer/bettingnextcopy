@@ -46,7 +46,10 @@ export type ValorantGame = {
         team: string,
         kills: number[],
         deaths: number[],
-        assists: number[]
+        assists: number[],
+        firstKills: number[],
+        firstDeaths: number[],
+        headShots: number[]
     }[],
     maps: string[]
 }
