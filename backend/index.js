@@ -513,6 +513,8 @@ app.get("/valorant/game", async (req, res) => {
         player.kills = ensureLength(player.kills, 12, 0);
         player.deaths = ensureLength(player.deaths, 12, 0);
         player.assists = ensureLength(player.assists, 12, 0);
+        player.firstKills = ensureLength(player.firstKills, 12, 0);
+        player.firstDeaths = ensureLength(player.firstDeaths, 12, 0);
     });
 
     res.json({

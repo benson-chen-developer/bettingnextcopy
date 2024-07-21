@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { ValorantGame } from '../../Context/PlayerTypes';
 import { StatCompartorValorant } from './ValPlayer';
 
@@ -19,60 +19,52 @@ export const Row:React.FC<Props> = ({game, playerName, pickedBtn, chartCompareTo
     const player = game.players.find(player => player.name === playerName);
 
     /* The player stats array is seperated into many portions and each number is the selected portion */
-    let playerAmount = {
-        "kills": 0, "assists": 0, "deaths": 0, "firstKills": 0, "firstDeaths": 0, 
-        // "headshots": 0
-    }; 
+    const [playerAmount, setPlayerAmount] = useState<{"kills": number, "assists": number, "deaths": number, "firstKills": number, "firstDeaths": number}>(
+        {
+            "kills": 0, "assists": 0, "deaths": 0, "firstKills": 0, "firstDeaths": 0, 
+            // "headshots": 0
+        }
+    ); 
     
-    if(pickedBtn === 'All Maps') {
-        playerAmount.kills = player?.kills[3] as number;
-        playerAmount.deaths = player?.deaths[3] as number;
-        playerAmount.assists = player?.assists[3] as number;
-        playerAmount.firstKills = player?.firstKills[3] as number;
-        playerAmount.firstDeaths = player?.firstDeaths[3] as number;
-    } 
-    else if(pickedBtn === 'Map 1'){
-        playerAmount.kills = player?.kills[0] as number;
-        playerAmount.deaths = player?.deaths[0] as number;
-        playerAmount.assists = player?.assists[0] as number;
-        playerAmount.firstKills = player?.firstKills[0] as number;
-        playerAmount.firstDeaths = player?.firstDeaths[0] as number;
+    const addUpPlayerStats = (...numbers: number[]) => {
+        let playerAmount = {
+            "kills": 0, "assists": 0, "deaths": 0, "firstKills": 0, "firstDeaths": 0, 
+        }; 
+
+        numbers.forEach((number) => {
+            playerAmount.kills += player?.kills[number] as number;
+            playerAmount.deaths += player?.deaths[number] as number;
+            playerAmount.assists += player?.assists[number] as number;
+            playerAmount.firstKills += player?.firstKills[number] as number;
+            playerAmount.firstDeaths += player?.firstDeaths[number] as number;
+        })
+
+        setPlayerAmount(playerAmount);
     }
-    else if(pickedBtn === 'Map 2'){
-        playerAmount.kills = player?.kills[6] as number;
-        playerAmount.deaths = player?.deaths[6] as number;
-        playerAmount.assists = player?.assists[6] as number;
-        playerAmount.firstKills = player?.firstKills[6] as number;
-        playerAmount.firstDeaths = player?.firstDeaths[6] as number;
-    }
-    else if(pickedBtn === 'Map 3'){
-        playerAmount.kills = player?.kills[9] as number;
-        playerAmount.deaths = player?.deaths[9] as number;
-        playerAmount.assists = player?.assists[9] as number;
-        playerAmount.firstKills = player?.firstKills[9] as number;
-        playerAmount.firstDeaths = player?.firstDeaths[9] as number;
-    }
-    else if (pickedBtn === 'Map 1+2') {
-        playerAmount.kills = (player?.kills[0] ?? 0) + (player?.kills[6] ?? 0);
-        playerAmount.deaths = (player?.deaths[0] ?? 0) + (player?.deaths[6] ?? 0);
-        playerAmount.assists = (player?.assists[0] ?? 0) + (player?.assists[6] ?? 0);
-        playerAmount.firstKills = (player?.firstKills[0] ?? 0) + (player?.firstKills[6] ?? 0);
-        playerAmount.firstDeaths = (player?.firstDeaths[0] ?? 0) + (player?.firstDeaths[6] ?? 0);
-    }
-    else if (pickedBtn === 'Map 2+3') {
-        playerAmount.kills = (player?.kills[6] ?? 0) + (player?.kills[9] ?? 0);
-        playerAmount.deaths = (player?.deaths[6] ?? 0) + (player?.deaths[9] ?? 0);
-        playerAmount.assists = (player?.assists[6] ?? 0) + (player?.assists[9] ?? 0);
-        playerAmount.firstKills = (player?.firstKills[6] ?? 0) + (player?.firstKills[9] ?? 0);
-        playerAmount.firstDeaths = (player?.firstDeaths[6] ?? 0) + (player?.firstDeaths[9] ?? 0);
-    } 
-    else if (pickedBtn === 'Map 1+3') {
-        playerAmount.kills = (player?.kills[0] ?? 0) + (player?.kills[9] ?? 0);
-        playerAmount.deaths = (player?.deaths[0] ?? 0) + (player?.deaths[9] ?? 0);
-        playerAmount.assists = (player?.assists[0] ?? 0) + (player?.assists[9] ?? 0);
-        playerAmount.firstKills = (player?.firstKills[0] ?? 0) + (player?.firstKills[9] ?? 0);
-        playerAmount.firstDeaths = (player?.firstDeaths[0] ?? 0) + (player?.firstDeaths[9] ?? 0);
-    } 
+
+    useEffect(() => {
+        if(pickedBtn === 'All Maps') {
+            addUpPlayerStats(3);
+        } 
+        else if(pickedBtn === 'Map 1'){
+            addUpPlayerStats(0);
+        }
+        else if(pickedBtn === 'Map 2'){
+            addUpPlayerStats(6);
+        }
+        else if(pickedBtn === 'Map 3'){
+            addUpPlayerStats(9);
+        }
+        else if (pickedBtn === 'Map 1+2') {
+            addUpPlayerStats(3, 6);
+        }
+        else if (pickedBtn === 'Map 2+3') {
+            addUpPlayerStats(6, 9);
+        } 
+        else if (pickedBtn === 'Map 1+3') {
+            addUpPlayerStats(3, 9);
+        } 
+    }, [pickedBtn])
 
     return (
         <tr style={{display:'flex'}}>
@@ -84,6 +76,7 @@ export const Row:React.FC<Props> = ({game, playerName, pickedBtn, chartCompareTo
             {Object.entries(chartCompareTo).map(([key, value]) => (
                 <Square 
                     compareAmount={value}
+                    key={key}
                     amount={playerAmount[key as keyof { 
                         kills: number; assists: number; deaths: number; firstKills: number; firstDeaths: number; 
                         // headshots: number 
