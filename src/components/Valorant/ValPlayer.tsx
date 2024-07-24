@@ -5,8 +5,9 @@ import { ValorantGame, ValorantPlayer } from '../../Context/PlayerTypes';
 import { ClipLoader } from 'react-spinners';
 import { Hero } from '../Player/Hero';
 import { Row } from './Row';
-import { StatCompartor } from '../Player/StatCompartor';
+import { StatCompartor } from '../Player/StatComparator';
 import { TableHeader } from '../Player/TableHeader';
+import { EverythingLoaded } from '../Player/EverythingLoaded';
 
 export type StatCompartorValorant = {
     kills: number, 
@@ -55,22 +56,6 @@ export const ValPlayer = () => {
         // "headshots": -1
     })
     const [pickedBtn, setPickedBtn] = useState<string>('All Maps')
-
-    /* Drop down for the stats (So PTS would be Points) */
-    const showDropdown = (e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
-        const target = e.target as HTMLTableCellElement;
-        const dropdown = target.querySelector('.dropdown') as HTMLElement;
-        if (dropdown) {
-            dropdown.style.display = 'block';
-        }
-    };
-    const hideDropdown = (e: React.MouseEvent<HTMLTableCellElement, MouseEvent>) => {
-        const target = e.target as HTMLTableCellElement;
-        const dropdown = target.querySelector('.dropdown') as HTMLElement;
-        if (dropdown) {
-            dropdown.style.display = 'none';
-        }
-    };
 
     /* Utility function to remove the non updated maps/players in allGames with updated ones */
     const updatedAllGames = (allGames: ValorantGame[], newGames: ValorantGame[]): ValorantGame[] => {
@@ -183,40 +168,20 @@ export const ValPlayer = () => {
                     </tbody>
                 </table>
 
-                {allGamesLoaded ?
-                    <div style={{ width: '70%', display: 'flex', justifyContent:'center', marginTop:'25px' }}>
-                        <p style={{color: '#000', fontSize:12, fontWeight:'bold'}}>
-                            Everything is Loaded
-                        </p>
-                    </div>
-                        :
-                    <div style={{ width: '70%', display: 'flex', justifyContent:'center', marginTop:'25px' }}>
-                        <button 
-                             onClick={() => {
-                                const loadGames = async () => {
-                                    const newGames = await loadMore(allGames, 5);
-                                    setDisplayedGames(p => [...p, ...newGames]);
-                                    setAllGames(p => updatedAllGames(p, newGames))
-                                    setLoading(false);
-                                };
-                        
-                                setLoading(true);
-                                loadGames();
-                            }} 
-                            style={{
-                                width: 100, height:40, borderRadius: 50,
-                                background: '#D9D9D9',
-                                border: '1px solid #000',
-                                display:'flex', justifyContent:'center', alignItems:'center',
-                                cursor:'pointer', marginBottom:'50px'
-                            }}
-                        >
-                            <p style={{color: '#000', fontSize:12, fontWeight:'bold'}}>
-                                Load More
-                            </p>
-                        </button>
-                    </div>
-                }
+                <EverythingLoaded 
+                    allLoaded={allGamesLoaded}
+                    onClickFunction={() => {
+                        const loadGames = async () => {
+                            const newGames = await loadMore(allGames, 5);
+                            setDisplayedGames(p => [...p, ...newGames]);
+                            setAllGames(p => updatedAllGames(p, newGames))
+                            setLoading(false);
+                        };
+                
+                        setLoading(true);
+                        loadGames();
+                    }}
+                />
             </div>
 
         </div>

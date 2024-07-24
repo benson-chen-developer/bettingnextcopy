@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useContext, Dispatch, SetStateAction, useState, useEffect, ReactNode } from 'react';
 import { Game2 } from '../functions/players';
-import { ValorantPlayer, WNBAPlayer } from './PlayerTypes';
+import { LolPlayer, ValorantPlayer, WNBAPlayer } from './PlayerTypes';
 import {apiUrl} from '../data/data';
 
 interface ContextProps {
@@ -11,7 +11,10 @@ interface ContextProps {
   setGames: Dispatch<SetStateAction<Game2[]>>;
   valorantPlayers: ValorantPlayer[];
   setValorantPlayers:  Dispatch<SetStateAction<ValorantPlayer[]>>;
-  fetchValorantPlayers: () => Promise<ValorantPlayer[]>; // Updated type definition
+  fetchValorantPlayers: () => Promise<ValorantPlayer[]>;
+  lolPlayers: LolPlayer[],
+  setLolPlayers: Dispatch<SetStateAction<LolPlayer[]>>,
+  fetchLolPlayers: () => Promise<LolPlayer[]>
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -21,12 +24,16 @@ const GlobalContext = createContext<ContextProps>({
   setGames: (): Game2[] => [],
   valorantPlayers: [],
   setValorantPlayers:  (): ValorantPlayer[] => [],
-  fetchValorantPlayers: async (): Promise<ValorantPlayer[]> => [] // Default empty function
+  fetchValorantPlayers: async (): Promise<ValorantPlayer[]> => [],
+  lolPlayers: [],
+  setLolPlayers:  (): LolPlayer[] => [],
+  fetchLolPlayers: async (): Promise<LolPlayer[]> => [] 
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
   const [players, setPlayers] = useState<WNBAPlayer[]>([]);
   const [valorantPlayers, setValorantPlayers] = useState<ValorantPlayer[]>([]);
+  const [lolPlayers, setLolPlayers] = useState<LolPlayer[]>([]);
   const [games, setGames] = useState<Game2[]>([]);
 
   const fetchPlayers = async () => {
@@ -62,12 +69,37 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
   };
 
+  const fetchLolPlayers = async (): Promise<LolPlayer[]> => {
+    if(lolPlayers.length > 0){
+      console.log("Cached Lol");
+      return lolPlayers;
+    } else {
+      try {
+        console.log("Not Cached Lol");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/lol/allPlayers`);
+        if (!response.ok) throw new Error('Failed to fetch Lol players');
+
+        const data = await response.json();
+        setLolPlayers(data);
+        return data;
+      } catch (error) {
+        console.error('Error fetching Lol players:', error);
+        return [];
+      }
+    }
+  };
+
   useEffect(() => {
     fetchPlayers();
   }, []);
 
   return (
-    <GlobalContext.Provider value={{ players, setPlayers, valorantPlayers, setValorantPlayers, games, setGames, fetchValorantPlayers }}>
+    <GlobalContext.Provider value={{ 
+      players, setPlayers, 
+      valorantPlayers, setValorantPlayers, fetchValorantPlayers,
+      lolPlayers, setLolPlayers, fetchLolPlayers,
+      games, setGames, 
+    }}>
       {children}
     </GlobalContext.Provider>
   );

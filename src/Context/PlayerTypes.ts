@@ -1,7 +1,10 @@
-export type WNBAPlayer = {
-    picId: number;
-    lastName: string;
-    firstName: string;
+export type PlayerType = {
+    firstName: string,
+    lastName: string,
+    picId: string
+}
+
+export type WNBAPlayer = PlayerType & {
     city: string;
     team: string;
     abbr: string;
@@ -12,12 +15,9 @@ export type WNBAPlayer = {
     apg: number;
 };
 
-export type ValorantPlayer = {
+export type ValorantPlayer = PlayerType & {
     id: string,
     name: string,
-    firstName: string,
-    lastName: string,
-    picId: string,
     rnd: number,
     r: number,
     acs: number,
@@ -53,3 +53,25 @@ export type ValorantGame = {
     }[],
     maps: string[]
 }
+
+export type LolPlayer = PlayerType & {
+    id: string,
+    kills: string,
+    deaths: string,
+    assists: string,
+    team: string,
+}
+export type LolGame = {
+    champion: {name: string, number: string},
+    url: string,
+    scores: string[],
+    date: string,
+    tournament: string,
+    game: string,
+}
+// champion: { name: 'KSante', number: '162' },
+// result: 'Defeat',
+// score: ['0/4/3', '3/3/3'],
+// date: '2024-06-15',
+// game: 'Cloud9 vs Dignitas',
+// tournament: 'LCS Summer 2024'
