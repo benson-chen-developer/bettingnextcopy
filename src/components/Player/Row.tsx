@@ -5,6 +5,11 @@ interface Props {
     chartCompareTo: number[],
     team: string,
     date: string,
+    
+    /* 
+      Will always be an array of stats to map over
+        - So like [3,3,4] (KDA) or [10,10,30] (PRA)
+    */
     displayedStats: number[],
 }
 const formatDate = (dateString: string): string => {
