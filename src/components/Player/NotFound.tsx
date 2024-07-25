@@ -101,7 +101,7 @@ export const NotFound: React.FC<Props> = ({}) => {
 
     useEffect(() => {
         let players: PlayerType[] = [];
-
+        
         const fetchPlayers = async () => {
             if (paramLeague![0].toLowerCase() === 'lol') {
                 players = await fetchLolPlayers();

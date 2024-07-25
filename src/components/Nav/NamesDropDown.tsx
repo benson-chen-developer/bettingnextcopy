@@ -3,7 +3,7 @@ import { findSimilarLastNames } from '../Player/NotFound';
 import Image from 'next/image';
 import { useGlobalContext } from '../../Context/store';
 import { searchPlayer } from './SearchBar';
-import { WNBAPlayer } from '../../Context/PlayerTypes';
+import { PlayerType, WNBAPlayer } from '../../Context/PlayerTypes';
 import { ClipLoader } from 'react-spinners';
 
 interface Props {
@@ -28,16 +28,17 @@ export const NamesDropDown: React.FC<Props> = ({input, sport}) => {
         Make the getAllPlayer calls to the respective league
     */
     const getSimilarPlayers = async () => {
-        let similarPlayers: any[] = [];
+        const sportLower = sport.toLowerCase();
+        let similarPlayers: PlayerType[] = [];
 
-        if(sport === "WNBA"){
+        if(sportLower === "wnba"){
             similarPlayers = findSimilarLastNames(players, input, 2);
         }
-        else if(sport === "Valorant"){
+        else if(sportLower === "valorant"){
             const players = await fetchValorantPlayers();
             similarPlayers = findSimilarLastNames(players, input, 2);
         }
-        else if(sport === "LOL"){
+        else if(sportLower === "lol"){
             const players = await fetchLolPlayers();
             similarPlayers = findSimilarLastNames(players, input, 2);
         }
@@ -47,6 +48,8 @@ export const NamesDropDown: React.FC<Props> = ({input, sport}) => {
 
     useEffect(() => {
         setIsDropdownOpen(true);
+        setSimilarPlayers([]);
+        
         getSimilarPlayers();
         setLoading(false);
     }, [input, sport])
