@@ -8,6 +8,7 @@ import { EverythingLoaded } from '../EverythingLoaded';
 import { TableHeader } from '../TableHeader';
 import { LolGame, LolPlayer } from '../../../Context/PlayerTypes';
 import { Row } from '../Row';
+import { NotFound } from '../NotFound';
 
 export type StatCompartorLeague = {
     kills: number, 
@@ -137,7 +138,6 @@ export const LeaguePlayer = () => {
                 setPlayer(updatedPlayer);
                 setAllGames(allGames);
                 setDisplayedRows(compareFunction('All Maps', allGames));
-            } else {
             }
 
             setLoading(false);
@@ -150,7 +150,7 @@ export const LeaguePlayer = () => {
         setDisplayedRows(compareFunction(pickedBtn, allGames));
     }, [pickedBtn, setPickedBtn])
 
-    if(!loading) return (
+    if(!loading && player) return (
         <div>
             <Hero 
                 playerName={player?.firstName as string}
@@ -203,6 +203,10 @@ export const LeaguePlayer = () => {
             </div>
 
         </div>
+    )
+
+    if(!loading && !player) return(
+        <NotFound />
     )
 
     return <div style={{

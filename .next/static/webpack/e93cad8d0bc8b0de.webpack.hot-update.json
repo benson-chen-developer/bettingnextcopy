@@ -1,1 +1,0 @@
-{"c":["pages/_app","pages/player/[paramLeague]/[paramPlayer]","webpack"],"r":[],"m":["./src/components/Player/EverythingLoaded.tsx","./src/components/Player/League/LeaguePlayer.tsx","./src/components/Player/Row.tsx","./src/components/Player/StatComparator.tsx"]}

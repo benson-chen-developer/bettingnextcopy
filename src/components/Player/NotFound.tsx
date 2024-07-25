@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { useEffect } from 'react';
-import { WNBAPlayer } from '../../Context/PlayerTypes';
+import { PlayerType, WNBAPlayer } from '../../Context/PlayerTypes';
 
 interface Props{
 }
@@ -42,7 +42,7 @@ const levenshteinDistance = (a: string, b: string): number => {
 /*
     Returns all the player names that are similar to the one we searched
 */
-export const findSimilarLastNames = (players: any[], input: string, maxAllowedDistance: number): any[] => {
+export const findSimilarLastNames = (players: PlayerType[], input: string, maxAllowedDistance: number): any[] => {
     const trimmedInput = input.trim();
 
     let firstName = ''; let lastName = ''; 
@@ -83,16 +83,39 @@ export const findSimilarLastNames = (players: any[], input: string, maxAllowedDi
     return Array.from(foundPlayers);
 };
 
+/*
+    We only need the paramPlayer name
+
+    1) Make a call depending on league to get all the players of that league
+    2) The players will be PlayerType so we can just try to find their names with findSimilarLastNames
+    3) Anyone returned is displayed
+*/
 export const NotFound: React.FC<Props> = ({}) => {
-    const {players} = useGlobalContext();
+    const {players, fetchLolPlayers, fetchValorantPlayers} = useGlobalContext();
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
+    const [allPlayers, setAllPlayers] = useState<PlayerType[]>([]);
+
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [similarPlayers, setSimilarPlayers] = useState<WNBAPlayer[]>([]);
 
     useEffect(() => {
-        setSimilarPlayers(findSimilarLastNames(players, paramPlayer as string, 2));
-        setIsLoading(false);
+        let players: PlayerType[] = [];
+
+        const fetchPlayers = async () => {
+            if (paramLeague![0].toLowerCase() === 'lol') {
+                players = await fetchLolPlayers();
+            }
+            else if(paramLeague![0].toLowerCase() === 'valorant') {
+                players = await fetchValorantPlayers();
+            }
+
+            setAllPlayers(players);
+            setSimilarPlayers(findSimilarLastNames(players, paramPlayer as string, 2));
+            setIsLoading(false);
+        };
+
+        if(paramLeague) fetchPlayers();
     }, [])
 
     if(isLoading) return <ClipLoader

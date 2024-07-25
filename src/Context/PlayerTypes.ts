@@ -1,3 +1,13 @@
+/*
+    Player
+        - Has the pic and avg stats BUT MOST IMPORTANT it has the match ids played
+
+    Game
+        - Has the the match data and player stats
+        - From these player stats you have to find the player again and return it. Is confusing since this player is a diff
+            type from the PlayerType
+*/
+
 export type PlayerType = {
     firstName: string,
     lastName: string,
