@@ -1,7 +1,20 @@
-export type WNBAPlayer = {
-    picId: number;
-    lastName: string;
-    firstName: string;
+/*
+    Player
+        - Has the pic and avg stats BUT MOST IMPORTANT it has the match ids played
+
+    Game
+        - Has the the match data and player stats
+        - From these player stats you have to find the player again and return it. Is confusing since this player is a diff
+            type from the PlayerType
+*/
+
+export type PlayerType = {
+    firstName: string,
+    lastName: string,
+    picId: string
+}
+
+export type WNBAPlayer = PlayerType & {
     city: string;
     team: string;
     abbr: string;
@@ -12,12 +25,9 @@ export type WNBAPlayer = {
     apg: number;
 };
 
-export type ValorantPlayer = {
+export type ValorantPlayer = PlayerType & {
     id: string,
     name: string,
-    firstName: string,
-    lastName: string,
-    picId: string,
     rnd: number,
     r: number,
     acs: number,
@@ -53,3 +63,25 @@ export type ValorantGame = {
     }[],
     maps: string[]
 }
+
+export type LolPlayer = PlayerType & {
+    id: string,
+    kills: string,
+    deaths: string,
+    assists: string,
+    team: string,
+}
+export type LolGame = {
+    champion: {name: string, number: string},
+    url: string,
+    scores: string[],
+    date: string,
+    tournament: string,
+    game: string,
+}
+// champion: { name: 'KSante', number: '162' },
+// result: 'Defeat',
+// score: ['0/4/3', '3/3/3'],
+// date: '2024-06-15',
+// game: 'Cloud9 vs Dignitas',
+// tournament: 'LCS Summer 2024'
