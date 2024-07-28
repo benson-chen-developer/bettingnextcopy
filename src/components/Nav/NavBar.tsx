@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react'
 import Link  from 'next/link'
 import { green, pink } from '../../data/colors'
 import { Promo } from './Promo'
-import { SearchBar } from './SearchBar'
+import { SearchBar } from './SearchBar/SearchBar'
 import Image from 'next/image';
 
 interface Props {

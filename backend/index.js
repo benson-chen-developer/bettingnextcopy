@@ -592,6 +592,33 @@ app.get("/lol/player/:id", async (req, res) => {
     res.json(games);
 })
 
+/*
+    CFL
+*/
+app.get("/cfl/allPlayers", async (req, res) => {
+    const response = await axios.get("https://gol.gg/players/list/season-S14/split-Summer/tournament-ALL/");
+    const html = response.data;
+
+    const $ = cheerio.load(html);
+    const players = [];
+
+    // $('table.table_list.playerslist.tablesaw.trhover tr').slice(1).each((index, element) => {
+    //     let player = {
+    //         firstName : $(element).find('td a').first().text().trim(),
+    //         lastName: '',
+    //         picId: '',
+    //         id: $(element).find('td a').first().attr('href').match(/\/player-stats\/(\d+)\//)[1],
+    //         kills : $(element).find('td').eq(5).text().trim(),
+    //         deaths : $(element).find('td').eq(6).text().trim(),
+    //         assists : $(element).find('td').eq(7).text().trim(),
+    //         team: ''
+    //     }
+    //     players.push(player)
+    // });
+
+    res.json(players);
+})
+
 const getTeamNames = (actions) => {
     let teamNames = [];
     let i = 0;
