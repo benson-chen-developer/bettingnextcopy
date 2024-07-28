@@ -1,5 +1,5 @@
 import React from 'react'
-import { SearchBar } from '../components/Nav/SearchBar'
+import { SearchBar } from '../components/Nav/SearchBar/SearchBar'
 
 const Missing = () => {
     return (

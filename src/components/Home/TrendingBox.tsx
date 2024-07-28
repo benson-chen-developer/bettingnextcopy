@@ -1,7 +1,7 @@
 import React from 'react'
 import { TrendingPlayer } from '../../pages';
 import Image from 'next/image';
-import { searchPlayer } from '../Nav/SearchBar';
+import { searchPlayer } from '../Nav/SearchBar/SearchBar';
 
 interface Props {
     leagueName: string,
