@@ -15,7 +15,7 @@ interface Props {
 export const DropDown: React.FC<Props> = ({ input, sport, dropDown, setDropDown, setSport }) => {
     const [loading, setLoading] = useState<boolean>(false);
 
-    if (dropDown === "" || input.trim().length === 0) return null;
+    if (dropDown === "") return null;
 
     if (loading) return (
         <div style={{
@@ -39,7 +39,7 @@ export const DropDown: React.FC<Props> = ({ input, sport, dropDown, setDropDown,
         <SportDropDown input={input} sport={sport} setSport={setSport} dropDown={dropDown} setDropDown={setDropDown}/>
     );
 
-    if (dropDown === "players") return (
+    else if (dropDown === "players") return (
         <PlayerDropDown input={input} sport={sport} dropDown={dropDown} setDropDown={setDropDown}/>
     );
 

@@ -61,6 +61,7 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
 
   useEffect(() => {
     console.log(dropDown)
+    console.log(dropDown === "sports")
   }, [dropDown])
 
   return (

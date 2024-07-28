@@ -71,7 +71,7 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
         };
     }, [dropDown]);
 
-    // if(!isDropdownOpen || input.trim().length === 0) return null;
+    if(input.trim().length === 0) return null;
     
     if(loading && isDropdownOpen) return (
         <div style={{
