@@ -24,12 +24,12 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
     */
     const [similarPlayers, setSimilarPlayers] = useState<any[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
-    const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
     /*
         Make the getAllPlayer calls to the respective league
     */
     const getSimilarPlayers = async () => {
+        setLoading(true)
         const sportLower = sport.toLowerCase();
         let similarPlayers: PlayerType[] = [];
 
@@ -45,22 +45,18 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
             similarPlayers = findSimilarLastNames(players, input, 2);
         }
 
+        setLoading(false);
         setSimilarPlayers(similarPlayers);
     }
 
     useEffect(() => {
-        setIsDropdownOpen(true);
-        setSimilarPlayers([]);
-        
-        getSimilarPlayers();
-        setLoading(false);
-    }, [input, sport])
+        if(input !== "") getSimilarPlayers();
+    }, [input])
 
     /* To handle closing the drop down when clicking somewhere on the screen */
     const handleClickOutside = (event: MouseEvent) => {
         const target = event.target as HTMLElement;
         if (!target.closest('.inputFieldSearchBar') && dropDown === 'players') {
-            console.log("im here")
             setDropDown('');
         }
     };
@@ -73,7 +69,7 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
 
     if(input.trim().length === 0) return null;
     
-    if(loading && isDropdownOpen) return (
+    if(loading) return (
         <div style={{
             width: '100%', minHeight:'50px', background:'#eaeaea', position:'absolute',
             top: '100%', left: 0, borderBottomLeftRadius: 10, borderBottomRightRadius: 10,
@@ -91,7 +87,7 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
         </div>
     )
 
-    if(loading && isDropdownOpen && similarPlayers.length === 0) return (
+    if(!loading && similarPlayers.length === 0) return (
         <div style={{
             width: '100%', minHeight:'50px', background:'#eaeaea', position:'absolute',
             top: '100%', left: 0, borderBottomLeftRadius: 10, borderBottomRightRadius: 10,

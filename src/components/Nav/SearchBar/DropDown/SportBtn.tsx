@@ -81,7 +81,7 @@ export const SportBtn: React.FC<SportBtnProps> = ({ dropDown, setDropDown, sport
                 transition: 'transform 0.3s ease', // Optional: adds a smooth transition
             }}
            >
-            <path fill="#fff" stroke="#fff" stroke-linejoin="round" stroke-width="4" d="m12 29l12-12l12 12z" />
+            <path fill="#fff" stroke="#fff" stroke-linejoin="round" strokeWidth="4" d="m12 29l12-12l12 12z" />
           </svg>
   
         </button>
