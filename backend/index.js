@@ -2,9 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const cheerio = require('cheerio');
+const mongoose = require("mongoose");
+require('dotenv').config();
+
+const ValorantRoute = require('./routes/Valorant');
 
 const app = express();
 app.use(cors());
+app.use("/valorant", ValorantRoute);
 
 /*
     - Parses JSON file with all the actions
@@ -309,53 +314,6 @@ app.get("/allPlayers", async (req, res) => {
     }
 })
 
-app.get('/valorant/getAllPlayers', async (req, res) => {
-    try {
-        const axiosResponse = await axios.get('https://www.vlr.gg/stats');
-        const axiosHtml = axiosResponse.data;
-        
-        const $ = cheerio.load(axiosHtml);
-
-        let playersArr = [];
-        $('tbody tr').each((index, element) => {
-            const playerLink = $(element).find('.mod-player a').attr('href');
-            const playerId = playerLink ? playerLink.split('/')[2] : null;
-
-            const playerData = {
-                id: playerId,
-                name: $(element).find('.mod-player .text-of').text().trim(),
-                firstName: $(element).find('.mod-player .text-of').text().trim(),
-                lastName: '',
-                picId: '',
-                rnd: parseInt($(element).find('.mod-rnd').text().trim(), 10),
-                r: parseFloat($(element).find('.mod-color-sq').eq(0).text().trim()),
-                acs: parseFloat($(element).find('.mod-color-sq.mod-acs').text().trim()),
-                kd: parseFloat($(element).find('.mod-color-sq').eq(2).text().trim()),
-                kast: $(element).find('.mod-color-sq').eq(3).text().trim(),
-                adr: parseFloat($(element).find('.mod-color-sq').eq(4).text().trim()),
-                kpr: parseFloat($(element).find('.mod-color-sq').eq(5).text().trim()),
-                apr: parseFloat($(element).find('.mod-color-sq').eq(6).text().trim()),
-                fkpr: parseFloat($(element).find('.mod-color-sq').eq(7).text().trim()),
-                kdpr: parseFloat($(element).find('.mod-color-sq').eq(8).text().trim()),
-                hs: $(element).find('.mod-color-sq').eq(9).text().trim(),
-                cl: $(element).find('.mod-cl').text().trim(),
-                k: parseInt($(element).find('td').eq(14).text().trim(), 10),
-                d: parseInt($(element).find('td').eq(15).text().trim(), 10),
-                a: parseInt($(element).find('td').eq(16).text().trim(), 10),
-                fk: parseInt($(element).find('td').eq(17).text().trim(), 10),
-                fd: parseInt($(element).find('td').eq(18).text().trim(), 10),
-                team:  $(element).find('div.stats-player-country').text().trim()
-            };
-            playersArr.push(playerData);
-        });
-
-        res.json(playersArr);
-    } catch (error) {
-        console.error('Error fetching data:', error);
-        res.status(500).send('Error fetching data');
-    }
-});
-
 app.get("/valorant/:id/:username", async (req, res) => {
     if(req.params.id === undefined || req.params.username === undefined) res.error(500, "The name or id is undefined");
 
@@ -639,6 +597,14 @@ const getTeamNames = (actions) => {
     return teamNames;
 }
 
-app.listen(3001, () => {
-    console.log("Server is on 3001");
-});
+// console.log('NEXT_MONGO_URI URI:', process.env.NEXT_MONGO_URI);
+mongoose.connect("mongodb+srv://lebron:lebron@book-store-mern.8mxu5ek.mongodb.net/valorants?retryWrites=true&w=majority&appName=Book-Store-MERN")
+    .then(() => {
+        console.log("Connected to MongoDB");
+        app.listen(3001, () => {
+            console.log("Server is Running on port 3001");
+        });
+    })
+    .catch((err) => {
+        console.error("Error connecting to MongoDB", err);
+    });
