@@ -11,12 +11,12 @@
 export type PlayerType = {
     firstName: string,
     lastName: string,
-    picId: string
+    picId: string,
+    team: string
 }
 
 export type WNBAPlayer = PlayerType & {
     city: string;
-    team: string;
     abbr: string;
     position: string;
     number: string;
@@ -45,7 +45,6 @@ export type ValorantPlayer = PlayerType & {
     a: number,
     fk: number,
     fd: number,
-    team:string,
 }
 export type ValorantGame = {
     url: string,
@@ -69,7 +68,6 @@ export type LolPlayer = PlayerType & {
     kills: string,
     deaths: string,
     assists: string,
-    team: string,
 }
 export type LolGame = {
     champion: {name: string, number: string},
@@ -84,4 +82,8 @@ export type LolGame = {
 // score: ['0/4/3', '3/3/3'],
 // date: '2024-06-15',
 // game: 'Cloud9 vs Dignitas',
-// tournament: 'LCS Summer 2024'
+// tournament: 'LCS Summer 2024''
+
+export type CSPlayer = PlayerType & {
+    
+}

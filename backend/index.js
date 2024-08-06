@@ -598,13 +598,16 @@ const getTeamNames = (actions) => {
 }
 
 // console.log('NEXT_MONGO_URI URI:', process.env.NEXT_MONGO_URI);
-mongoose.connect("mongodb+srv://lebron:lebron@book-store-mern.8mxu5ek.mongodb.net/valorants?retryWrites=true&w=majority&appName=Book-Store-MERN")
-    .then(() => {
-        console.log("Connected to MongoDB");
-        app.listen(3001, () => {
-            console.log("Server is Running on port 3001");
-        });
-    })
-    .catch((err) => {
-        console.error("Error connecting to MongoDB", err);
-    });
+// mongoose.connect("mongodb+srv://lebron:lebron@book-store-mern.8mxu5ek.mongodb.net/valorants?retryWrites=true&w=majority&appName=Book-Store-MERN")
+//     .then(() => {
+//         console.log("Connected to MongoDB");
+//         app.listen(3001, () => {
+//             console.log("Server is Running on port 3001");
+//         });
+//     })
+//     .catch((err) => {
+//         console.error("Error connecting to MongoDB", err);
+//     });
+app.listen(3001, () => {
+    console.log("Server is Running on port 3001");
+});

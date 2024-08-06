@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useContext, Dispatch, SetStateAction, useState, useEffect, ReactNode } from 'react';
 import { Game2 } from '../functions/players';
-import { LolPlayer, ValorantPlayer, WNBAPlayer } from './PlayerTypes';
+import { CSPlayer, LolPlayer, ValorantPlayer, WNBAPlayer } from './PlayerTypes';
 import {apiUrl} from '../data/data';
 
 interface ContextProps {
@@ -14,7 +14,10 @@ interface ContextProps {
   fetchValorantPlayers: () => Promise<ValorantPlayer[]>;
   lolPlayers: LolPlayer[],
   setLolPlayers: Dispatch<SetStateAction<LolPlayer[]>>,
-  fetchLolPlayers: () => Promise<LolPlayer[]>
+  fetchLolPlayers: () => Promise<LolPlayer[]>,
+  csPlayers: CSPlayer[],
+  setCSPlayers: Dispatch<SetStateAction<CSPlayer[]>>,
+  fetchCSPlayers: () => Promise<CSPlayer[]>
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -27,13 +30,17 @@ const GlobalContext = createContext<ContextProps>({
   fetchValorantPlayers: async (): Promise<ValorantPlayer[]> => [],
   lolPlayers: [],
   setLolPlayers:  (): LolPlayer[] => [],
-  fetchLolPlayers: async (): Promise<LolPlayer[]> => [] 
+  fetchLolPlayers: async (): Promise<LolPlayer[]> => [] ,
+  csPlayers: [],
+  setCSPlayers: (): CSPlayer[] => [],
+  fetchCSPlayers: async (): Promise<CSPlayer[]> => [] ,
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
   const [players, setPlayers] = useState<WNBAPlayer[]>([]);
   const [valorantPlayers, setValorantPlayers] = useState<ValorantPlayer[]>([]);
   const [lolPlayers, setLolPlayers] = useState<LolPlayer[]>([]);
+  const [csPlayers, setCSPlayers] = useState<CSPlayer[]>([]);
   const [games, setGames] = useState<Game2[]>([]);
 
   const fetchPlayers = async () => {
@@ -89,6 +96,24 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     }
   };
 
+  const fetchCSPlayers = async (): Promise<CSPlayer[]> => {
+    if(csPlayers.length > 0){
+      return csPlayers;
+    } else {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/cs/players`);
+        if (!response.ok) throw new Error('Failed to fetch CS players');
+
+        const data = await response.json();
+        setCSPlayers(data);
+        return data;
+      } catch (error) {
+        console.error('Error fetching Lol players:', error);
+        return [];
+      }
+    }
+  };
+
   useEffect(() => {
     fetchPlayers();
   }, []);
@@ -98,6 +123,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       players, setPlayers, 
       valorantPlayers, setValorantPlayers, fetchValorantPlayers,
       lolPlayers, setLolPlayers, fetchLolPlayers,
+      csPlayers, setCSPlayers, fetchCSPlayers,
       games, setGames, 
     }}>
       {children}
