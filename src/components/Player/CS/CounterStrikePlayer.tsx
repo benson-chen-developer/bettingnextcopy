@@ -125,26 +125,26 @@ export const CounterStrikePlayer = () => {
     }
 
     useEffect(() => {
-        const fetchPlayer = async () => {
-            const allPlayers = await fetchLolPlayers();
-            setAllPlayers(allPlayers);
+        // const fetchPlayer = async () => {
+        //     const allPlayers = await fetchLolPlayers();
+        //     setAllPlayers(allPlayers);
         
-            const foundPlayer = allPlayers.find(player => player.firstName.toLowerCase() === (paramPlayer as string).toLowerCase());
+        //     const foundPlayer = allPlayers.find(player => player.firstName.toLowerCase() === (paramPlayer as string).toLowerCase());
 
-            if(foundPlayer){
-                const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/lol/player/${foundPlayer.id}`)
-                const allGames = await res.json();
+        //     if(foundPlayer){
+        //         const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/lol/player/${foundPlayer.id}`)
+        //         const allGames = await res.json();
 
-                let updatedPlayer = setTeamForPlayer(foundPlayer, allGames);
-                setPlayer(updatedPlayer);
-                setAllGames(allGames);
-                setDisplayedRows(compareFunction('All Maps', allGames));
-            }
+        //         let updatedPlayer = setTeamForPlayer(foundPlayer, allGames);
+        //         setPlayer(updatedPlayer);
+        //         setAllGames(allGames);
+        //         setDisplayedRows(compareFunction('All Maps', allGames));
+        //     }
 
-            setLoading(false);
-        }
+        //     setLoading(false);
+        // }
 
-        if(paramLeague && paramPlayer) fetchPlayer();
+        // if(paramLeague && paramPlayer) fetchPlayer();
     }, [])
 
     useEffect(() => {
