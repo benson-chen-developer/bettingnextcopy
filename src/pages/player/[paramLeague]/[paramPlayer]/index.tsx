@@ -27,16 +27,8 @@ export const metadate = {
 const Player: React.FC<Props> = ({}) => {
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
-
     const [gamesWithPlayer, setGamesWithPlayer] = useState<Game2[]>([]);
-    const [isLoading, setIsLoading] = useState<boolean>(true);
 
-
-    // if(!isLoading && gamesWithPlayer.length === 0) return (
-    //     <NotFound />
-    // )
-
-    // if(!isLoading && paramLeague) return (
     if(paramLeague) return (
         <>
 

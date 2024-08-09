@@ -13,7 +13,8 @@ export type PlayerType = {
     lastName: string,
     picId: string,
     team: string,
-    playerId: string
+    playerId: string,
+    sport: string
 }
 
 export type WNBAPlayer = PlayerType & {

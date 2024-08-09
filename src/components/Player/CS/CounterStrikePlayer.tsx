@@ -10,9 +10,6 @@ import { CSPlayer, CSGame } from '../../../Context/PlayerTypes';
 import { Row } from '../Row';
 import { NotFound } from '../NotFound';
 
-/*
-
-*/
 export const CounterStrikePlayer = () => {
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
@@ -109,7 +106,6 @@ export const CounterStrikePlayer = () => {
     }, [])
 
     useEffect(() => {
-        console.log(pickedBtn, compareFunction(pickedBtn, allGames))
         setDisplayedRows(compareFunction(pickedBtn, allGames));
     }, [pickedBtn, setPickedBtn])
 
@@ -128,10 +124,10 @@ export const CounterStrikePlayer = () => {
 
             <h1 style={{ marginLeft: '75px', marginBottom:'10px'}}>Games</h1>
 
-            <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%'}}>
+            <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%', minHeight:'150px'}}>
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
-                        {/* <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} /> */}
+                        <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} />
 
                         <TableHeader statsHeader={statsHeader} />
                     </thead>
@@ -149,7 +145,7 @@ export const CounterStrikePlayer = () => {
                     </tbody>
                 </table>
 
-                {/* <EverythingLoaded 
+                <EverythingLoaded 
                     allLoaded={allGamesLoaded}
                     onClickFunction={() => {
                         const loadGames = async () => {
@@ -158,9 +154,8 @@ export const CounterStrikePlayer = () => {
                         setLoading(true);
                         loadGames();
                     }}
-                /> */}
+                />
             </div>
-
         </div>
     )
 

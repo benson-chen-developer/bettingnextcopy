@@ -284,7 +284,7 @@ app.get("/getPlayersInGame/:urlId", async (req, res) => {
     reb 10.2,        ast 3.7,
     'Season'
 */
-app.get("/allPlayers", async (req, res) => {
+app.get("/players", async (req, res) => {
     try {
         const axiosResponse = await axios.get('https://www.wnba.com/players?team=all&position=all&show-historic-players=fal');
         const html = axiosResponse.data;
@@ -486,7 +486,7 @@ app.get("/valorant/game", async (req, res) => {
 /*
     Gets the list of all league players on the homepage
 */
-app.get("/lol/allPlayers", async (req, res) => {
+app.get("/lol/players", async (req, res) => {
     const response = await axios.get("https://gol.gg/players/list/season-S14/split-Summer/tournament-ALL/");
     const html = response.data;
 

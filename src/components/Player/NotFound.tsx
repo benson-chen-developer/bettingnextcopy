@@ -91,7 +91,7 @@ export const findSimilarLastNames = (players: PlayerType[], input: string, maxAl
     3) Anyone returned is displayed
 */
 export const NotFound: React.FC<Props> = ({}) => {
-    const {players, fetchLolPlayers, fetchValorantPlayers} = useGlobalContext();
+    const {fetchWnbaPlayer, fetchLolPlayers, fetchValorantPlayers, fetchCSPlayers} = useGlobalContext();
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
     const [allPlayers, setAllPlayers] = useState<PlayerType[]>([]);
@@ -108,6 +108,12 @@ export const NotFound: React.FC<Props> = ({}) => {
             }
             else if(paramLeague![0].toLowerCase() === 'valorant') {
                 players = await fetchValorantPlayers();
+            }
+            else if(paramLeague![0].toLowerCase() === 'wnba') {
+                players = await fetchWnbaPlayer();
+            }
+            else if(paramLeague![0].toLowerCase() === 'cs') {
+                players = await fetchCSPlayers();
             }
 
             setAllPlayers(players);

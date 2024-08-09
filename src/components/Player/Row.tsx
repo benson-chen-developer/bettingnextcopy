@@ -17,7 +17,7 @@ interface Props {
 */
 export const Row:React.FC<Props> = ({displayedStats, pickedBtn, chartCompareTo, team, date}) => {
     return (
-        <tr style={{display:'flex'}}>
+        <tr style={{display:'flex', minHeight: '35px'}}>
             <th style={{width:'200px', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
                 <h4 style={{margin:0}}>{date}</h4>
                 <h4 style={{margin:0}}>@{team}</h4>
@@ -25,7 +25,7 @@ export const Row:React.FC<Props> = ({displayedStats, pickedBtn, chartCompareTo, 
 
             {displayedStats[0] === -1 ? 
               <div  style={{
-                width: "200px", height: "35px", display:'flex', justifyContent:'center', alignItems:'center'
+                width: "200px", height: "100%", display:'flex', justifyContent:'center', alignItems:'center'
               }}>
                 <p style={{fontSize: '15px', fontWeight:'bold', color:'#3d3d3d'}}>Did Not Play</p>
               </div>
