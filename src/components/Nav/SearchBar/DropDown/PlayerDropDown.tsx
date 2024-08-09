@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDropDown}) => {
-    const {players, fetchValorantPlayers, fetchLolPlayers} = useGlobalContext();
+    const {players, fetchValorantPlayers, fetchLolPlayers, fetchCSPlayers} = useGlobalContext();
 
     /*
         Only need 
@@ -42,6 +42,11 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
         }
         else if(sportLower === "lol"){
             const players = await fetchLolPlayers();
+            similarPlayers = findSimilarLastNames(players, input, 2);
+        }
+        else if(sportLower === "cs"){
+            const players = await fetchCSPlayers();
+            console.log(players);
             similarPlayers = findSimilarLastNames(players, input, 2);
         }
 

@@ -6,9 +6,12 @@ const mongoose = require("mongoose");
 require('dotenv').config();
 
 const ValorantRoute = require('./routes/Valorant');
+const CSRoute = require('./routes/CS');
 
 const app = express();
 app.use(cors());
+app.use(express.json());
+app.use("/cs", CSRoute);
 app.use("/valorant", ValorantRoute);
 
 /*

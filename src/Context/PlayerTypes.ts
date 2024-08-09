@@ -12,7 +12,8 @@ export type PlayerType = {
     firstName: string,
     lastName: string,
     picId: string,
-    team: string
+    team: string,
+    playerId: string
 }
 
 export type WNBAPlayer = PlayerType & {
@@ -85,5 +86,22 @@ export type LolGame = {
 // tournament: 'LCS Summer 2024''
 
 export type CSPlayer = PlayerType & {
-    
+    teams: string[]
+}
+export type CSGame = {
+    url: string,
+    team1: string,
+    team2: string,
+    date: string,
+    maps: {
+        players: CSGamePlayer[]
+    }[],
+}
+export type CSGamePlayer = {
+    name: string,
+    kills: string,
+    headshots: string
+    deaths: string,
+    assists: string,
+    team: string,
 }

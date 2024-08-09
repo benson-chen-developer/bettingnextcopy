@@ -8,6 +8,7 @@ import Head from 'next/head';
 import { WNBAPlayer } from '../../../../components/WNBA/WNBAPlayer';
 import { ValPlayer } from '../../../../components/Valorant/ValPlayer';
 import { LeaguePlayer } from '../../../../components/Player/League/LeaguePlayer';
+import { CounterStrikePlayer } from '../../../../components/Player/CS/CounterStrikePlayer';
 
 interface Props{
     // allGamesLoaded: {league: string, loaded: boolean}[]
@@ -48,6 +49,7 @@ const Player: React.FC<Props> = ({}) => {
         {(paramLeague as string).toLowerCase() === "wnba" && <WNBAPlayer />}
         {(paramLeague as string).toLowerCase() === "valorant" && <ValPlayer />}
         {(paramLeague as string)?.toLowerCase() === "lol" && <LeaguePlayer />}
+        {(paramLeague as string)?.toLowerCase() === "cs" && <CounterStrikePlayer />}
 
         </>
     )

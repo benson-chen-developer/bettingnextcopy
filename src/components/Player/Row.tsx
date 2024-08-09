@@ -5,27 +5,17 @@ interface Props {
     chartCompareTo: number[],
     team: string,
     date: string,
-    
     /* 
       Will always be an array of stats to map over
         - So like [3,3,4] (KDA) or [10,10,30] (PRA)
     */
     displayedStats: number[],
 }
-const formatDate = (dateString: string): string => {
-  const [year, month, day] = dateString.split('/');
-  const formattedDay = parseInt(day, 10); // Convert to integer to remove leading zeros
-  const formattedMonth = parseInt(month, 10); // Convert to integer to remove leading zeros
-  return `${year}-${formattedMonth}-${formattedDay}`;
-}
 
 /*
   Displayed stats is the box score essentially. It should be an array so we can just loop through it
 */
 export const Row:React.FC<Props> = ({displayedStats, pickedBtn, chartCompareTo, team, date}) => {
-
-    /* The player stats array is seperated into many portions and each number is the selected portion */
-    
     return (
         <tr style={{display:'flex'}}>
             <th style={{width:'200px', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
@@ -33,13 +23,23 @@ export const Row:React.FC<Props> = ({displayedStats, pickedBtn, chartCompareTo, 
                 <h4 style={{margin:0}}>@{team}</h4>
             </th>
 
-            {chartCompareTo.map((value, index) => (
-                <Square 
-                    key={index}
-                    compareAmount={value}
-                    amount={displayedStats[index]} 
-                />
-            ))}
+            {displayedStats[0] === -1 ? 
+              <div  style={{
+                width: "200px", height: "35px", display:'flex', justifyContent:'center', alignItems:'center'
+              }}>
+                <p style={{fontSize: '15px', fontWeight:'bold', color:'#3d3d3d'}}>Did Not Play</p>
+              </div>
+                :
+              <>
+                {chartCompareTo.map((value, index) => (
+                    <Square 
+                        key={index}
+                        compareAmount={value}
+                        amount={displayedStats[index]} 
+                    />
+                ))}
+              </>
+            }
         </tr>
     )
 }
