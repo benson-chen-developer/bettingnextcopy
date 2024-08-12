@@ -20,9 +20,9 @@ export const TableHeader: React.FC<Props> = ({ statsHeader }) => {
                 >
                     {statObj.name}
                     <div className="dropdown">
-                        <div className="dropdown-content">
+                        <h2 className="dropdown-content">
                             {statObj.underName}
-                        </div>
+                        </h2>
                     </div>
                 </th>
             ))}

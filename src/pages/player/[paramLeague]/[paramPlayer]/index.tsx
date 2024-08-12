@@ -5,16 +5,15 @@ import { ClipLoader } from 'react-spinners';
 import { NotFound } from '../../../../components/Player/NotFound';
 import { useGlobalContext } from '../../../../Context/store';
 import Head from 'next/head';
-import { WNBAPlayer } from '../../../../components/WNBA/WNBAPlayer';
 import { ValPlayer } from '../../../../components/Valorant/ValPlayer';
 import { LeaguePlayer } from '../../../../components/Player/League/LeaguePlayer';
 import { CounterStrikePlayer } from '../../../../components/Player/CS/CounterStrikePlayer';
+import { WNBAPlayerPage } from '../../../../components/Player/WNBA/WNBAPlayer';
 
 interface Props{
     // allGamesLoaded: {league: string, loaded: boolean}[]
     // setAllGamesLoaded: Dispatch<SetStateAction<{league: string, loaded: boolean}[]>>
 }
-
 export const metadate = {
     title: 'Player Stats Page'
 }
@@ -38,7 +37,7 @@ const Player: React.FC<Props> = ({}) => {
             <meta name="keywords" content={`WNBA, fantasy, rebounds, points, assists, steals, blocks`} />
         </Head>
 
-        {(paramLeague as string).toLowerCase() === "wnba" && <WNBAPlayer />}
+        {(paramLeague as string).toLowerCase() === "wnba" && <WNBAPlayerPage />}
         {(paramLeague as string).toLowerCase() === "valorant" && <ValPlayer />}
         {(paramLeague as string)?.toLowerCase() === "lol" && <LeaguePlayer />}
         {(paramLeague as string)?.toLowerCase() === "cs" && <CounterStrikePlayer />}

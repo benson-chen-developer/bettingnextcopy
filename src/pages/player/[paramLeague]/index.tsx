@@ -1,9 +1,6 @@
 import React, { useEffect } from 'react'
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import { ValHome } from '../../../components/Valorant/ValHome';
-import { WNBAPlayer } from '../../../components/WNBA/WNBAPlayer';
-import { LeaguePlayer } from '../../../components/Player/League/LeaguePlayer';
 
 const Index = () => {
     const router = useRouter();

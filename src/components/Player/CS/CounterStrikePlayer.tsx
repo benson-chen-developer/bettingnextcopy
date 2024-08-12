@@ -83,7 +83,6 @@ export const CounterStrikePlayer = () => {
         const fetchPlayer = async () => {
             const allPlayers = await fetchCSPlayers();
             setAllPlayers(allPlayers);
-        
             const foundPlayer = allPlayers.find(player => player.firstName.toLowerCase() === (paramPlayer as string).toLowerCase());
             if(foundPlayer){
                 setPlayer(foundPlayer);

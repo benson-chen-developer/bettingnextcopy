@@ -53,7 +53,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
     } else {
       try {
         console.log("Not Cached wnbaPlayers");
-        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/players`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/wnba/players`);
         if (!response.ok) throw new Error('Failed to fetch wnbaPlayers players');
 
         const data = await response.json();

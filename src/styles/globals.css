@@ -33,7 +33,7 @@ body {
 .dropdown-content {
   padding: 10px;
   color: #fff;
-  border-bottom: 1px solid #ddd;
+  font-size: 15px;
 }
 
 .dropdown-container:hover .dropdown {

@@ -26,6 +26,23 @@ export type WNBAPlayer = PlayerType & {
     rpg: number;
     apg: number;
 };
+export type WNBAGame = {
+    url: string,
+    date: string,
+    team1: string,
+    team2: string,
+    actions: WNBAAction[],
+    id: string
+};
+export type WNBAAction = {
+    name: string
+    period: number,
+    clock: string,
+    teamTricode: string,
+    actionType: String,
+    amount: number,
+    picId: number
+}
 
 export type ValorantPlayer = PlayerType & {
     id: string,

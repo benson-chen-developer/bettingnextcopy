@@ -4,7 +4,6 @@ import ResponsiveTrendingBoxes from '../components/Home/ResponsiveTrendingBoxes'
 import { Tab } from '../components/Home/Tab';
 import { TrendingBox } from '../components/Home/TrendingBox';
 import Head from 'next/head';
-import { fetchTodayWNBAGames } from '../components/WNBA/functions';
 
 const marginLeftSpacing = '50px';
 
@@ -27,7 +26,8 @@ const Trending = () => {
     useEffect(() => {
         const fetchTodayGames = async () => {
             try {
-                const newTrendingGames = await fetchTodayWNBAGames();
+                // const newTrendingGames = await fetchTodayWNBAGames();
+                const newTrendingGames: any [] = [];
                 setHomePlayersLoad(true);
                 setTrendingGames(newTrendingGames);
             }
