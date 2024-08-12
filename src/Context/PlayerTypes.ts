@@ -16,6 +16,11 @@ export type PlayerType = {
     playerId: string,
     sport: string
 }
+export type TrendingPlayer = PlayerType & {
+    oppTeam: string,
+    date: string,
+    tournament: string
+}
 
 export type WNBAPlayer = PlayerType & {
     city: string;

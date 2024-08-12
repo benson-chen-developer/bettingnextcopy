@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { black } from '../data/colors'
-import ResponsiveTrendingBoxes from '../components/Home/ResponsiveTrendingBoxes';
 import { Tab } from '../components/Home/Tab';
 import { TrendingBox } from '../components/Home/TrendingBox';
 import Head from 'next/head';
+import { TrendingPage } from '../components/Home/Trending/TrendingPage';
 
-const marginLeftSpacing = '50px';
 
 export type TrendingPlayer = {
     firstName: string,
@@ -40,7 +39,6 @@ const Trending = () => {
         fetchTodayGames();
     }, []);
     
-    const spaceBetween = '30px';
     return (
         <>
 
@@ -50,7 +48,9 @@ const Trending = () => {
             <meta name="ahrefs-site-verification" content="881627b9cdfce1e5ef0a890ec7d5477594ec45471d470d5eeaadea5976b61433" />
         </Head>
 
-        <TrendingPa
+        <div style={{minHeight:'100vh', minWidth: '100vw', background: black, display:'flex', flexDirection:'column'}}>
+            <TrendingPage />
+        </div>
 
         </>
     )

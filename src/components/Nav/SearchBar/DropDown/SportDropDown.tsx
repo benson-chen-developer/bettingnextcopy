@@ -45,7 +45,7 @@ interface SquareProps {
     setSport: Dispatch<SetStateAction<string>>
 }
 
-const SportSquare: React.FC<SquareProps>  = ({selected, sport, setSport}) => {
+export const SportSquare: React.FC<SquareProps>  = ({selected, sport, setSport}) => {
     const [isHovered, setIsHovered] = useState(false);
 
     if(selected) return(
