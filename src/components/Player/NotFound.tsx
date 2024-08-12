@@ -148,7 +148,6 @@ export const NotFound: React.FC<Props> = ({}) => {
             }
             else if((paramLeague as string).toLowerCase() === 'wnba') {
                 players = await fetchWnbaPlayer();
-                console.log(players)
             }
             else if((paramLeague as string).toLowerCase() === 'cs') {
                 players = await fetchCSPlayers();

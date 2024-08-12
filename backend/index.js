@@ -602,8 +602,7 @@ const getTeamNames = (actions) => {
     return teamNames;
 }
 
-// console.log('NEXT_MONGO_URI URI:', process.env.NEXT_MONGO_URI);
-mongoose.connect("mongodb+srv://lebron:lebron@book-store-mern.8mxu5ek.mongodb.net/valorants?retryWrites=true&w=majority&appName=Book-Store-MERN")
+mongoose.connect(process.env.NEXT_MONGO_URI)
     .then(() => {
         console.log("Connected to MongoDB");
         app.listen(3001, () => {

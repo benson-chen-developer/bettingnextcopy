@@ -14,7 +14,7 @@ function App({ Component, pageProps }) {
           <meta name="ahrefs-site-verification" content="881627b9cdfce1e5ef0a890ec7d5477594ec45471d470d5eeaadea5976b61433" />
           <meta name="description" content="NBA, MLB, NFL, NHL, and Esports stats tracking" />
           <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" href="/favicon.svg" />
+          <link rel="icon" href="/taskBarLogo.svg" />
         </Head>
 
         <NavBar />

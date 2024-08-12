@@ -7,7 +7,6 @@ const Index = () => {
     const { paramPlayer, paramLeague } = router.query;
     
     useEffect(() => {
-        console.log("This is not a player page");
     }, []);
 
     return (
