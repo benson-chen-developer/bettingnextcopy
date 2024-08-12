@@ -26,10 +26,10 @@ export const searchPlayer = (input: string, league: string, correctName?: boolea
     parsedName = parsedName.toLowerCase(); // Convert to lowercase
     let nameParts = parsedName.split(' '); // Split the name
 
-    if (nameParts.length >= 2) { // Basically turn Cait Clark to C_Clark
+    if (nameParts.length >= 2) { // Basically turn Cait Clark to Cait_Clark
       let firstName = nameParts[0];
       let lastName = nameParts[1];
-      parsedName = `${firstName.charAt(0)}_${lastName}`;
+      parsedName = `${firstName}_${lastName}`;
     }
 
     if (input.trim()) {

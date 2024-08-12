@@ -83,6 +83,41 @@ export const findSimilarLastNames = (players: PlayerType[], input: string, maxAl
     return Array.from(foundPlayers);
 };
 
+export const findSimilarNames = (players: PlayerType[], firstName: string, lastName: string): PlayerType[] => {
+    if(firstName) firstName = firstName.trim(); 
+    if(lastName) lastName = lastName.trim(); 
+    let foundPlayers = new Set<any>();
+
+    if (firstName && lastName) {
+        for (const player of players) {
+            if (levenshteinDistance(player.firstName, firstName) <= 2) {
+                foundPlayers.add(player);
+            }
+            if (foundPlayers.size >= 5) break;
+
+            if (levenshteinDistance(player.lastName, lastName) <= 2) {
+                foundPlayers.add(player);
+            }
+            if (foundPlayers.size >= 5) break;
+        }
+    } else {
+        /* This code runs if they typed one thing only so we have to check that name with the first and last name */
+        for (const player of players) {
+            if (levenshteinDistance(player.firstName, firstName) <= 2) {
+                foundPlayers.add(player);
+            }
+            if (foundPlayers.size >= 5) break;
+
+            if (levenshteinDistance(player.lastName, firstName) <= 2) {
+                foundPlayers.add(player);
+            }
+            if (foundPlayers.size >= 5) break;
+        }
+    }
+    
+    return Array.from(foundPlayers);
+};
+
 /*
     We only need the paramPlayer name
 
@@ -94,30 +129,33 @@ export const NotFound: React.FC<Props> = ({}) => {
     const {fetchWnbaPlayer, fetchLolPlayers, fetchValorantPlayers, fetchCSPlayers} = useGlobalContext();
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
+    const firstName = (paramPlayer as string).split('_')[0]; 
+    const lastName = (paramPlayer as string).split('_')[1];
     const [allPlayers, setAllPlayers] = useState<PlayerType[]>([]);
 
     const [isLoading, setIsLoading] = useState<boolean>(true);
-    const [similarPlayers, setSimilarPlayers] = useState<WNBAPlayer[]>([]);
+    const [similarPlayers, setSimilarPlayers] = useState<PlayerType[]>([]);
 
     useEffect(() => {
         let players: PlayerType[] = [];
         
         const fetchPlayers = async () => {
-            if (paramLeague![0].toLowerCase() === 'lol') {
+            if ((paramLeague as string).toLowerCase() === 'lol') {
                 players = await fetchLolPlayers();
             }
-            else if(paramLeague![0].toLowerCase() === 'valorant') {
+            else if((paramLeague as string).toLowerCase() === 'valorant') {
                 players = await fetchValorantPlayers();
             }
-            else if(paramLeague![0].toLowerCase() === 'wnba') {
+            else if((paramLeague as string).toLowerCase() === 'wnba') {
                 players = await fetchWnbaPlayer();
+                console.log(players)
             }
-            else if(paramLeague![0].toLowerCase() === 'cs') {
+            else if((paramLeague as string).toLowerCase() === 'cs') {
                 players = await fetchCSPlayers();
             }
 
             setAllPlayers(players);
-            setSimilarPlayers(findSimilarLastNames(players, paramPlayer as string, 2));
+            setSimilarPlayers(findSimilarNames(players, firstName, lastName));
             setIsLoading(false);
         };
 
@@ -139,8 +177,7 @@ export const NotFound: React.FC<Props> = ({}) => {
         }}>
             {similarPlayers.length === 0 ?
                 <>
-                    <h1>{paramPlayer as string}</h1>
-                    <h1 style={{}}>Player Doesn't Exist or Has No Games</h1>
+                    <h2 style={{}}>This Player Doesn't Exist or Has No Games</h2>
                 </> 
                     :
                 <div style={{display:'flex', alignItems:'center', flexDirection:'column', width:'100%'}}>
@@ -158,7 +195,7 @@ export const NotFound: React.FC<Props> = ({}) => {
 }
 
 type PlayerBoxProps = {
-    player: WNBAPlayer;
+    player: PlayerType;
 };
   
 const PlayerBox: React.FC<PlayerBoxProps> = ({ player }) => {
