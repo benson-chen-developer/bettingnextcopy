@@ -1,16 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { black } from '../data/colors'
-import { Tab } from '../components/Home/Tab';
-import { TrendingBox } from '../components/Home/TrendingBox';
 import Head from 'next/head';
 import { TrendingPage } from '../components/Home/Trending/TrendingPage';
 
-
-export type TrendingPlayer = {
-    firstName: string,
-    lastName: string
-    wnbaId: string,
-}
 
 const Trending = () => {
     const trendings = [

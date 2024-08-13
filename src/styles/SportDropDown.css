@@ -1,0 +1,30 @@
+.sport-square {
+    width: 85px;
+    height: 85px;
+    border-radius: 10px;
+    border: 2px solid #B3B3B3;
+    background: #7A7A7A;
+    display: flex;
+    justify-content: space-evenly;
+    margin: 10px;
+    align-items: center;
+    flex-direction: column;
+    cursor: pointer;
+    /* transition: background 0.3s, border 0.3s; */
+}
+
+.sport-square:hover {
+    border: 2px solid #F33479;
+    background: #8F3052;
+}
+
+.sport-square.selected {
+    border: 2px solid #F33479;
+    background: #8F3052;
+}
+
+.sport-name {
+    font-size: 13px;
+    color: #fff;
+    margin: 0;
+}

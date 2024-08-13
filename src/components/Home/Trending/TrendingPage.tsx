@@ -78,14 +78,26 @@ export const TrendingPage = () => {
                     <div className="trending-container">
                         {trendingPlayers
                             .filter(player => selectedTab === "All" || player.sport === selectedTab)
-                            .map((player, index) => {
-                                return (
-                                    <PlayerBox 
-                                        key={index} 
-                                        player={player}
-                                    />
-                                );
-                            }
+                            .length > 0 ? (
+                            trendingPlayers
+                                .filter(player => selectedTab === "All" || player.sport === selectedTab)
+                                .map((player, index) => {
+                                    return (
+                                        <PlayerBox 
+                                            key={index} 
+                                            player={player}
+                                        />
+                                    );
+                                })
+                        ) : (
+                            <div style={{display:'flex', justifyItems:'center',alignItems:'center', flexDirection:'column'}}>
+                                <p style={{color:'#fff', fontSize:'25px', fontWeight:'bold'}}>
+                                    No Trending Players Currently 
+                                </p>
+                                <p style={{color:'#b2b2b2', fontSize:'20px', fontWeight:'bold'}}>
+                                    Check Back Later For More
+                                </p>
+                            </div>
                         )}
                     </div>
                 }

@@ -44,39 +44,20 @@ interface SquareProps {
     sport: string,
     setSport: Dispatch<SetStateAction<string>>
 }
-
-export const SportSquare: React.FC<SquareProps>  = ({selected, sport, setSport}) => {
-    const [isHovered, setIsHovered] = useState(false);
-
-    if(selected) return(
-        <div style={{
-            width:"85px", height:'85px', border: '2px solid #F33479', borderRadius: 10,
-            background:"#8F3052", display:'flex', justifyContent:'space-evenly', margin: '10px',
-            alignItems:'center', flexDirection:'column', cursor:'pointer'
-        }}>
-             <LeagueIcon sport={sport} size="40px"/>
-             <h3 style={{fontSize:'13px', color:'#fff', margin:0}}>
-                {sport}
-             </h3>
-        </div>
-    )
-
-    return(
-        <div style={{
-            width:"85px", height:'85px', borderRadius: 10,
-            border: isHovered ? '2px solid #F33479' : '2px solid #B3B3B3', 
-            background: isHovered ? "#8F3052": "#7A7A7A", 
-            display:'flex', justifyContent:'space-evenly', margin: '10px',
-            alignItems:'center', flexDirection:'column', cursor:'pointer'
-        }} 
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            onClick={() => setSport(sport)}
+export const SportSquare: React.FC<SquareProps> = ({ selected, sport, setSport }) => {
+    const handleClick = () => {
+        setSport(sport);
+    };
+    return (
+        <div
+            className={`sport-square ${selected ? 'selected' : ''}`}
+            onClick={handleClick}
         >
-            <LeagueIcon sport={sport} size="40px"/>
-             <h3 style={{fontSize:'13px', color:'#fff', margin:0}}>
+            <LeagueIcon sport={sport} size="40px" />
+            <h3 className="sport-name">
                 {sport}
-             </h3>
+            </h3>
         </div>
-    )
-}
+    );
+};
+

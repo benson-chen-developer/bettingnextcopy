@@ -2,6 +2,7 @@ import { Footer } from '../components/Footer/Footer';
 import { NavBar } from '../components/Nav/NavBar';
 import '../styles/TrendingBox.css';
 import '../styles/globals.css';
+import '../styles/SportDropDown.css';
 import { GlobalContextProvider } from '../Context/store'
 import Head from 'next/head';
 
