@@ -7,6 +7,7 @@ import { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { useEffect } from 'react';
 import { PlayerType, WNBAPlayer } from '../../Context/PlayerTypes';
+import { searchPlayer } from '../Nav/SearchBar/SearchBar';
 
 interface Props{
 }
@@ -199,19 +200,23 @@ type PlayerBoxProps = {
   
 const PlayerBox: React.FC<PlayerBoxProps> = ({ player }) => {
     return(
-        <Link href={`/player/WNBA/${player.firstName}_${player.lastName}`} style={{textDecoration: 'none', color:'black'}}>
-            <div style={{
-                width:'200px', height:'100px', border:'2px solid #1E1E1E', borderRadius:20,
-                display:'flex', alignItems:'center', margin:'20px',
-                cursor:'pointer'
-            }}>
-                <Image
-                    src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}
-                    style={{width: '50%', height: '75%'}}
-                    alt={`Pic of ${player.firstName} ${player.lastName}`} width={90} height={75}
-                />
-                <p>{player.firstName} {player.lastName}</p>
-            </div>
-        </Link>
+        <div style={{
+            width:'200px', height:'100px', border:'2px solid #1E1E1E', borderRadius:20,
+            display:'flex', alignItems:'center', margin:'20px',
+            cursor:'pointer'
+        }} onClick={() => {
+            if(player.lastName){
+                searchPlayer(`${player.firstName}_${player.lastName}`, player.sport)
+            } else {
+                searchPlayer(`${player.firstName}_`, player.sport)
+            }
+        }}>
+            <Image
+                src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}
+                style={{width: '50%', height: '75%'}}
+                alt={`Pic of ${player.firstName} ${player.lastName}`} width={90} height={75}
+            />
+            <p>{player.firstName} {player.lastName}</p>
+        </div>
     )
 }

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import React from 'react'
 import { TrendingPlayer } from '../../../Context/PlayerTypes';
 import { LeagueIcon } from '../../Nav/SearchBar/DropDown/SportBtn';
+import { searchPlayer } from '../../Nav/SearchBar/SearchBar';
 
 interface Props {
     player: TrendingPlayer,
@@ -19,7 +20,11 @@ export const PlayerBox: React.FC<Props> = ({player}) => {
             justifyContent: 'space-evenly',
             alignItems: 'center', flexDirection:'column'
         }} onClick={() => {
-            // searchPlayer(`${player.firstName}_${player.lastName}`, leagueName, true);
+            if(player.lastName){
+                searchPlayer(`${player.firstName}_${player.lastName}`, player.sport, true);
+            } else {
+                searchPlayer(`${player.firstName}_`, player.sport, true);
+            }
         }}>
             {player.picId !== "" ? 
                 <Image
