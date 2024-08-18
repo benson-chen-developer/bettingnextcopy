@@ -5,6 +5,8 @@ import { useGlobalContext } from '../../../Context/store';
 import { ValorantGame, ValorantPlayer } from '../../../Context/PlayerTypes';
 import { Hero } from '../Hero';
 import { Row } from '../Row';
+import { StatComparator } from '../StatComparator';
+import { TableHeader } from '../TableHeader';
 
 export type StatCompartorValorant = {
     kills: number, 
@@ -140,10 +142,10 @@ export const ValPlayerPage = () => {
 
             <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%'}}>
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
-                    {/* <thead>
+                    <thead>
                         <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} />
                         <TableHeader statsHeader={statsHeader} />
-                    </thead> */}
+                    </thead>
                     <tbody>
                         {allGames.map((game, index) => {
                             return (
@@ -160,20 +162,7 @@ export const ValPlayerPage = () => {
                     </tbody>
                 </table>
 
-                {/* <EverythingLoaded 
-                    allLoaded={allGamesLoaded}
-                    onClickFunction={() => {
-                        const loadGames = async () => {
-                            const newGames = await loadMore(allGames, 5);
-                            setDisplayedGames(p => [...p, ...newGames]);
-                            setAllGames(p => updatedAllGames(p, newGames))
-                            setLoading(false);
-                        };
-                
-                        setLoading(true);
-                        loadGames();
-                    }}
-                /> */}
+                <div style={{marginBottom: '50px'}}></div>        
             </div>
 
         </div>
