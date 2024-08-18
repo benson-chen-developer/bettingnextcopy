@@ -67,14 +67,11 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   };
   const fetchValorantPlayers = async (): Promise<ValorantPlayer[]> => {
     if(valorantPlayers.length > 0){
-      console.log("Cached Valorant");
       return valorantPlayers;
     } else {
       try {
-        console.log("Not Cached Valorant");
-        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/getAllPlayers`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/dummy/players`);
         if (!response.ok) throw new Error('Failed to fetch Valorant players');
-
         const data = await response.json();
         setValorantPlayers(data);
         return data;

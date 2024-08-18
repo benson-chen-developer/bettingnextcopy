@@ -5,10 +5,10 @@ import { ClipLoader } from 'react-spinners';
 import { NotFound } from '../../../../components/Player/NotFound';
 import { useGlobalContext } from '../../../../Context/store';
 import Head from 'next/head';
-import { ValPlayer } from '../../../../components/Valorant/ValPlayer';
 import { LeaguePlayer } from '../../../../components/Player/League/LeaguePlayer';
 import { CounterStrikePlayer } from '../../../../components/Player/CS/CounterStrikePlayer';
 import { WNBAPlayerPage } from '../../../../components/Player/WNBA/WNBAPlayer';
+import { ValPlayerPage } from '../../../../components/Player/Valorant/ValorantPlayer';
 
 interface Props{
     // allGamesLoaded: {league: string, loaded: boolean}[]
@@ -38,7 +38,7 @@ const Player: React.FC<Props> = ({}) => {
         </Head>
 
         {(paramLeague as string).toLowerCase() === "wnba" && <WNBAPlayerPage />}
-        {(paramLeague as string).toLowerCase() === "valorant" && <ValPlayer />}
+        {(paramLeague as string).toLowerCase() === "valorant" && <ValPlayerPage />}
         {(paramLeague as string)?.toLowerCase() === "lol" && <LeaguePlayer />}
         {(paramLeague as string)?.toLowerCase() === "cs" && <CounterStrikePlayer />}
 

@@ -44,47 +44,32 @@ export type WNBAAction = {
     period: number,
     clock: string,
     teamTricode: string,
-    actionType: String,
+    actionType: string,
     amount: number,
     picId: number
 }
 
 export type ValorantPlayer = PlayerType & {
-    id: string,
-    name: string,
-    rnd: number,
-    r: number,
-    acs: number,
-    kd: number,
-    kast: string,
-    adr: number,
-    kpr: number,
-    apr: number,
-    fkpr: number,
-    kdpr: number,
-    hs: string,
-    cl: string,
-    k: number,
-    d: number,
-    a: number,
-    fk: number,
-    fd: number,
+    gameUrls: string[]
 }
 export type ValorantGame = {
     url: string,
-    oppTeam: string,
+    team1: string,
+    team2: string,
     date: string,
+    maps: ValorantMap[]
+}
+export type ValorantMap = {
+    map: string,
     players: {
         name: string,
-        team: string,
-        kills: number[],
-        deaths: number[],
-        assists: number[],
-        firstKills: number[],
-        firstDeaths: number[],
-        headShots: number[]
+        kills: number,
+        deaths: number,
+        assists: number,
+        firstKills: number,
+        firstDeaths: number
     }[],
-    maps: string[]
+    didPlay: boolean
 }
 
 export type LolPlayer = PlayerType & {
