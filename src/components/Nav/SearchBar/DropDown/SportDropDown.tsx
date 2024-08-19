@@ -33,7 +33,11 @@ export const SportDropDown: React.FC<Props> = ({input, sport, setSport, dropDown
             borderRight: '2px solid black', borderBottom: '2px solid black',
         }}>
             {currentAllSports.map((option, index) => 
-                <SportSquare selected={option === sport} setSport={setSport} sport={option} key={index}/>
+                <SportSquare 
+                    selected={option === sport} 
+                    setSport={setSport} sport={option} key={index}
+                    index={index} totalLen={currentAllSports.length}
+                />
             )}
         </div>
     )
@@ -43,14 +47,19 @@ interface SquareProps {
     selected: boolean,
     sport: string,
     setSport: Dispatch<SetStateAction<string>>
+    index: number,
+    totalLen: number
 }
-export const SportSquare: React.FC<SquareProps> = ({ selected, sport, setSport }) => {
+export const SportSquare: React.FC<SquareProps> = ({ selected, sport, setSport, index, totalLen }) => {
     const handleClick = () => {
         setSport(sport);
     };
     return (
         <div
             className={`sport-square ${selected ? 'selected' : ''}`}
+            style={{
+                marginRight: index !== totalLen-1 ? "15px" : "0px",
+            }}
             onClick={handleClick}
         >
             <LeagueIcon sport={sport} size="40px" />

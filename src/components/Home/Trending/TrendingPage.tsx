@@ -5,7 +5,6 @@ import { SportSquare } from '../../Nav/SearchBar/DropDown/SportDropDown'
 import { PlayerBox } from './PlayerBox';
 
 export const TrendingPage = () => {
-    const marginLeftSpacing = '50px'; const spaceBetween = '30px';
     const trendings = [
         {name:'All'},
         {name:'WNBA'},
@@ -40,6 +39,39 @@ export const TrendingPage = () => {
                 oppTeam: "",
                 date: "",
                 tournament: ""
+            },
+            {
+                firstName: "Wyzo",
+                lastName: "",
+                picId: "",
+                team: "Vitality",
+                playerId: "",
+                sport: "CS",
+                oppTeam: "",
+                date: "",
+                tournament: ""
+            },
+            {
+                firstName: "Wyzo",
+                lastName: "",
+                picId: "",
+                team: "Vitality",
+                playerId: "",
+                sport: "CS",
+                oppTeam: "",
+                date: "",
+                tournament: ""
+            },
+            {
+                firstName: "Wyzo",
+                lastName: "",
+                picId: "",
+                team: "Vitality",
+                playerId: "",
+                sport: "CS",
+                oppTeam: "",
+                date: "",
+                tournament: ""
             }
         ]
 
@@ -48,19 +80,29 @@ export const TrendingPage = () => {
     }, [])
 
     return (
-        <>
-            <h1 style={{color:'#fff', fontWeight:'bold', fontSize: '2em', margin: `100px 0px ${spaceBetween} ${marginLeftSpacing}`}}>
+        <div className='TrendingPage'>
+            <h1 style={{color:'#fff', fontWeight:'bold', fontSize: '2em', marginTop:"100px", marginBottom:'15px'}}
+                className="marginSides"
+            >
                 Trending 🔥
             </h1>
 
-            <div style={{display:'flex', marginLeft: marginLeftSpacing, marginBottom:spaceBetween}}>
+            <div style={{
+                display: 'flex', marginBottom: '25px',
+                overflowX: 'auto', whiteSpace: 'nowrap', flexWrap: 'nowrap', 
+                scrollbarWidth: 'none',  msOverflowStyle: 'none'
+            }} className="marginSides">
                 {trendings.map((trending, index) => 
-                    <SportSquare selected={trending.name === selectedTab} sport={trending.name} setSport={setSelectedTab}/>
+                    <SportSquare 
+                        selected={trending.name === selectedTab} 
+                        sport={trending.name} setSport={setSelectedTab}
+                        index={index} key={index} totalLen={trendings.length}
+                    />
                 )}
             </div>
 
-            <div style={{width:'100%', marginTop:'10px', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                <div style={{width:'95%', height:'1px', background:'#545454', borderRadius:'10px'}} />
+            <div style={{width:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                <div style={{width:'100%', height:'1px', background:'#6d6d6d', borderRadius:'10px' }} className="marginSides"/>
             </div>
 
             <div className="trending-box">
@@ -102,6 +144,6 @@ export const TrendingPage = () => {
                     </div>
                 }
             </div>
-        </>
+        </div>
     )
 }

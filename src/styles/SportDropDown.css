@@ -1,3 +1,6 @@
+/* .TrendingPage {
+    margin-left: 20px;
+} */
 .sport-square {
     width: 85px;
     height: 85px;
@@ -6,11 +9,9 @@
     background: #7A7A7A;
     display: flex;
     justify-content: space-evenly;
-    margin: 10px;
     align-items: center;
     flex-direction: column;
     cursor: pointer;
-    /* transition: background 0.3s, border 0.3s; */
 }
 
 .sport-square:hover {
@@ -28,3 +29,30 @@
     color: #fff;
     margin: 0;
 }
+
+/* Mobile styles */
+.marginSides {
+    margin-left: 100px;
+    margin-right: 100px;
+}
+@media (max-width: 600px) {
+    .marginSides {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .sport-square {
+        min-width: 85px; /* Smaller width on mobile */
+        min-height: 75px; /* Smaller height on mobile */
+        margin: 5px; /* Reduce margin */
+    }
+
+    .sport-name {
+        font-size: 0.9rem; /* Slightly smaller font size */
+    }
+}
+
+
+
