@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { Action, fillStats, Game2 } from "../../functions/players";
 import Image from 'next/image';
 
 type Props = {
@@ -18,23 +17,14 @@ export const Hero: React.FC<Props> = ({
     playerName, number, team, position, picUrl, allPickedBtns, pickedBtn, setPickedBtn
 }) => {
 
-    return <div style={{
-        width:'100%', height: "370px", background: '#1D1D1D',
-        display:'flex', justifyContent:'flex-end',
-        flexDirection:'column', paddingLeft: '75px'
-    }}>
+    return <div className="playerPageHeroContainer">
 
-        <div style={{width:'100%', height:'300px', display:'flex', alignItems:'flex-end'}}>
+        <div style={{width:'100%', height:'20%', display:'flex', alignItems:'flex-end'}}>
 
             <div style={{display:'flex', alignItems:'flex-end'}}>
 
                 {/* Player Pic */}
-                <div style={{
-                    width: '120px', height: '120px', 
-                    background: '#fff', borderRadius: '50%', 
-                    display: 'flex', overflow:'hidden',
-                    justifyContent: 'center', alignItems: 'flex-end'
-                }}>
+                <div className="playerPagePic">
                     {picUrl !== "" ?
                         <Image
                             src={picUrl}

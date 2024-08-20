@@ -1,0 +1,23 @@
+.playerPagePic {
+    width: 120px;
+    height: 120px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    overflow: hidden;
+    justify-content: center;
+    align-items: flex-end;
+}
+
+.playerPageHeroContainer {
+    margin-top: 70px;
+    width: 100%; 
+    height: auto; 
+    background: #1D1D1D;
+    display: flex; 
+    justify-content: flex-end;
+    flex-direction: column; 
+    padding-left: 75px;
+    padding-right: 75px;
+    box-sizing: border-box;
+}

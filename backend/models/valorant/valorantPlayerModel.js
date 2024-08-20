@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const PlayerStatsSchema = new mongoose.Schema({
     name: { type: String, required: true },
+    team: { type: String, required: true },
     kills: { type: [Number], required: true },
     deaths: { type: [Number], required: true },
     assists: { type: [Number], required: true },
