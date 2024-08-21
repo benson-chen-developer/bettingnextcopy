@@ -17,6 +17,8 @@ interface Props{
     the user searched
 */
 const levenshteinDistance = (a: string, b: string): number => {
+    a = a.toLocaleLowerCase(); b = b.toLocaleLowerCase();
+
     const matrix = [];
     for (let i = 0; i <= b.length; i++) {
       matrix[i] = [i];

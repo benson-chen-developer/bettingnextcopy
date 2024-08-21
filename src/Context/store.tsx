@@ -70,7 +70,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       return valorantPlayers;
     } else {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/dummy/players`);
+        // const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/dummy/players`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/players`);
         if (!response.ok) throw new Error('Failed to fetch Valorant players');
         const data = await response.json();
         setValorantPlayers(data);

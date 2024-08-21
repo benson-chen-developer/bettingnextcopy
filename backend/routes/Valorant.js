@@ -4,7 +4,7 @@ const ValorantPlayer = require("../models/valorant/valorantPlayerModel");
 
 router.get("/players", async (req, res) => {
     try {
-        const players = await ValorantPlayer.find(); 
+        const players = await ValorantPlayer.find({}); 
         res.status(200).json(players);
     } catch (err) {
         console.error("Error fetching players", err);

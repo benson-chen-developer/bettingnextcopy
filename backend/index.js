@@ -602,16 +602,16 @@ const getTeamNames = (actions) => {
     return teamNames;
 }
 
-// mongoose.connect(process.env.NEXT_MONGO_URI)
-//     .then(() => {
-//         console.log("Connected to MongoDB");
-//         app.listen(3001, () => {
-//             console.log("Server is Running on port 3001");
-//         });
-//     })
-//     .catch((err) => {
-//         console.error("Error connecting to MongoDB", err);
-//     });
-app.listen(3001, () => {
-    console.log("Server is Running on port 3001");
-});
+mongoose.connect(process.env.NEXT_MONGO_URI)
+    .then(() => {
+        console.log("Connected to MongoDB");
+        app.listen(3001, () => {
+            console.log("Server is Running on port 3001");
+        });
+    })
+    .catch((err) => {
+        console.error("Error connecting to MongoDB", err);
+    });
+// app.listen(3001, () => {
+//     console.log("Server is Running on port 3001");
+// });
