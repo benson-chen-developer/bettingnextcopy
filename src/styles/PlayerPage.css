@@ -1,6 +1,6 @@
 .playerPagePic {
-    width: 120px;
-    height: 120px;
+    width: 100px;
+    height: 100px;
     background: #fff;
     border-radius: 50%;
     display: flex;
@@ -8,16 +8,127 @@
     justify-content: center;
     align-items: flex-end;
 }
+@media (max-width: 768px) {
+    .playerPagePic {
+        width: 75px;
+        height: 75px;
+    }
+}
+
+.playerPageName{
+    color: #fff;
+    font-size: 40px;
+    margin: 0
+}
+@media (max-width: 768px) {
+    .playerPageName {
+        font-size: 25px;
+    }
+}
+
+.playerPageTeam{
+    color: #ccc9c9;
+    font-size: 22px;
+}
+@media (max-width: 768px) {
+    .playerPageTeam {
+        font-size: 18px;
+    }
+}
 
 .playerPageHeroContainer {
-    margin-top: 70px;
     width: 100%; 
-    height: auto; 
+    margin-top: 70px;
+    min-height: 30vh; 
     background: #1D1D1D;
     display: flex; 
-    justify-content: flex-end;
+    justify-content: space-evenly;
     flex-direction: column; 
     padding-left: 75px;
     padding-right: 75px;
     box-sizing: border-box;
+}
+@media (max-width: 768px) {
+    .playerPageHeroContainer {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+}
+
+.playerPageStatTableContainer {
+    display: flex; 
+    flex-direction: column;
+    margin-left: 50px; /* Default margin-left for larger screens */
+    width: calc(100vw - 50px); /* Default width calculation */
+    overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+}
+@media (max-width: 768px) {
+    .playerPageStatTableContainer {
+        margin-left: 0px; /* Reduced margin-left for mobile */
+        width: calc(100vw); /* Adjust width based on smaller margin */
+    }
+}
+.playerPageStatTable {
+    width: 100%; /* Make sure the table fits its container */
+    border-collapse: collapse; 
+    min-width: 100%; /* Ensures table doesn't shrink below its container's width */
+}
+
+.playerPageGamesHeader{
+    margin: 10px 0px 10px 75px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+@media (max-width: 768px) {
+    .playerPageGamesHeader {
+        margin: 10px 0px 10px 10px;
+    }
+}
+
+.playerPageStatBtn{
+    min-width: 100px;
+    height: 40px;
+    border-radius: 20px;
+    border: 1px solid #fff;
+    display: 'flex';
+    justify-content: 'center';
+    align-items: 'center';
+    cursor: 'pointer';
+    margin: 0px 5px;
+}
+@media (max-width: 768px) {
+    .playerPageStatBtn {
+        min-width: 75px;
+        height: 40px;
+    }
+}
+
+.playerPagescrollableContainer {
+    display: flex;
+    margin-left: 10px;
+    max-height: 200px;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+.playerPagescrollableContainer::-webkit-scrollbar {
+    display: none;
+}
+
+.playerPagePfpHeaders{
+    display: flex;
+    width: 100vw;
+    margin-left: 10px;
+    align-items: center;
+}
+.playerPagePfpInfo{
+    margin-left: 50px;
+    height:'100px';
+    display:'flex';
+    flex-direction:'column'
+}
+@media (max-width: 768px) {
+    .playerPagePfpInfo {
+        margin-left: 25px;
+    }
 }

@@ -17,7 +17,7 @@ interface Props {
 */
 export const Row:React.FC<Props> = ({displayedStats, pickedBtn, chartCompareTo, team, date}) => {
     return (
-        <tr style={{display:'flex', minHeight: '35px'}}>
+        <tr style={{display:'flex', minHeight: '35px', marginRight:'20px'}}>
             <th style={{width:'200px', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
                 <h4 style={{margin:0}}>{date}</h4>
                 <h4 style={{margin:0}}>@{team}</h4>

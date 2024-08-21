@@ -19,10 +19,8 @@ export const Hero: React.FC<Props> = ({
 
     return <div className="playerPageHeroContainer">
 
-        <div style={{width:'100%', height:'20%', display:'flex', alignItems:'flex-end'}}>
-
-            <div style={{display:'flex', alignItems:'flex-end'}}>
-
+        <div style={{width:'100%', height:'20%', display:'flex', justifyContent:'space-between'}}>
+            <div className="playerPagePfpHeaders">
                 {/* Player Pic */}
                 <div className="playerPagePic">
                     {picUrl !== "" ?
@@ -39,20 +37,19 @@ export const Hero: React.FC<Props> = ({
                 </div>
 
                 {/* Player name */}
-                <div style={{marginLeft:'50px', height:'100px', display:'flex', flexDirection:'column'}}>
-                    <h1 style={{color:'#fff', fontSize: 50, margin: 0}}>
+                <div className="playerPagePfpInfo">
+                    <h1 className="playerPageName">
                         {playerName}
                     </h1>
-                    <h1 style={{color:'#ccc9c9', fontSize: 25}}>
+                    <h2 className="playerPageTeam">
                         {number !== "" ? `#${number}  -` : ""} {team !== "" ? `${team}` : ""} {position !== "" ? `- ${position}` : ""}
-                    </h1>
+                    </h2>
                 </div>
             </div>
         </div>
 
-        <div style={{display:'flex', flexDirection:'column', justifyContent:'space-between'}}>
-            <h2 style={{color:'#fff'}}>{pickedBtn}</h2>
-            <div style={{display:'flex', marginBottom: '20px'}}>
+        <div style={{display: 'flex', flexDirection: 'column', justifyContent: 'space-between'}}>
+            <div className="playerPagescrollableContainer">
                 {allPickedBtns.map((btnText, index) => 
                     <StatBtn 
                         onClick={() => setPickedBtn(btnText)} key={index} index={index}
@@ -61,6 +58,7 @@ export const Hero: React.FC<Props> = ({
                 )}
             </div>
         </div>
+
     </div>
 }
 
@@ -77,13 +75,9 @@ const StatBtn: React.FC<StatBtnProps> = ({ btnText, pickedBtn, onClick, index })
     return (
         <button 
             onClick={() => onClick()} 
+            className="playerPageStatBtn"
             style={{
-                width: 100, height:40, borderRadius: 50,
-                background: pickedBtn === btnText ? '#fff' : black, 
-                border: '1px solid #fff',
-                display:'flex', justifyContent:'center', alignItems:'center',
-                margin: index === 0 ? "5px 5px 5px 0px" : "5px", 
-                cursor:'pointer'
+                background: pickedBtn === btnText ? '#fff' : 'black',
             }}
         >
             <p style={{

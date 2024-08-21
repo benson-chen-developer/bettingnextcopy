@@ -11,7 +11,10 @@ interface Props {
 export const TableHeader: React.FC<Props> = ({ statsHeader }) => {
     return (
         <tr style={{ display: 'flex' }}>
-            <th style={{ width: '200px' }}>Team</th>
+            {/* 195px widt this part? */}
+            <th style={{ width: '120px' }}>Date</th>
+            <th style={{ width: '30px' }}>Team</th>
+            <th style={{ width: '45px' }}></th>
             {statsHeader.map((statObj, index) => (
                 <th 
                     className="dropdown-container"

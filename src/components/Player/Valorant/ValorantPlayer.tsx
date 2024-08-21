@@ -39,7 +39,7 @@ export const ValPlayerPage = () => {
     const [displayedStats, setDisplayedStats] = useState<number[][]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2"];
+    const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2", "Map 3", "Map 1+2"];
     const statsHeader = [
         {name: "K", underName: "Kills"},
         {name: "D", underName: "Deaths"},
@@ -138,10 +138,10 @@ export const ValPlayerPage = () => {
                 allPickedBtns={allPickedBtns}
             />
 
-            <h1 style={{ marginLeft: '75px', marginBottom:'10px'}}>Games</h1>
+            <p className="playerPageGamesHeader">Games</p>
 
-            <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%'}}>
-                <table style={{ width: '50%', borderCollapse: "collapse"}}>
+            <div className='playerPageStatTableContainer'>
+                <table className='playerPageStatTable'>
                     <thead>
                         <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} />
                         <TableHeader statsHeader={statsHeader} />
