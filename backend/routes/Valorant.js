@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const ValorantPlayer = require("../models/valorant/valorantPlayerModel");
+const ValorantPlayer = require("../models/valorant/MatchModel");
+const ValorantMatch = require("../models/valorant/MatchModel");
 
 router.get("/players", async (req, res) => {
     try {
@@ -89,6 +90,17 @@ router.post("/dummy/games", async (req, res) => {
     const foundGames = games.filter(game => urls.includes(game.url));
 
     res.status(200).json(foundGames);
+})
+router.post("/games", async (req, res) => {
+    const team = req.body.team;
+    const games = await ValorantMatch.find({
+        $or: [
+            { team1: team },
+            { team2: team }
+        ]
+    });
+
+    res.status(200).json(games);
 })
 
 module.exports = router;
