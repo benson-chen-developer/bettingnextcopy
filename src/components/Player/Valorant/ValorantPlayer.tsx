@@ -118,7 +118,6 @@ export const ValPlayerPage = () => {
                 },
                 body: JSON.stringify({team: foundPlayer?.team}) 
             });
-            console.log(matchRes)
             let games = await matchRes.json();
             setAllGames(games);
 
@@ -156,6 +155,9 @@ export const ValPlayerPage = () => {
                     </thead>
                     <tbody>
                         {allGames.map((game, index) => {
+                            const dateObj = new Date(game.date);
+                            const formattedDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}/${dateObj.getFullYear()}`;
+
                             return (
                                 <Row 
                                     key={index}
@@ -163,7 +165,7 @@ export const ValPlayerPage = () => {
                                     chartCompareTo={chartCompareTo}
                                     displayedStats={displayedStats[index]}
                                     team={game.team1 === player?.team ? game.team2 : game.team1}
-                                    date={game.date}
+                                    date={formattedDate}
                                 />
                             );
                         })}
