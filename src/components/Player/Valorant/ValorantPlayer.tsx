@@ -39,7 +39,7 @@ export const ValPlayerPage = () => {
     const [displayedStats, setDisplayedStats] = useState<number[][]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2", "Map 3", "Map 1+2"];
+    const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2"];
     const statsHeader = [
         {name: "K", underName: "Kills"},
         {name: "D", underName: "Deaths"},
@@ -55,7 +55,7 @@ export const ValPlayerPage = () => {
             let statsArr: number[] = Array(statsHeader.length).fill(0);
 
             /* Scenrio in which we pick map 3 but there was no played map 3 */
-            if(pickedNumbers.length === 1 && pickedNumbers[0] === 2){
+            if(pickedNumbers.length === 1 && pickedNumbers[0] === 2 && !game.maps[2].didPlay){
                 return Array(statsHeader.length).fill(-1);
             } 
 
@@ -64,11 +64,11 @@ export const ValPlayerPage = () => {
 
                 if(map.didPlay){
                     let playerStats = map.players.find(p => p.name === foundPlayer.firstName)
-                    statsArr[0] += (playerStats!.kills)
-                    statsArr[1] += (playerStats!.deaths)
-                    statsArr[2] += (playerStats!.assists)
-                    statsArr[3] += (playerStats!.firstKills)
-                    statsArr[4] += (playerStats!.firstDeaths)
+                    statsArr[0] += Number(playerStats!.kills)
+                    statsArr[1] += Number(playerStats!.deaths)
+                    statsArr[2] += Number(playerStats!.assists)
+                    statsArr[3] += Number(playerStats!.firstKills)
+                    statsArr[4] += Number(playerStats!.firstDeaths)
                 } 
             })
 
@@ -104,13 +104,21 @@ export const ValPlayerPage = () => {
             setPlayer(foundPlayer);
 
             /* Get the Matches */
-            const matchRes = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/dummy/games`, {
+            // const matchRes = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/dummy/games`, {
+            //     method: 'POST', 
+            //     headers: {
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify({urls: ["111"]}) 
+            // });
+            const matchRes = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/games`, {
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({urls: ["111"]}) 
+                body: JSON.stringify({team: foundPlayer?.team}) 
             });
+            console.log(matchRes)
             let games = await matchRes.json();
             setAllGames(games);
 

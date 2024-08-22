@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const ValorantPlayer = require("../models/valorant/MatchModel");
+const ValorantPlayer = require("../models/valorant/PlayerSchema");
 const ValorantMatch = require("../models/valorant/MatchModel");
 
 router.get("/players", async (req, res) => {
