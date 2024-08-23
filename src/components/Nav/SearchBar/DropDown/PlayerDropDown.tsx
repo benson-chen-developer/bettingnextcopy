@@ -47,6 +47,7 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
         }
         else if(sportLower === "cs"){
             const players = await fetchCSPlayers();
+            console.log(players)
             similarPlayers = findSimilarLastNames(players, input, 2);
         }
 

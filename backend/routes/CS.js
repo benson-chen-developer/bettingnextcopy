@@ -1,18 +1,18 @@
 const express = require("express");
 const router = express.Router();
-// const ValorantPlayer = require("../models/valorant/valorantPlayerModel");
-
-// router.get("/players", async (req, res) => {
-//     try {
-//         const players = await ValorantPlayer.find(); 
-//         res.status(200).json(players);
-//     } catch (err) {
-//         console.error("Error fetching players", err);
-//         res.status(500).send({ message: "Error fetching players" });
-//     }
-// })
+const CSPlayer = require("../models/cs/PlayerSchema");
+const CSMatch = require("../models/cs/MatchSchema");
 
 router.get("/players", async (req, res) => {
+    try {
+        const players = await CSPlayer.find({}); 
+        res.status(200).json(players);
+    } catch (err) {
+        console.error("Error fetching players", err);
+        res.status(500).send({ message: "Error fetching players" });
+    }
+})
+router.get("/dummy/players", async (req, res) => {
     try {
         const players = [
             {
@@ -36,7 +36,8 @@ router.get("/players", async (req, res) => {
         res.status(500).send({ message: "Error fetching players" });
     }
 })
-router.post("/playerMatches", async (req, res) => {
+
+router.post("/dummy/matches", async (req, res) => {
     try {
         let games = [];
         const {firstName, teams} = req.body;
@@ -96,5 +97,19 @@ router.post("/playerMatches", async (req, res) => {
         res.status(500).send({ message: "Error fetching players" });
     }
 })
+router.post("/matches", async (req, res) => {
+    try {
+        const { team } = req.body;
+
+        const matches = await CSMatch.find({
+            $or: [{ team1: team }, { team2: team }]
+        });
+
+        res.status(200).json(matches);
+    } catch (err) {
+        console.error("Error fetching matches", err);
+        res.status(500).send({ message: "Error fetching matches" });
+    }
+});
 
 module.exports = router;

@@ -30,7 +30,7 @@ export const CounterStrikePlayer = () => {
         {name: "D", underName: "Deaths"},
         {name: "A", underName: "Assists"},
     ];
-    const [chartCompareTo, setChartCompareTo] = useState<number[]>([-1, -1, -1, -1]); 
+    const [chartCompareTo, setChartCompareTo] = useState<number[]>(Array(statsHeader.length).fill(-1)); 
     const [pickedBtn, setPickedBtn] = useState<string>('All Maps')
 
     const compareFunction = (pickedBtn: string, allTheGames: CSGame[]): number[][] => {
@@ -41,16 +41,18 @@ export const CounterStrikePlayer = () => {
         */
         const addUpMaps = (mapIndexes: number[]): number[][] => {
             let ret: number[][] = [];
-
+            
             allTheGames.forEach(game => {
-                let intial: number[] = [0,0,0,0];
+                let intial: number[] = Array(statsHeader.length).fill(0);
 
                 for(let i=0; i<game.maps.length; i++){
                     const mapIndex = mapIndexes[i];
+                    console.log(game.maps)
+                    console.log(game.maps[mapIndex])
 
                     /* This means this map was never played */
-                    if(mapIndex > game.maps.length - 1) {
-                        intial = [-1, -1, -1, -1];
+                    if(mapIndex > game.maps.length - 1 || game.maps[mapIndex] === undefined) {
+                        intial = Array(statsHeader.length).fill(-1);
                     } else {
                         const players = game.maps[mapIndex].players;
                         if(players){
@@ -86,17 +88,20 @@ export const CounterStrikePlayer = () => {
             const foundPlayer = allPlayers.find(player => player.firstName.toLowerCase() === (paramPlayer as string).toLowerCase());
             if(foundPlayer){
                 setPlayer(foundPlayer);
-                const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/cs/playerMatches`, {
+                const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/cs/matches`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(foundPlayer)
+                    body: JSON.stringify({team: foundPlayer.team})
                 });
                 const allGames = await res.json();
+                const sortedGames = allGames.sort((a: { date: string }, b: { date: string }) => {
+                    return new Date(b.date).getTime() - new Date(a.date).getTime();
+                });
 
-                setAllGames(allGames);
-                setDisplayedRows(compareFunction('All Maps', allGames));
+                setAllGames(sortedGames);
+                setDisplayedRows(compareFunction('All Maps', sortedGames));
             }
             setLoading(false);
         }
@@ -113,7 +118,7 @@ export const CounterStrikePlayer = () => {
             <Hero 
                 playerName={player?.firstName as string}
                 picUrl=""
-                team={player?.teams[0]}
+                team={player?.team}
                 number=""
                 position=''
                 pickedBtn={pickedBtn}
@@ -131,16 +136,24 @@ export const CounterStrikePlayer = () => {
                         <TableHeader statsHeader={statsHeader} />
                     </thead>
                     <tbody>
-                        {displayedRows.map((row, index) => (
-                            <Row 
-                                key={index} 
-                                chartCompareTo={chartCompareTo} 
-                                displayedStats={row}
-                                pickedBtn={pickedBtn} 
-                                team={allGames[index].team1}
-                                date={allGames[index].date}
-                            />
-                        ))}
+                        {displayedRows.map((row, index) => {
+                            const formattedDate = new Date(allGames[index].date).toLocaleDateString("en-US", {
+                                year: "2-digit",
+                                month: "numeric",
+                                day: "numeric",
+                            });
+
+                            return (
+                                <Row 
+                                    key={index} 
+                                    chartCompareTo={chartCompareTo} 
+                                    displayedStats={row}
+                                    pickedBtn={pickedBtn} 
+                                    team={allGames[index].team1}
+                                    date={formattedDate} 
+                                />
+                            );
+                        })}
                     </tbody>
                 </table>
 
