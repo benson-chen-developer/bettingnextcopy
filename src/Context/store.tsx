@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useContext, Dispatch, SetStateAction, useState, useEffect, ReactNode } from 'react';
 import { Game2 } from '../functions/players';
-import { CSPlayer, LolPlayer, ValorantPlayer, WNBAPlayer } from './PlayerTypes';
+import { CSPlayer, LolPlayer, PlayerType, ValorantPlayer, WNBAPlayer } from './PlayerTypes';
 import {apiUrl} from '../data/data';
 
 interface ContextProps {
@@ -18,7 +18,11 @@ interface ContextProps {
   fetchLolPlayers: () => Promise<LolPlayer[]>,
   csPlayers: CSPlayer[],
   setCSPlayers: Dispatch<SetStateAction<CSPlayer[]>>,
-  fetchCSPlayers: () => Promise<CSPlayer[]>
+  fetchCSPlayers: () => Promise<CSPlayer[]>,
+  comboPopUp: boolean,
+  setComboPopUp: Dispatch<SetStateAction<boolean>>,
+  playersInCombo: PlayerType[],
+  setPlayersInCombo: Dispatch<SetStateAction<PlayerType[]>>,
 }
 
 const GlobalContext = createContext<ContextProps>({
@@ -36,6 +40,10 @@ const GlobalContext = createContext<ContextProps>({
   csPlayers: [],
   setCSPlayers: (): CSPlayer[] => [],
   fetchCSPlayers: async (): Promise<CSPlayer[]> => [] ,
+  comboPopUp: false,
+  setComboPopUp: (): boolean => false,
+  playersInCombo: [],
+  setPlayersInCombo: (): PlayerType[] => [],
 });
 
 export const GlobalContextProvider = ({ children }: { children: ReactNode }) => {
@@ -44,7 +52,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [lolPlayers, setLolPlayers] = useState<LolPlayer[]>([]);
   const [csPlayers, setCSPlayers] = useState<CSPlayer[]>([]);
   const [games, setGames] = useState<Game2[]>([]);
-
+  const [comboPopUp, setComboPopUp] = useState<boolean>(false);
+  const [playersInCombo, setPlayersInCombo] = useState<PlayerType[]>([]);
 
   const fetchWnbaPlayer = async (): Promise<WNBAPlayer[]> => {
     if(wnbaPlayers.length > 0){
@@ -126,6 +135,8 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       lolPlayers, setLolPlayers, fetchLolPlayers,
       csPlayers, setCSPlayers, fetchCSPlayers,
       games, setGames, 
+      comboPopUp, setComboPopUp,
+      playersInCombo, setPlayersInCombo
     }}>
       {children}
     </GlobalContext.Provider>

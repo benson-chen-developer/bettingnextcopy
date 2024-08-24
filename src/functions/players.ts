@@ -33,13 +33,6 @@ export type Game2 = {
     id: string
 }
 
-type Team = {
-    name: string,
-    stats: Stats,
-    players: string[]
-    actions: Action[]
-}
-
 const FantasyScoring = (stat: string, amount: number): number => {
     if(stat === "PTS") return 1*amount;
     else if(stat === "REB") return 1.2;

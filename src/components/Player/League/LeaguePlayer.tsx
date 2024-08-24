@@ -200,6 +200,7 @@ export const LeaguePlayer = () => {
                         loadGames();
                     }}
                 />
+
             </div>
 
         </div>

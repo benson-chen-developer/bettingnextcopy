@@ -4,8 +4,11 @@ import '../styles/TrendingBox.css';
 import '../styles/globals.css';
 import '../styles/SportDropDown.css';
 import '../styles/PlayerPage.css';
+import '../styles/Combo.css';
 import { GlobalContextProvider } from '../Context/store'
 import Head from 'next/head';
+import { ComboBtn } from '../components/Combo/ComboBtn';
+import { PopUp } from '../components/Combo/PopUp';
 
 function App({ Component, pageProps }) {
   return (
@@ -20,7 +23,12 @@ function App({ Component, pageProps }) {
         </Head>
 
         <NavBar />
+
         <Component {...pageProps} />
+
+        <ComboBtn />
+        <PopUp />
+
         <Footer />
       </GlobalContextProvider>
     </>
