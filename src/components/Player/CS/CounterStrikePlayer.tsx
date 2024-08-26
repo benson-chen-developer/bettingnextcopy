@@ -54,15 +54,18 @@ export const CounterStrikePlayer = () => {
                         intial = Array(statsHeader.length).fill(-1);
                     } else {
                         const players = game.maps[mapIndex].players;
+                        const didPlay = game.maps[mapIndex].didPlay;
 
                         if(players){
                             const boxScore = players.find(p => p.name.toLowerCase() === (paramPlayer as string).toLowerCase());
                             
                             if(boxScore){
-                                intial[0] += parseFloat(boxScore!.kills);
-                                intial[1] += parseFloat(boxScore!.headshots);
-                                intial[2] += parseFloat(boxScore!.deaths);
-                                intial[3] += parseFloat(boxScore!.assists);
+                                if(didPlay){
+                                    intial[0] += parseFloat(boxScore!.kills);
+                                    intial[1] += parseFloat(boxScore!.headshots);
+                                    intial[2] += parseFloat(boxScore!.deaths);
+                                    intial[3] += parseFloat(boxScore!.assists);
+                                }
                             } else {
                                 /* This game needs to be removed (player prob was subbed) */
                                 setAllGames(prevGames => prevGames.filter(pGame => pGame.url !== game.url));
@@ -107,7 +110,7 @@ export const CounterStrikePlayer = () => {
                     return new Date(b.date).getTime() - new Date(a.date).getTime();
                 });
 
-                console.log(sortedGames)
+                // console.log(sortedGames)
                 setAllGames(sortedGames);
                 setDisplayedRows(compareFunction('All Maps', sortedGames));
             }

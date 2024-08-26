@@ -102,6 +102,8 @@ export type CSGame = {
     team2: string,
     date: string,
     maps: {
+        didPlay: boolean,
+        map: string,
         players: CSGamePlayer[]
     }[],
 }
