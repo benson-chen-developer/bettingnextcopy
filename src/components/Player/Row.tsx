@@ -10,12 +10,13 @@ interface Props {
         - So like [3,3,4] (KDA) or [10,10,30] (PRA)
     */
     displayedStats: number[],
+    extraText: string
 }
 
 /*
   Displayed stats is the box score essentially. It should be an array so we can just loop through it
 */
-export const Row:React.FC<Props> = ({displayedStats, pickedBtn, chartCompareTo, team, date}) => {
+export const Row:React.FC<Props> = ({displayedStats, pickedBtn, chartCompareTo, team, date, extraText}) => {
     return (
         <tr style={{display:'flex', minHeight: '35px', marginRight:'20px'}}>
             <th style={{width:'200px', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
@@ -27,7 +28,11 @@ export const Row:React.FC<Props> = ({displayedStats, pickedBtn, chartCompareTo, 
               <div  style={{
                 width: "200px", height: "100%", display:'flex', justifyContent:'center', alignItems:'center'
               }}>
-                <p style={{fontSize: '15px', fontWeight:'bold', color:'#3d3d3d'}}>Did Not Play</p>
+                {extraText ? 
+                  <p style={{fontSize: '15px', fontWeight:'bold', color:'#3d3d3d'}}>{extraText}</p>
+                    :
+                  <p style={{fontSize: '15px', fontWeight:'bold', color:'#3d3d3d'}}>Did Not Play</p>
+                }
               </div>
                 :
               <>

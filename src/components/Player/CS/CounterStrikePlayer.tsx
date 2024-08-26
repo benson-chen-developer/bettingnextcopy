@@ -44,28 +44,35 @@ export const CounterStrikePlayer = () => {
             
             allTheGames.forEach(game => {
                 let intial: number[] = Array(statsHeader.length).fill(0);
+                let skipThisGame = false;
 
-                for(let i=0; i<game.maps.length; i++){
+                for(let i=0; i<mapIndexes.length; i++){
                     const mapIndex = mapIndexes[i];
-                    console.log(game.maps)
-                    console.log(game.maps[mapIndex])
 
                     /* This means this map was never played */
                     if(mapIndex > game.maps.length - 1 || game.maps[mapIndex] === undefined) {
                         intial = Array(statsHeader.length).fill(-1);
                     } else {
                         const players = game.maps[mapIndex].players;
+
                         if(players){
                             const boxScore = players.find(p => p.name.toLowerCase() === (paramPlayer as string).toLowerCase());
-                            intial[0] += parseFloat(boxScore!.kills);
-                            intial[1] += parseFloat(boxScore!.headshots);
-                            intial[2] += parseFloat(boxScore!.deaths);
-                            intial[3] += parseFloat(boxScore!.assists);
+                            
+                            if(boxScore){
+                                intial[0] += parseFloat(boxScore!.kills);
+                                intial[1] += parseFloat(boxScore!.headshots);
+                                intial[2] += parseFloat(boxScore!.deaths);
+                                intial[3] += parseFloat(boxScore!.assists);
+                            } else {
+                                /* This game needs to be removed (player prob was subbed) */
+                                setAllGames(prevGames => prevGames.filter(pGame => pGame.url !== game.url));
+                                skipThisGame = true;
+                            }
                         }
                     }
                 }
 
-                ret.push(intial);
+                if(!skipThisGame) ret.push(intial);
             })
 
             return ret;
@@ -100,6 +107,7 @@ export const CounterStrikePlayer = () => {
                     return new Date(b.date).getTime() - new Date(a.date).getTime();
                 });
 
+                console.log(sortedGames)
                 setAllGames(sortedGames);
                 setDisplayedRows(compareFunction('All Maps', sortedGames));
             }
@@ -149,8 +157,9 @@ export const CounterStrikePlayer = () => {
                                     chartCompareTo={chartCompareTo} 
                                     displayedStats={row}
                                     pickedBtn={pickedBtn} 
-                                    team={allGames[index].team1}
+                                    team={player.team === allGames[index].team1 ? allGames[index].team2.slice(0,4) : allGames[index].team1.slice(0,4)}
                                     date={formattedDate} 
+                                    extraText={allGames[index].maps.length === 1 ? 'DNP (Best of 1)' : 'DNP (Best of 3)'}
                                 />
                             );
                         })}
