@@ -175,6 +175,7 @@ export const WNBAPlayerPage = () => {
                                     pickedBtn={pickedBtn} 
                                     team={allGames[index].team1 === player.abbr ? allGames[index].team2 : allGames[index].team1}
                                     date={formattedDate}
+                                    extraText=''
                                 />
                             );
                         })}

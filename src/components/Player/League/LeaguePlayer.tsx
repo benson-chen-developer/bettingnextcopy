@@ -50,7 +50,7 @@ export const LeaguePlayer = () => {
         let teamCounts: { [team: string]: number } = {};
     
         games.forEach(game => {
-            const [teamOne, , teamTwo] = game.game.split(" ");
+            const [teamOne, teamTwo] = game.game.split(" ");
             
             if (previousTeams && previousTeams[0] === teamOne && previousTeams[1] === teamTwo) {
                 // Skip if the teams are the same as the previous teams
@@ -69,6 +69,28 @@ export const LeaguePlayer = () => {
         player.team = commonTeam;
     
         return player;
+    };
+
+    /* Check first 2 games and return the 2 names in common between both games */
+    const GetTeamName = (games: LolGame[]): string => {
+        let firstGame = games[0]; let secondGame = games[1];
+        let names: string[] = [];
+
+        if(firstGame && secondGame){
+            names = [
+                firstGame.game.split(' ')[0], firstGame.game.split(' ')[2], 
+                secondGame.game.split(' ')[0], secondGame.game.split(' ')[2]
+            ]
+        }
+
+        for (let i = 0; i < names.length; i++) {
+            for (let j = i + 1; j < names.length; j++) {
+                if (names[i].toLocaleLowerCase() === names[j].toLocaleLowerCase()) {
+                    return names[i];
+                }
+            }
+        }
+        return ''; 
     };
 
     /*
@@ -111,7 +133,7 @@ export const LeaguePlayer = () => {
         }
         else if(pickedBtn === "Map 3"){
             displayGames = allTheGames.map(game => {
-                return { ...game, scores: addUpMaps(game.scores[3] ? game.scores[3] : '0/0/0') }
+                return { ...game, scores: addUpMaps(game.scores[2] ? game.scores[2] : '-1/-1/-1') }
             })
         }
         else if(pickedBtn === "Map 1+2"){
@@ -128,14 +150,15 @@ export const LeaguePlayer = () => {
             const allPlayers = await fetchLolPlayers();
             setAllPlayers(allPlayers);
         
-            const foundPlayer = allPlayers.find(player => player.firstName.toLowerCase() === (paramPlayer as string).toLowerCase());
+            let foundPlayer = allPlayers.find(player => player.firstName.toLowerCase() === (paramPlayer as string).toLowerCase());
 
             if(foundPlayer){
                 const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/lol/player/${foundPlayer.id}`)
                 const allGames = await res.json();
 
-                let updatedPlayer = setTeamForPlayer(foundPlayer, allGames);
-                setPlayer(updatedPlayer);
+                let team = GetTeamName(allGames);
+                if(team) foundPlayer.team = team;
+                setPlayer(foundPlayer);
                 setAllGames(allGames);
                 setDisplayedRows(compareFunction('All Maps', allGames));
             }
@@ -181,10 +204,11 @@ export const LeaguePlayer = () => {
                                 displayedStats={game.scores[0].split('/').map(strNum => parseInt(strNum))}
                                 pickedBtn={pickedBtn} 
                                 team={
-                                    game.game.split(" ")[0] !== player?.team ? 
+                                    game.game.split(" ")[0].toLocaleLowerCase() !== player?.team.toLocaleLowerCase() ? 
                                     game.game.split(" ")[0] : game.game.split(" ")[2]
                                 }
                                 date={game.date}
+                                extraText={allGames[index].scores.length === 1 ? 'DNP (Best of 1)' : 'DNP (Best of 3)'}
                             />
                         ))}
                     </tbody>

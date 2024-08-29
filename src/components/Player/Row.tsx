@@ -21,7 +21,7 @@ export const Row:React.FC<Props> = ({displayedStats, pickedBtn, chartCompareTo, 
         <tr style={{display:'flex', minHeight: '35px', marginRight:'20px'}}>
             <th style={{width:'200px', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
                 <h4 style={{margin:0}}>{date}</h4>
-                <h4 style={{margin:0}}>@{team}</h4>
+                <h4 style={{margin:0}}>@{team.slice(0,4)}</h4>
             </th>
 
             {displayedStats[0] === -1 ? 
