@@ -77,22 +77,21 @@ export const ValPlayerPage: React.FC<Props> = ({
             <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%'}}>
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
-                        <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} />
+                        {/* <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} /> */}
                         <TableHeader statsHeader={statsHeader} />
                     </thead>
                     <tbody>
-                        {allGames.map((game, index) => {
+                        {/* {allGames.map((game, index) => {
                             return (
                                 <Row 
                                     key={index}
-                                    pickedBtn={pickedBtn}
                                     chartCompareTo={chartCompareTo}
                                     displayedStats={displayedStats[index]}
                                     team={game.team1 === player?.team ? game.team2 : game.team1}
                                     date={game.date}
                                 />
                             );
-                        })}
+                        })} */}
                     </tbody>
                 </table>
 
