@@ -47,7 +47,7 @@ export const ValPlayerPage = () => {
         {name: "FK", underName: "First Kills"},
         {name: "FD", underName: "First Deaths"},
     ];
-    const [chartCompareTo, setChartCompareTo] = useState<number[]>(Array(statsHeader.length).fill(-1))
+    const [compareTo, setCompareTo] = useState<string[]>(Array(statsHeader.length).fill(""))
     const [pickedBtn, setPickedBtn] = useState<string>(allPickedBtns[0])
 
     const compareFunction = (newAllGames: ValorantGame[], foundPlayer: ValorantPlayer): number[][] => {
@@ -103,14 +103,6 @@ export const ValPlayerPage = () => {
             const foundPlayer = allValPlayers.find(player => player.firstName.toLowerCase() === (paramPlayer as string).toLowerCase());
             setPlayer(foundPlayer);
 
-            /* Get the Matches */
-            // const matchRes = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/dummy/games`, {
-            //     method: 'POST', 
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify({urls: ["111"]}) 
-            // });
             const matchRes = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/games`, {
                 method: 'POST', 
                 headers: {
@@ -150,7 +142,7 @@ export const ValPlayerPage = () => {
             <div className='playerPageStatTableContainer'>
                 <table className='playerPageStatTable'>
                     <thead>
-                        <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} />
+                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo}/>
                         <TableHeader statsHeader={statsHeader} />
                     </thead>
                     <tbody>
@@ -161,11 +153,11 @@ export const ValPlayerPage = () => {
                             return (
                                 <Row 
                                     key={index}
-                                    pickedBtn={pickedBtn}
-                                    chartCompareTo={chartCompareTo}
+                                    compareTo={compareTo}
                                     displayedStats={displayedStats[index]}
                                     team={game.team1 === player?.team ? game.team2 : game.team1}
                                     date={formattedDate}
+                                    extraText=''
                                 />
                             );
                         })}

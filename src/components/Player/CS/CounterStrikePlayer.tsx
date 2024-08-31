@@ -30,7 +30,7 @@ export const CounterStrikePlayer = () => {
         {name: "D", underName: "Deaths"},
         {name: "A", underName: "Assists"},
     ];
-    const [chartCompareTo, setChartCompareTo] = useState<number[]>(Array(statsHeader.length).fill(-1)); 
+    const [compareTo, setCompareTo] = useState<string[]>(Array(statsHeader.length).fill(""))
     const [pickedBtn, setPickedBtn] = useState<string>('All Maps')
 
     const compareFunction = (pickedBtn: string, allTheGames: CSGame[]): number[][] => {
@@ -142,7 +142,7 @@ export const CounterStrikePlayer = () => {
             <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%', minHeight:'150px'}}>
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
-                        <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} />
+                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
 
                         <TableHeader statsHeader={statsHeader} />
                     </thead>
@@ -157,9 +157,8 @@ export const CounterStrikePlayer = () => {
                             return (
                                 <Row 
                                     key={index} 
-                                    chartCompareTo={chartCompareTo} 
+                                    compareTo={compareTo} 
                                     displayedStats={row}
-                                    pickedBtn={pickedBtn} 
                                     team={player.team === allGames[index].team1 ? allGames[index].team2.slice(0,4) : allGames[index].team1.slice(0,4)}
                                     date={formattedDate} 
                                     extraText={allGames[index].maps.length === 1 ? 'DNP (Best of 1)' : 'DNP (Best of 3)'}

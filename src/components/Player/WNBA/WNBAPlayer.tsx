@@ -42,7 +42,7 @@ export const WNBAPlayerPage = () => {
         {name: "FTA", underName: "Free Throws Attempted"},
         {name: "FAN", underName: "Fantasy Score"},
     ];
-    const [chartCompareTo, setChartCompareTo] = useState<number[]>(Array(statsHeader.length).fill(-1)); 
+    const [compareTo, setCompareTo] = useState<string[]>(Array(statsHeader.length).fill(""))
     const [pickedBtn, setPickedBtn] = useState<string>(allPickedBtns[0])
 
     const FantasyScoring = (stat: string, amount: number): number => {
@@ -154,7 +154,7 @@ export const WNBAPlayerPage = () => {
             <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%', minHeight:'150px'}}>
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
-                        <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} />
+                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
 
                         <TableHeader statsHeader={statsHeader} />
                     </thead>
@@ -170,9 +170,8 @@ export const WNBAPlayerPage = () => {
                             return (
                                 <Row 
                                     key={index} 
-                                    chartCompareTo={chartCompareTo} 
+                                    compareTo={compareTo}
                                     displayedStats={row}
-                                    pickedBtn={pickedBtn} 
                                     team={allGames[index].team1 === player.abbr ? allGames[index].team2 : allGames[index].team1}
                                     date={formattedDate}
                                     extraText=''

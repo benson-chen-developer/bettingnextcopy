@@ -56,7 +56,6 @@ interface PropsTwo {
 const Square: React.FC<PropsTwo> = ({ amount, compareAmount }) => {
   let bgColor = '#D9D9D9';
   let amountParsed = parseFloat(compareAmount);
-  console.log(amountParsed)
   if (isNaN(amountParsed)) {
     amountParsed = -1;
   }
