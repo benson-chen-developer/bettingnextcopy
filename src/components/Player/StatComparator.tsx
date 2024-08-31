@@ -1,19 +1,20 @@
 import React, { Dispatch, SetStateAction } from 'react';
 
 interface Props {
-    chartCompareTo: number[],
-    setChartCompareTo: Dispatch<SetStateAction<number[]>>
+    compareTo: string[],
+    setCompareTo: Dispatch<SetStateAction<string[]>>
 }
 
-export const StatComparator: React.FC<Props> = ({ chartCompareTo, setChartCompareTo }) => {
-    const handleCompareToChange = (value: number, index: number) => {
-        if (value <= -1) value = -1;
-        
-        setChartCompareTo((prev: number[]) => {
-            const newCompareTo = [...prev];
-            newCompareTo[index] = value;
-            return newCompareTo;
-        });
+export const StatComparator: React.FC<Props> = ({ compareTo, setCompareTo }) => {
+    const handleCompareToChange = (value: string, index: number) => {
+        const validInput = /^\d*\.?\d*$/;
+        if (validInput.test(value)) {
+            setCompareTo((prev: string[]) => {
+                const newCompareTo = [...prev];
+                newCompareTo[index] = value;
+                return newCompareTo;
+            });
+        }
     };
 
     return (
@@ -28,7 +29,7 @@ export const StatComparator: React.FC<Props> = ({ chartCompareTo, setChartCompar
                 </p>
             </th>
 
-            {chartCompareTo.map((value, index) => (
+            {compareTo.map((value, index) => (
                 <td key={index} style={{ width: '50px', height: '35px' }}>
                     <input
                         style={{
@@ -42,8 +43,9 @@ export const StatComparator: React.FC<Props> = ({ chartCompareTo, setChartCompar
                             justifyContent: 'center',
                             alignItems: 'center'
                         }}
-                        type="number"
-                        onChange={(e) => handleCompareToChange(Number(e.target.value), index)}
+                        type="string"
+                        maxLength={5}
+                        onChange={(e) => handleCompareToChange((e.target.value), index)}
                         value={value}
                     />
                 </td>

@@ -38,38 +38,8 @@ export const LeaguePlayer = () => {
         {name: "D", underName: "Deaths"},
         {name: "A", underName: "Assists"},
     ];
-    const [chartCompareTo, setChartCompareTo] = useState<number[]>([-1, -1, -1,])
+    const [compareTo, setCompareTo] = useState<string[]>(Array(statsHeader.length).fill(""))
     const [pickedBtn, setPickedBtn] = useState<string>('All Maps')
-
-    /*
-        We loop through games and find the same name team two times in a row
-        (best way I can get the team name)
-    */
-    const setTeamForPlayer = (player: LolPlayer, games: LolGame[]): LolPlayer => {
-        let previousTeams: [string, string] | null = null;
-        let teamCounts: { [team: string]: number } = {};
-    
-        games.forEach(game => {
-            const [teamOne, teamTwo] = game.game.split(" ");
-            
-            if (previousTeams && previousTeams[0] === teamOne && previousTeams[1] === teamTwo) {
-                // Skip if the teams are the same as the previous teams
-                return;
-            }
-    
-            previousTeams = [teamOne, teamTwo];
-            if (!teamCounts[teamOne]) teamCounts[teamOne] = 0;
-            if (!teamCounts[teamTwo]) teamCounts[teamTwo] = 0;
-            teamCounts[teamOne]++;
-            teamCounts[teamTwo]++;
-        });
-    
-        const commonTeam = Object.keys(teamCounts).reduce((a, b) => teamCounts[a] > teamCounts[b] ? a : b);
-    
-        player.team = commonTeam;
-    
-        return player;
-    };
 
     /* Check first 2 games and return the 2 names in common between both games */
     const GetTeamName = (games: LolGame[]): string => {
@@ -191,18 +161,15 @@ export const LeaguePlayer = () => {
             <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%'}}>
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
-
-                        <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} />
-
+                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
                         <TableHeader statsHeader={statsHeader} />
                     </thead>
                     <tbody>
                         {displayedRows.map((game, index) => (
                             <Row 
                                 key={index} 
-                                chartCompareTo={chartCompareTo} 
+                                compareTo={compareTo}
                                 displayedStats={game.scores[0].split('/').map(strNum => parseInt(strNum))}
-                                pickedBtn={pickedBtn} 
                                 team={
                                     game.game.split(" ")[0].toLocaleLowerCase() !== player?.team.toLocaleLowerCase() ? 
                                     game.game.split(" ")[0] : game.game.split(" ")[2]
