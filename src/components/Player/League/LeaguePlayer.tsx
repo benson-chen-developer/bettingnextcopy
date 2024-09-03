@@ -23,16 +23,15 @@ export const LeaguePlayer = () => {
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
     const {fetchLolPlayers} = useGlobalContext();
-    const [allPlayers, setAllPlayers] = useState<LolPlayer[]>([]);
     const [player, setPlayer] = useState<LolPlayer | undefined>(undefined);
 
     const [allGames, setAllGames] = useState<LolGame[]>([]);
-    const [displayedRows, setDisplayedRows] = useState<LolGame[]>([]);
+    const [displayedStats, setDisplayedStats] = useState<number[][]>([]);
     
     const [allGamesLoaded, setAllGamesLoaded] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(true);
 
-    const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2"];
+    const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2", "Map 1+2+3", "Map 4", "Map 5"];
     const statsHeader = [
         {name: "K", underName: "Kills"},
         {name: "D", underName: "Deaths"},
@@ -48,8 +47,8 @@ export const LeaguePlayer = () => {
 
         if(firstGame && secondGame){
             names = [
-                firstGame.game.split(' ')[0], firstGame.game.split(' ')[2], 
-                secondGame.game.split(' ')[0], secondGame.game.split(' ')[2]
+                firstGame.game.split('vs')[0], firstGame.game.split(' ')[1], 
+                secondGame.game.split('vs')[0], secondGame.game.split(' ')[1]
             ]
         }
 
@@ -69,56 +68,55 @@ export const LeaguePlayer = () => {
             - Adds up the maps needed (so all maps is '4/4/4')
             - returns displayedRows which is the same game but with only one item in scores field
     */
-    const compareFunction = (pickedBtn: string, allTheGames: LolGame[]): LolGame[] => {
+    const compareFunction = (pickedBtn: string, allTheGames: LolGame[]) => {
         /* This takes the strings '3/3/3' and adds up the columns */
-        const addUpMaps = (...maps: string[]): string[] => {
+        const addUpMaps = (...maps: (string | undefined | null)[]): number[] => {
+            // Check if any map is null, undefined, or out of range
+            if (maps.some(map => !map || map === '-1/-1/-1')) {
+                return [-1];
+            }
+    
             const sums = [0, 0, 0];
-        
+            
             maps.forEach(map => {
-                const parts = map.split('/').map(Number);
+                const parts = map!.split('/').map(Number);
                 for (let i = 0; i < parts.length; i++) {
                     sums[i] += parts[i];
                 }
             });
         
-            return [sums.join('/')];
+            return sums;
         };
 
-        let displayGames: LolGame[] = [];
-
         if(pickedBtn === "All Maps"){
-            displayGames = allTheGames.map(game => {
-                return { ...game, scores: addUpMaps(...game.scores) }
-            })
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(...game.scores)))
         }
         else if(pickedBtn === "Map 1"){
-            displayGames = allTheGames.map(game => {
-                return { ...game, scores: addUpMaps(game.scores[0]) }
-            })
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores[0])))
         }
         else if(pickedBtn === "Map 2"){
-            displayGames = allTheGames.map(game => {
-                return { ...game, scores: addUpMaps(game.scores[1]) }
-            })
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores[1])))
         }
         else if(pickedBtn === "Map 3"){
-            displayGames = allTheGames.map(game => {
-                return { ...game, scores: addUpMaps(game.scores[2] ? game.scores[2] : '-1/-1/-1') }
-            })
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores[2])))
         }
         else if(pickedBtn === "Map 1+2"){
-            displayGames = allTheGames.map(game => {
-                return { ...game, scores: addUpMaps(...game.scores.slice(0,2)) }
-            })
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(...game.scores.slice(0,2))))
         }
-
-        return displayGames;
+        else if(pickedBtn === "Map 1+2+3"){
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(...game.scores.slice(0,3))))
+        }
+        else if(pickedBtn === "Map 4"){
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores[3])))
+        }
+        else if(pickedBtn === "Map 5"){
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores[4])))
+        }
     }
 
     useEffect(() => {
         const fetchPlayer = async () => {
             const allPlayers = await fetchLolPlayers();
-            setAllPlayers(allPlayers);
         
             let foundPlayer = allPlayers.find(player => player.firstName.toLowerCase() === (paramPlayer as string).toLowerCase());
 
@@ -130,7 +128,7 @@ export const LeaguePlayer = () => {
                 if(team) foundPlayer.team = team;
                 setPlayer(foundPlayer);
                 setAllGames(allGames);
-                setDisplayedRows(compareFunction('All Maps', allGames));
+                compareFunction('All Maps', allGames);
             }
 
             setLoading(false);
@@ -140,7 +138,7 @@ export const LeaguePlayer = () => {
     }, [])
 
     useEffect(() => {
-        setDisplayedRows(compareFunction(pickedBtn, allGames));
+        compareFunction(pickedBtn, allGames)
     }, [pickedBtn, setPickedBtn])
 
     if(!loading && player) return (
@@ -162,23 +160,29 @@ export const LeaguePlayer = () => {
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
                         <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
-                        <TableHeader statsHeader={statsHeader} />
+                        <TableHeader statsHeader={statsHeader} hasMaps={true}/>
                     </thead>
                     <tbody>
-                        {displayedRows.map((game, index) => (
-                            <Row 
-                                key={index} 
-                                compareTo={compareTo}
-                                displayedStats={game.scores[0].split('/').map(strNum => parseInt(strNum))}
-                                team={
-                                    game.game.split(" ")[0].toLocaleLowerCase() !== player?.team.toLocaleLowerCase() ? 
-                                    game.game.split(" ")[0] : game.game.split(" ")[2]
-                                }
-                                date={game.date}
-                                extraText={allGames[index].scores.length === 1 ? 'DNP (Best of 1)' : 'DNP (Best of 3)'}
-                            />
-                        ))}
+                        {allGames.map((game, index) => {
+                            let firstName = game.game.split("vs")[0];
+                            let secondName = game.game.split("vs")[1];
+                            let oppTeam = firstName.toLocaleLowerCase() !== player?.team.toLocaleLowerCase() ? firstName : secondName;
+                            oppTeam = oppTeam.split(" ")[0].toLocaleLowerCase() === 'team' ? oppTeam.split(" ")[1] : oppTeam;
+                        
+                            return (
+                                <Row 
+                                    key={index} 
+                                    compareTo={compareTo}
+                                    displayedStats={displayedStats[index]}
+                                    team={oppTeam}
+                                    date={game.date}
+                                    mapsPlayed={game.scores.length}
+                                    extraText={allGames[index].scores.length === 1 ? 'DNP (Best of 1)' : 'DNP (Best of 3)'}
+                                />
+                            );
+                        })}
                     </tbody>
+
                 </table>
 
                 <EverythingLoaded 

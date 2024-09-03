@@ -23,41 +23,63 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
             -picId
     */
     const [similarPlayers, setSimilarPlayers] = useState<any[]>([]);
+    const [players, setPlayers] = useState<PlayerType[]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
-    /*
-        Make the getAllPlayer calls to the respective league
-    */
-    const getSimilarPlayers = async () => {
+    const fetchPlayers = async (): Promise<PlayerType[]> => {
         setLoading(true)
+
         const sportLower = sport.toLowerCase();
-        let similarPlayers: PlayerType[] = [];
+        let players: PlayerType[] = [];
 
         if(sportLower === "wnba"){
-            const players = await fetchWnbaPlayer();
-            similarPlayers = findSimilarLastNames(players, input, 2);
+            players = await fetchWnbaPlayer();
         }
         else if(sportLower === "valorant"){
-            const players = await fetchValorantPlayers();
-            similarPlayers = findSimilarLastNames(players, input, 2);
+            players = await fetchValorantPlayers();
         }
         else if(sportLower === "lol"){
-            const players = await fetchLolPlayers();
-            console.log(players)
-            similarPlayers = findSimilarLastNames(players, input, 2);
+            players = await fetchLolPlayers();
         }
         else if(sportLower === "cs"){
-            const players = await fetchCSPlayers();
-            similarPlayers = findSimilarLastNames(players, input, 2);
+            players = await fetchCSPlayers();
         }
-
+        
         setLoading(false);
+        return players;
+    }
+    const getSimilarPlayers = async (players: PlayerType[]) => {
+        const similarPlayers = findSimilarLastNames(players, input, 1);
         setSimilarPlayers(similarPlayers);
     }
 
     useEffect(() => {
-        if(input !== "") getSimilarPlayers();
-    }, [input])
+        const fetchSimilarPlayers = async () => {
+            if (input !== "" && loading) {
+                const players = await fetchPlayers();
+                setPlayers(players); 
+            }
+            else if(input !== "" && !loading) {
+                getSimilarPlayers(players);
+            }
+        }
+
+        fetchSimilarPlayers();
+    }, [input]);
+    useEffect(() => {
+        const fetchSimilarPlayers = async () => {
+            if (!loading) getSimilarPlayers(players);
+        }
+
+        fetchSimilarPlayers();
+    }, [loading]);
+
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+            document.removeEventListener('click', handleClickOutside);
+        };
+    }, [dropDown]);
 
     /* To handle closing the drop down when clicking somewhere on the screen */
     const handleClickOutside = (event: MouseEvent) => {
@@ -66,12 +88,6 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
             setDropDown('');
         }
     };
-    useEffect(() => {
-        document.addEventListener('click', handleClickOutside);
-        return () => {
-            document.removeEventListener('click', handleClickOutside);
-        };
-    }, [dropDown]);
 
     if(input.trim().length === 0) return null;
     
@@ -111,18 +127,26 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
 
     return (
         <div style={{
-            width: '100%', background:'#eaeaea', position:'absolute',
-            top: '100%', left: 0, borderBottomLeftRadius: 10, borderBottomRightRadius: 10,
-            borderLeft: '2px solid black', 
-            borderRight: '2px solid black',
-            borderBottom: '2px solid black',
-        }}>
+                width: '100%', position:'absolute',
+                top: '100%', left: 0, borderBottomLeftRadius: 10, borderBottomRightRadius: 10,
+                borderLeft: '2px solid black', 
+                borderRight: '2px solid black',
+                borderBottom: '2px solid black',
+            }}
+        >
             {similarPlayers.map((player, index) => 
                 <div key={index} style={{
-                    width:'100%', height:'50px', display:'flex', alignItems:'center', cursor:'pointer'
-                }} onClick={() => searchPlayer(`${player.firstName}_${player.lastName}`, sport, true)}>
+                        width:'100%', height:'50px', display:'flex', alignItems:'center', cursor:'pointer',
+                        background:'#eaeaea', 
+                        borderBottomLeftRadius: index === similarPlayers.length - 1 ? 10: 0, 
+                        borderBottomRightRadius: index === similarPlayers.length - 1 ? 10 : 0,
+                    }} 
+                    onClick={() => searchPlayer(`${player.firstName}_${player.lastName}`, sport, true)}
+                    onMouseEnter={e => e.currentTarget.style.backgroundColor = '#CAC9C9'} 
+                    onMouseLeave={e => e.currentTarget.style.backgroundColor = '#eaeaea'} 
+                >
                     {player.picId === "" ?
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 8 8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 8 8" style={{marginLeft:'10px'}}>
                             <path fill="#1D1D1D" d="M4 0C2.9 0 2 1.12 2 2.5S2.9 5 4 5s2-1.12 2-2.5S5.1 0 4 0M1.91 5C.85 5.05 0 5.92 0 7v1h8V7c0-1.08-.84-1.95-1.91-2c-.54.61-1.28 1-2.09 1c-.81 0-1.55-.39-2.09-1" />
                         </svg>
                             :
@@ -133,7 +157,8 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
                             style={{marginLeft:'10px'}}
                         />
                     }
-                    <p style={{marginLeft: '15px'}}>{player.firstName} {player.lastName}</p>
+                    <p style={{marginLeft: '15px', fontWeight:'bold'}}>{player.firstName} {player.lastName}</p>
+                    <p style={{marginLeft: '5px'}}>• {player.team}</p>
                 </div>
             )}
         </div>

@@ -144,7 +144,7 @@ export const CounterStrikePlayer = () => {
                     <thead>
                         <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
 
-                        <TableHeader statsHeader={statsHeader} />
+                        <TableHeader statsHeader={statsHeader} hasMaps={true}/>
                     </thead>
                     <tbody>
                         {displayedRows.map((row, index) => {
@@ -161,6 +161,7 @@ export const CounterStrikePlayer = () => {
                                     displayedStats={row}
                                     team={player.team === allGames[index].team1 ? allGames[index].team2.slice(0,4) : allGames[index].team1.slice(0,4)}
                                     date={formattedDate} 
+                                    mapsPlayed={allGames[index].maps.length}
                                     extraText={allGames[index].maps.length === 1 ? 'DNP (Best of 1)' : 'DNP (Best of 3)'}
                                 />
                             );

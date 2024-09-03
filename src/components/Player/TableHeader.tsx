@@ -2,19 +2,24 @@ import React from 'react'
 
 export type TableHeaderObject = {
     name: string,
-    underName: string
+    underName: string,
 }
 interface Props {
-    statsHeader: TableHeaderObject[]
+    statsHeader: TableHeaderObject[],
+    hasMaps: boolean
 }
 
-export const TableHeader: React.FC<Props> = ({ statsHeader }) => {
+export const TableHeader: React.FC<Props> = ({ statsHeader, hasMaps }) => {
     return (
         <tr style={{ display: 'flex' }}>
-            {/* 195px widt this part? */}
-            <th style={{ width: '120px' }}>Date</th>
-            <th style={{ width: '30px' }}>Team</th>
-            <th style={{ width: '45px' }}></th>
+            <div style={{width: '250px', display:'flex'}}>
+                <th style={{ width: '50%'}}>Date</th>
+                <th style={{ width: '25%' }}>Team</th>
+                {hasMaps ? 
+                    <th style={{ width: '25%' }}>Maps</th> : null
+                }
+            </div>
+
             {statsHeader.map((statObj, index) => (
                 <th 
                     className="dropdown-container"

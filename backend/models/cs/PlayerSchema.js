@@ -5,7 +5,7 @@ const CSPlayerSchema = new mongoose.Schema({
     firstName: { type: String, required: false },
     lastName: { type: String, required: false },
     picId: { type: String, required: false },
-    team: { type: String, required: false },
+    teams: { type: [String], required: false },
 });
 
 const CSPlayer = mongoose.model("csplayers", CSPlayerSchema);

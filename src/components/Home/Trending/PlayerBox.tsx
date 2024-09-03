@@ -28,20 +28,20 @@ export const PlayerBox: React.FC<Props> = ({player}) => {
         }}>
             {player.picId !== "" ? 
                 <Image
-                    src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}
+                    src={`${player.picId}`}
                     alt={`Headshot of ${player.firstName} ${player.lastName}`}
                     width={80}
                     height={60}
                 /> :
                 <LeagueIcon sport={player.sport} size={"40px"}/>
             }
-            {/* <p style={{ color: '#fff', margin:0, fontSize:'16px' }}>{game.results.home.abbr} vs {game.results.visitor.abbr}</p> */}
 
             {/* <div style={{display:'flex', width:'70%', justifyContent:'space-evenly'}}>
                 <p style={{color: '#fff', margin:0, fontSize:'14px', fontWeight:'bold'}}>{getDay(game.results.easternTime)}</p>
                 <p style={{ color: '#fff', margin:0, fontSize:'14px' }}>{convertToEST(game.results.easternTime)}</p>
-            </div> */}
+                </div> */}
             <h3 style={{ color: '#fff', margin:0, fontSize:'16px' }}>{player.firstName} {player.lastName}</h3>
+            <p style={{ color: '#fff', margin:0, fontSize:'16px' }}>{player.sport} • {player.team}</p>
         </div>
     )
 }

@@ -94,6 +94,7 @@ export const WNBAPlayerPage = () => {
             })
         
             //If did not play then we return -1 PTS so just don't show this game
+            intialStats["FAN"] = parseFloat(intialStats["FAN"].toFixed(1))
             if(!didPlay) intialStats["PTS"] = -1;
         
             return [...Object.values(intialStats)];;
@@ -156,7 +157,7 @@ export const WNBAPlayerPage = () => {
                     <thead>
                         <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
 
-                        <TableHeader statsHeader={statsHeader} />
+                        <TableHeader statsHeader={statsHeader} hasMaps={false}/>
                     </thead>
                     <tbody>
                         {displayedRows.map((row, index) => {

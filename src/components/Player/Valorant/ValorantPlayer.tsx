@@ -143,7 +143,7 @@ export const ValPlayerPage = () => {
                 <table className='playerPageStatTable'>
                     <thead>
                         <StatComparator compareTo={compareTo} setCompareTo={setCompareTo}/>
-                        <TableHeader statsHeader={statsHeader} />
+                        <TableHeader statsHeader={statsHeader} hasMaps={true}/>
                     </thead>
                     <tbody>
                         {allGames.map((game, index) => {

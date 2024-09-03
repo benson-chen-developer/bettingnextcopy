@@ -26,8 +26,8 @@ function App({ Component, pageProps }) {
 
         <Component {...pageProps} />
 
-        <ComboBtn />
-        <PopUp />
+        {/* <ComboBtn />
+        <PopUp /> */}
 
         <Footer />
       </GlobalContextProvider>

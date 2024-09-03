@@ -8,10 +8,12 @@ require('dotenv').config();
 const ValorantRoute = require('./routes/Valorant');
 const CSRoute = require('./routes/CS');
 const WNBARoute = require('./routes/WNBA');
+const TrendingRoute = require('./routes/Trending');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/trending", TrendingRoute);
 app.use("/cs", CSRoute);
 app.use("/valorant", ValorantRoute);
 app.use("/wnba", WNBARoute);
@@ -145,25 +147,6 @@ app.get("/cfl/allPlayers", async (req, res) => {
     res.json(players);
 })
 
-const getTeamNames = (actions) => {
-    let teamNames = [];
-    let i = 0;
-
-    while(teamNames.length < 2){
-        let currentAction = actions[i];
-
-        if(currentAction.teamTricode){
-            const teamTriCode = teamNames.find(teamName => teamName === currentAction.teamTricode);
-            if(teamTriCode === undefined){
-                teamNames.push(currentAction.teamTricode)
-            }
-        }
-
-        i++;
-    }
-
-    return teamNames;
-}
 
 mongoose.connect(process.env.NEXT_MONGO_URI)
     .then(() => {

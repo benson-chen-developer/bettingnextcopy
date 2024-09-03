@@ -10,27 +10,33 @@ interface Props {
     */
     displayedStats: number[],
     extraText: string
+    mapsPlayed?: number
 }
 
 /*
   Displayed stats is the box score essentially. It should be an array so we can just loop through it
 */
-export const Row:React.FC<Props> = ({displayedStats, team, date, extraText, compareTo}) => {
+export const Row:React.FC<Props> = ({displayedStats, team, date, extraText, compareTo, mapsPlayed}) => {
     return (
         <tr style={{display:'flex', minHeight: '35px', marginRight:'20px'}}>
-            <th style={{width:'200px', display:'flex', justifyContent:'space-evenly', alignItems:'center'}}>
-                <h4 style={{margin:0}}>{date}</h4>
-                <h4 style={{margin:0}}>@{team.slice(0,4)}</h4>
+            <th style={{width:'250px', display:'flex',alignItems:'center'}}>
+                <div style={{width:'50%'}}>{date}</div>
+                <div style={{width:'25%'}}>@{team.slice(0,4)}</div>
+                {mapsPlayed ?
+                  <div style={{margin:0, display:'flex', justifyContent:'center', width:'25%'}}>{mapsPlayed}</div>
+                    :
+                  null
+                }
             </th>
 
             {displayedStats[0] === -1 ? 
               <div  style={{
-                width: "200px", height: "100%", display:'flex', justifyContent:'center', alignItems:'center'
+                width: "200px", minHeight: "35px", display:'flex',alignItems:'center', marginTop:'1px', marginBottom:'1px'
               }}>
                 {extraText ? 
-                  <p style={{fontSize: '15px', fontWeight:'bold', color:'#3d3d3d'}}>{extraText}</p>
+                  <p style={{fontSize: '15px', fontWeight:'bold', color:'#3d3d3d', margin:0}}>{extraText}</p>
                     :
-                  <p style={{fontSize: '15px', fontWeight:'bold', color:'#3d3d3d'}}>Did Not Play</p>
+                  <p style={{fontSize: '15px', fontWeight:'bold', color:'#3d3d3d', margin:0}}>Did Not Play</p>
                 }
               </div>
                 :
@@ -61,15 +67,15 @@ const Square: React.FC<PropsTwo> = ({ amount, compareAmount }) => {
   }
 
   // Set background color based on amountParsed compared to compareAmount
-  if (amountParsed > amount) {
-    bgColor = '#B1DEA3';
-  } 
-  else if (amountParsed < 0) {
+  if (amountParsed < 0) {
     bgColor = '#D9D9D9';
   }
+  else if (amount > amountParsed) {
+    bgColor = '#B1DEA3';
+  } 
   else if (amountParsed === amount) {
     bgColor = '#f7f259';
-  } else if (amountParsed < amount) {
+  } else if (amount < amountParsed) {
     bgColor = '#f94352';
   }
 

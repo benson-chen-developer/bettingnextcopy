@@ -5,7 +5,7 @@ const ValorantPlayerSchema = new mongoose.Schema({
     firstName: { type: String, required: false },
     lastName: { type: String, required: false },
     picId: { type: String, required: false },
-    team: { type: String, required: false },
+    teams: { type: [String], required: false },
     matches: { type: [String], required: false }
 });
 

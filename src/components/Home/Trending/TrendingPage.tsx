@@ -17,66 +17,14 @@ export const TrendingPage = () => {
     const [selectedTab, setSelectedTab] = useState<string>(trendings[0].name);
 
     useEffect(() => {
-        const newTrendingPlayers = [
-            {
-                firstName: "Cait",
-                lastName: "Clark",
-                picId: "1642286",
-                team: "IND",
-                playerId: "1642286",
-                sport: "WNBA",
-                oppTeam: "",
-                date: "",
-                tournament: ""
-            },
-            {
-                firstName: "Wyzo",
-                lastName: "",
-                picId: "",
-                team: "Vitality",
-                playerId: "",
-                sport: "CS",
-                oppTeam: "",
-                date: "",
-                tournament: ""
-            },
-            {
-                firstName: "Wyzo",
-                lastName: "",
-                picId: "",
-                team: "Vitality",
-                playerId: "",
-                sport: "CS",
-                oppTeam: "",
-                date: "",
-                tournament: ""
-            },
-            {
-                firstName: "Wyzo",
-                lastName: "",
-                picId: "",
-                team: "Vitality",
-                playerId: "",
-                sport: "CS",
-                oppTeam: "",
-                date: "",
-                tournament: ""
-            },
-            {
-                firstName: "Wyzo",
-                lastName: "",
-                picId: "",
-                team: "Vitality",
-                playerId: "",
-                sport: "CS",
-                oppTeam: "",
-                date: "",
-                tournament: ""
-            }
-        ]
+        const GetTrendingPlayers = async () => {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/trending/players`);
+            const parsed = await res.json();
+            setTrendingPlayers(parsed);
+            setLoading(false);
+        }
 
-        setTrendingPlayers(newTrendingPlayers);
-        setLoading(false);
+        GetTrendingPlayers();
     }, [])
 
     return (

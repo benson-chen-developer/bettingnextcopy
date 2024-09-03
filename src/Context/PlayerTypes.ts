@@ -50,7 +50,8 @@ export type WNBAAction = {
 }
 
 export type ValorantPlayer = PlayerType & {
-    gameUrls: string[]
+    gameUrls: string[],
+    teams: string[],
 }
 export type ValorantGame = {
     url: string,
@@ -113,5 +114,5 @@ export type CSGamePlayer = {
     headshots: string
     deaths: string,
     assists: string,
-    team: string,
+    teams: string[],
 }

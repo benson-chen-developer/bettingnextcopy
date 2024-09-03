@@ -44,6 +44,7 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
   const [playerName, setPlayerName] = useState<string>('');
   const [sport, setSport] = useState<string>('WNBA');
   const [dropDown, setDropDown] = useState<string>("");
+  const [botBorderHere, setBotBorderHere] = useState<boolean>(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlayerName(e.target.value);
@@ -60,9 +61,10 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
   }, [paramLeague, paramPlayer]);
 
   useEffect(() => {
-    // console.log(dropDown)
-    // console.log(dropDown === "sports")
-  }, [dropDown])
+    if(dropDown === "sports") setBotBorderHere(true);
+    else if(dropDown === "players" && playerName.trim().length > 0) setBotBorderHere(true);
+    else setBotBorderHere(false);
+  }, [dropDown, playerName])
 
   return (
     <div style={{
@@ -75,7 +77,10 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
       <form onSubmit={handleSubmit} style={{ 
         display: 'flex', background:'#fff', 
         width: "100%", justifyContent:'space-between',
-        borderRadius: 10,border: '2px solid #000', alignItems:'center',
+        borderRadius: 10, border: '2px solid #000', alignItems:'center',
+        borderBottom: botBorderHere ? 'none' : '2px solid #000',
+        borderBottomLeftRadius: botBorderHere ? 0 : 10,
+        borderBottomRightRadius: botBorderHere ? 0 : 10
       }}>
         <div style={{display:'flex', width:'70%'}}>
 
