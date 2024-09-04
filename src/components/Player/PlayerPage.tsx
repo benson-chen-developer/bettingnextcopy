@@ -78,7 +78,7 @@ export const ValPlayerPage: React.FC<Props> = ({
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
                         {/* <StatComparator chartCompareTo={chartCompareTo} setChartCompareTo={setChartCompareTo} /> */}
-                        <TableHeader statsHeader={statsHeader} />
+                        {/* <TableHeader statsHeader={statsHeader} /> */}
                     </thead>
                     <tbody>
                         {/* {allGames.map((game, index) => {
