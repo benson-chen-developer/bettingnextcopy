@@ -36,17 +36,19 @@ export type WNBAGame = {
     date: string,
     team1: string,
     team2: string,
-    actions: WNBAAction[],
-    id: string
+    actions: [],
+    id: string,
+    players: WNBAGamePlayer[]
 };
-export type WNBAAction = {
-    name: string
-    period: number,
-    clock: string,
-    teamTricode: string,
-    actionType: string,
-    amount: number,
-    picId: number
+export type WNBAGamePlayer = {
+    playerNameI: string,
+    stats: {
+        "PTS": number, "REB": number, "AST":number,
+        "STL": number, "BLK": number, "TO": number, "PF": number,
+        "FGM":  number, "FGA": number,
+        "3PM": number, "3PA": number, 
+        "FTM": number, "FTA": number,
+    }[];
 }
 
 export type ValorantPlayer = PlayerType & {

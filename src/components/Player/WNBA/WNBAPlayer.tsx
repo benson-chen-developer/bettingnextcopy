@@ -8,7 +8,7 @@ import { EverythingLoaded } from '../EverythingLoaded';
 import { TableHeader } from '../TableHeader';
 import { Row } from '../Row';
 import { NotFound } from '../NotFound';
-import { WNBAAction, WNBAGame, WNBAPlayer } from '../../../Context/PlayerTypes';
+import { WNBAGame, WNBAGamePlayer, WNBAPlayer } from '../../../Context/PlayerTypes';
 
 export const WNBAPlayerPage = () => {
     const router = useRouter();
@@ -61,48 +61,62 @@ export const WNBAPlayerPage = () => {
             - playerName should be in C. Clark format
             - if playerName is "" then just get all stats
         */
-        const fillStats = (playerName: string, condition: string, actions: WNBAAction[]): number[] => {
-            let intialStats = {
-                "PTS": 0, "REB": 0, "AST":0,
-                "STL": 0, "BLK": 0, "TO": 0, "PF": 0,
-                "FGM":  0, "FGA": 0,
-                "3PM": 0, "3PA": 0, 
-                "FTM": 0, "FTA": 0,
-                "FAN": 0
-            };
-            let didPlay = false;
-        
-            actions.forEach(action => {
-                /* This to see if the current action is what the player is looking for */
-                let conditionMet = false; let playerConditionMet = false;
-        
-                if(condition === "1st Quarter" && action.period === 1) conditionMet = true;
-                else if(condition === "2nd Quarter" && action.period === 2) conditionMet = true;
-                else if(condition === "3rd Quarter" && action.period === 3) conditionMet = true;
-                else if(condition === "4th Quarter" && action.period === 4) conditionMet = true;
-                else if(condition === "1st Half" && (action.period === 1 || action.period === 2)) conditionMet = true;
-                else if(condition === "2nd Half" && (action.period === 3 || action.period === 4)) conditionMet = true;
-                else if(condition === "Whole Game") conditionMet = true;
-                if(playerName.toLowerCase() === action?.name?.toLowerCase()) playerConditionMet = true;
-                else if(playerName === "") playerConditionMet = true;
-        
-                if(conditionMet && playerConditionMet){
-                    didPlay = true;
-                    intialStats[action.actionType as keyof typeof intialStats] += action.amount;
-                    intialStats["FAN"] += FantasyScoring(action.actionType as string, action.amount);
+        const fillStats = (playerName: string, condition: string, players: WNBAGamePlayer[]): number[] => {
+            let foundPlayer = players.find(player => player.playerNameI === playerName);
+            let stats: any = {};
+            if (foundPlayer) {
+                if (condition === "1st Quarter") stats = foundPlayer.stats[0];
+                else if (condition === "2nd Quarter") stats = foundPlayer.stats[1];
+                else if (condition === "3rd Quarter") stats = foundPlayer.stats[2];
+                else if (condition === "4th Quarter") stats = foundPlayer.stats[3];
+                else if (condition === "1st Half") {
+                    stats = { ...foundPlayer.stats[0] };
+                    let secondHalfStats: any = foundPlayer.stats[1];
+                    for (let key in secondHalfStats) {
+                        stats[key] = (stats[key] || 0) + (secondHalfStats[key] || 0);
+                    }
                 }
-            })
-        
-            //If did not play then we return -1 PTS so just don't show this game
-            intialStats["FAN"] = parseFloat(intialStats["FAN"].toFixed(1))
-            if(!didPlay) intialStats["PTS"] = -1;
-        
-            return [...Object.values(intialStats)];;
+                else if (condition === "2nd Half") {
+                    stats = { ...foundPlayer.stats[2] };
+                    let secondHalfStats: any = foundPlayer.stats[3];
+                    for (let key in secondHalfStats) {
+                        stats[key] = (stats[key] || 0) + (secondHalfStats[key] || 0);
+                    }
+                }
+                else if (condition === "Whole Game") {
+                    stats = { ...foundPlayer.stats[0] };
+                    let secondQ: any = foundPlayer.stats[1];
+                    let thirdQ: any = foundPlayer.stats[2];
+                    let fourthQ: any = foundPlayer.stats[3];
+                    for (let key in secondQ) {
+                        stats[key] = (stats[key] || 0) + (secondQ[key] || 0);
+                    }
+                    for (let key in thirdQ) {
+                        stats[key] = (stats[key] || 0) + (thirdQ[key] || 0);
+                    }
+                    for (let key in fourthQ) {
+                        stats[key] = (stats[key] || 0) + (fourthQ[key] || 0);
+                    }
+                }
+            }
+            delete stats["_id"];
+
+            /* Fantasy */
+            let fanAmount = -1;
+            for (let key in stats) {
+                if(fanAmount === -1) fanAmount = 0;
+                let value = stats[key];
+                fanAmount += FantasyScoring(key, value);
+            }
+            stats["FAN"] = parseFloat(fanAmount.toFixed(1))
+            
+            console.log(stats)
+            return [...Object.values(stats) as number[]];
         }
 
         const allTheDisplayedStats: number[][] = [];
         allTheGames.forEach((game) => {
-            allTheDisplayedStats.push(fillStats(`${firstName[0]}. ${lastName}`, pickedBtn, game.actions))
+            allTheDisplayedStats.push(fillStats(`${firstName[0]}. ${lastName}`, pickedBtn, game.players))
         })
         
         return allTheDisplayedStats;
@@ -116,7 +130,7 @@ export const WNBAPlayerPage = () => {
             const foundPlayer = allPlayers.find(player => player.firstName.toLowerCase() === firstName.toLowerCase() && player.lastName.toLowerCase() === lastName.toLowerCase());
             if(foundPlayer){
                 setPlayer(foundPlayer);
-                const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/wnba/player/${foundPlayer.abbr}`);
+                const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/wnba/player/${foundPlayer.team}`);
                 const allGames = await res.json();
                 allGames.sort((a: WNBAGame, b: WNBAGame) => {
                     const dateA = new Date(a.date).getTime();
@@ -173,7 +187,7 @@ export const WNBAPlayerPage = () => {
                                     key={index} 
                                     compareTo={compareTo}
                                     displayedStats={row}
-                                    team={allGames[index].team1 === player.abbr ? allGames[index].team2 : allGames[index].team1}
+                                    team={allGames[index].team1 === player.team ? allGames[index].team2 : allGames[index].team1}
                                     date={formattedDate}
                                     extraText=''
                                 />

@@ -9,7 +9,9 @@ const WNBAMatch = require("../models/wnba/MatchModel");
 router.get("/player/:abbr", async (req, res) => {
     const team = req.params.abbr;
     try {
-        const matches = await WNBAMatch.find({$or: [ { team1: team }, { team2: team } ]});
+        const matches = await WNBAMatch.find({$or: [ { team1: team }, { team2: team } ]})
+            .sort({ date: -1 })
+            .limit(15);
 
         res.status(200).json(matches);
     } catch (err) {
