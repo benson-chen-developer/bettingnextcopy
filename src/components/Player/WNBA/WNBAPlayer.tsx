@@ -41,6 +41,10 @@ export const WNBAPlayerPage = () => {
         {name: "FTM", underName: "Free Throws Made"},
         {name: "FTA", underName: "Free Throws Attempted"},
         {name: "FAN", underName: "Fantasy Score"},
+        {name: "PR", underName: "Points + Rebounds"},
+        {name: "PA", underName: "Points + Assists"},
+        {name: "PRA", underName: "Points + Rebounds + Assists"},
+        {name: "RA", underName: "Rebounds + Assists"},
     ];
     const [compareTo, setCompareTo] = useState<string[]>(Array(statsHeader.length).fill(""))
     const [pickedBtn, setPickedBtn] = useState<string>(allPickedBtns[0])
@@ -101,7 +105,7 @@ export const WNBAPlayerPage = () => {
             }
             delete stats["_id"];
 
-            /* Fantasy */
+            /* Fantasy + PR + PA + PRA + RA*/
             let fanAmount = -1;
             for (let key in stats) {
                 if(fanAmount === -1) fanAmount = 0;
@@ -109,8 +113,11 @@ export const WNBAPlayerPage = () => {
                 fanAmount += FantasyScoring(key, value);
             }
             stats["FAN"] = parseFloat(fanAmount.toFixed(1))
-            
-            console.log(stats)
+            stats["PR"] = stats["PTS"] + stats["REB"];
+            stats["PA"] = stats["PTS"] + stats["AST"];
+            stats["PRA"] = stats["PTS"] + stats["REB"] + stats['AST'];
+            stats["RA"] = stats["REB"] + stats["AST"];
+
             return [...Object.values(stats) as number[]];
         }
 

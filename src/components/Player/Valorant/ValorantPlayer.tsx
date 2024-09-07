@@ -58,19 +58,23 @@ export const ValPlayerPage = () => {
             if(pickedNumbers.length === 1 && pickedNumbers[0] === 2 && !game.maps[2].didPlay){
                 return Array(statsHeader.length).fill(-1);
             } 
-
-            pickedNumbers.forEach(number => {
+            
+            for(let number of pickedNumbers){
                 let map = game.maps[number];
-
+                
                 if(map.didPlay){
                     let playerStats = map.players.find(p => p.name === foundPlayer.firstName)
-                    statsArr[0] += Number(playerStats!.kills)
-                    statsArr[1] += Number(playerStats!.deaths)
-                    statsArr[2] += Number(playerStats!.assists)
-                    statsArr[3] += Number(playerStats!.firstKills)
-                    statsArr[4] += Number(playerStats!.firstDeaths)
+                    if(playerStats){
+                        statsArr[0] += Number(playerStats!.kills)
+                        statsArr[1] += Number(playerStats!.deaths)
+                        statsArr[2] += Number(playerStats!.assists)
+                        statsArr[3] += Number(playerStats!.firstKills)
+                        statsArr[4] += Number(playerStats!.firstDeaths)
+                    } else {
+                        return [-1];
+                    }
                 } 
-            })
+            }
 
             return statsArr;
         }
@@ -92,6 +96,7 @@ export const ValPlayerPage = () => {
             displayStats = newAllGames.map((game) => addUpMaps([0,1], game));
         }
 
+        // console.log(displayStats)
         return displayStats;
     }
 
@@ -111,6 +116,11 @@ export const ValPlayerPage = () => {
                 body: JSON.stringify({team: foundPlayer?.team}) 
             });
             let games = await matchRes.json();
+            games.sort((a: ValorantGame, b: ValorantGame) => {
+                const dateA = new Date(a.date).getTime();
+                const dateB = new Date(b.date).getTime();
+                return dateB - dateA;
+            });
             setAllGames(games);
 
             setDisplayedStats(compareFunction(games, foundPlayer!));

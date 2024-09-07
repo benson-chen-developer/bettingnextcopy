@@ -40,25 +40,24 @@ export const LeaguePlayer = () => {
     const [compareTo, setCompareTo] = useState<string[]>(Array(statsHeader.length).fill(""))
     const [pickedBtn, setPickedBtn] = useState<string>('All Maps')
 
-    /* Check first 2 games and return the 2 names in common between both games */
     const GetTeamName = (games: LolGame[]): string => {
         let firstGame = games[0]; let secondGame = games[1];
         let names: string[] = [];
 
         if(firstGame && secondGame){
             names = [
-                firstGame.game.split('vs')[0], firstGame.game.split(' ')[1], 
-                secondGame.game.split('vs')[0], secondGame.game.split(' ')[1]
+                firstGame.game.split('vs')[0], firstGame.game.split('vs')[1], 
+                secondGame.game.split('vs')[0], secondGame.game.split('vs')[1]
             ]
         }
-
         for (let i = 0; i < names.length; i++) {
             for (let j = i + 1; j < names.length; j++) {
                 if (names[i].toLocaleLowerCase() === names[j].toLocaleLowerCase()) {
-                    return names[i];
+                    return names[i].trim();
                 }
             }
         }
+        
         return ''; 
     };
 
@@ -75,7 +74,6 @@ export const LeaguePlayer = () => {
             if (maps.some(map => !map || map === '-1/-1/-1')) {
                 return [-1];
             }
-    
             const sums = [0, 0, 0];
             
             maps.forEach(map => {
@@ -89,28 +87,28 @@ export const LeaguePlayer = () => {
         };
 
         if(pickedBtn === "All Maps"){
-            setDisplayedStats(allTheGames.map((game) => addUpMaps(...game.scores)))
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(...game.scores.slice().reverse())))
         }
         else if(pickedBtn === "Map 1"){
-            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores[0])))
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores.slice().reverse()[0])))
         }
         else if(pickedBtn === "Map 2"){
-            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores[1])))
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores.slice().reverse()[1])))
         }
         else if(pickedBtn === "Map 3"){
-            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores[2])))
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores.slice().reverse()[2])))
         }
         else if(pickedBtn === "Map 1+2"){
-            setDisplayedStats(allTheGames.map((game) => addUpMaps(...game.scores.slice(0,2))))
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(...game.scores.slice().reverse().slice(0, 2))))
         }
         else if(pickedBtn === "Map 1+2+3"){
-            setDisplayedStats(allTheGames.map((game) => addUpMaps(...game.scores.slice(0,3))))
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(...game.scores.slice().reverse().slice(0, 3))))
         }
         else if(pickedBtn === "Map 4"){
-            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores[3])))
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores.slice().reverse()[3])))
         }
         else if(pickedBtn === "Map 5"){
-            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores[4])))
+            setDisplayedStats(allTheGames.map((game) => addUpMaps(game.scores.slice().reverse()[4])))
         }
     }
 
@@ -164,8 +162,8 @@ export const LeaguePlayer = () => {
                     </thead>
                     <tbody>
                         {allGames.map((game, index) => {
-                            let firstName = game.game.split("vs")[0];
-                            let secondName = game.game.split("vs")[1];
+                            let firstName = game.game.split("vs")[0].trim();
+                            let secondName = game.game.split("vs")[1].trim();
                             let oppTeam = firstName.toLocaleLowerCase() !== player?.team.toLocaleLowerCase() ? firstName : secondName;
                             oppTeam = oppTeam.split(" ")[0].toLocaleLowerCase() === 'team' ? oppTeam.split(" ")[1] : oppTeam;
                         
