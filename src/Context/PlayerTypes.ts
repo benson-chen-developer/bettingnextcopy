@@ -118,3 +118,23 @@ export type CSGamePlayer = {
     assists: string,
     teams: string[],
 }
+
+export type RainbowPlayer = PlayerType & {
+    teams: string[]
+}
+export type RainbowGame = {
+    url: string,
+    team1: string,
+    team2: string,
+    date: string,
+    maps: {
+        didPlay: boolean,
+        players: RainbowGamePlayer[]
+    }[],
+}
+export type RainbowGamePlayer = {
+    name: string,
+    kills: string,
+    deaths: string,
+    team: string
+}
