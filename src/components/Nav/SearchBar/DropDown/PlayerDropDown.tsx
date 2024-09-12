@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDropDown}) => {
-    const {fetchWnbaPlayer, fetchValorantPlayers, fetchLolPlayers, fetchCSPlayers} = useGlobalContext();
+    const {fetchWnbaPlayer, fetchValorantPlayers, fetchLolPlayers, fetchCSPlayers, fetchRainbowPlayers} = useGlobalContext();
 
     /*
         Only need 
@@ -43,6 +43,9 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
         }
         else if(sportLower === "cs"){
             players = await fetchCSPlayers();
+        }
+        else if(sportLower === "rainbow"){
+            players = await fetchRainbowPlayers();
         }
         
         setLoading(false);

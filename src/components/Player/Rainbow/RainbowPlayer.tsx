@@ -2,40 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import { ClipLoader } from 'react-spinners';
 import { useGlobalContext } from '../../../Context/store';
-import { ValorantGame, ValorantPlayer } from '../../../Context/PlayerTypes';
+import { RainbowGame, RainbowPlayer } from '../../../Context/PlayerTypes';
 import { Hero } from '../Hero';
 import { Row } from '../Row';
 import { StatComparator } from '../StatComparator';
 import { TableHeader } from '../TableHeader';
 
-export type StatCompartorValorant = {
-    kills: number, 
-    deaths: number,
-    assists: number,
-    firstKills: number,
-    firstDeaths: number,
-    // headshots: number
-}
-
-/*
-    For this page the games array is like this 
-
-    date: "2024/07/14"
-    maps : (3) ['Ascent', 'Bind', 'Lotus']
-    oppTeam : "LOUD"
-    players : Array(10) {name: 'saadhak', team: 'LOUD', kills: Array(12), deaths: Array(12), assists: Array(12)}
-    url: "/353200/loud-vs-100-thieves-champions-to"
-
-    1) We load 50 of these games but the maps and players will be empty
-    2) We load each map indivually via the url and fill the maps and players
-    3) Only load <Rows> for games without an empty players and maps array 
-*/
-export const ValPlayerPage = () => {
+export const RainbowPlayerPage = () => {
     const router = useRouter();
     const { paramPlayer, paramLeague } = router.query;
-    const {fetchValorantPlayers} = useGlobalContext();
-    const [player, setPlayer] = useState<ValorantPlayer | undefined>(undefined);
-    const [allGames, setAllGames] = useState<ValorantGame[]>([]);
+    const {fetchRainbowPlayers} = useGlobalContext();
+    const [player, setPlayer] = useState<RainbowPlayer | undefined>(undefined);
+    const [allGames, setAllGames] = useState<RainbowGame[]>([]);
     const [displayedStats, setDisplayedStats] = useState<number[][]>([]);
     const [loading, setLoading] = useState<boolean>(true);
 
@@ -43,37 +21,26 @@ export const ValPlayerPage = () => {
     const statsHeader = [
         {name: "K", underName: "Kills"},
         {name: "D", underName: "Deaths"},
-        {name: "A", underName: "Assists"},
-        {name: "FK", underName: "First Kills"},
-        {name: "FD", underName: "First Deaths"},
     ];
     const [compareTo, setCompareTo] = useState<string[]>(Array(statsHeader.length).fill(""))
     const [pickedBtn, setPickedBtn] = useState<string>(allPickedBtns[0])
 
-    const compareFunction = (newAllGames: ValorantGame[], foundPlayer: ValorantPlayer): number[][] => {
-        const addUpMaps = (pickedNumbers: number[], game: ValorantGame) => {
+    const compareFunction = (newAllGames: RainbowGame[], foundPlayer: RainbowPlayer): number[][] => {
+        const addUpMaps = (pickedNumbers: number[], game: RainbowGame) => {
             let statsArr: number[] = Array(statsHeader.length).fill(0);
+            let didNotPlayAtAll = true;
 
-            /* Scenrio in which we pick map 3 but there was no played map 3 */
-            if(pickedNumbers.length === 1 && pickedNumbers[0] === 2 && !game.maps[2].didPlay){
-                return Array(statsHeader.length).fill(-1);
-            } 
-            
             for(let number of pickedNumbers){
                 let map = game.maps[number];
                 
-                if(map.didPlay){
+                if(map && map.didPlay){
                     let playerStats = map.players.find(p => p.name === foundPlayer.firstName)
-                    if(playerStats){
-                        statsArr[0] += Number(playerStats!.kills)
-                        statsArr[1] += Number(playerStats!.deaths)
-                        statsArr[2] += Number(playerStats!.assists)
-                        statsArr[3] += Number(playerStats!.firstKills)
-                        statsArr[4] += Number(playerStats!.firstDeaths)
-                    } else {
-                        return [-1];
-                    }
-                } 
+                    statsArr[0] += Number(playerStats!.kills)
+                    statsArr[1] += Number(playerStats!.deaths)
+                    didNotPlayAtAll = false;
+                } else {
+                    if(didNotPlayAtAll) return [-1];
+                }
             }
 
             return statsArr;
@@ -96,19 +63,18 @@ export const ValPlayerPage = () => {
             displayStats = newAllGames.map((game) => addUpMaps([0,1], game));
         }
 
-        // console.log(displayStats)
         return displayStats;
     }
 
     useEffect(() => {
         const fetchPlayer = async () => {
-            const allValPlayers = await fetchValorantPlayers();
+            const allValPlayers = await fetchRainbowPlayers();
 
             /* Found the player in the load all players array */
             const foundPlayer = allValPlayers.find(player => player.firstName.toLowerCase() === (paramPlayer as string).toLowerCase());
             setPlayer(foundPlayer);
 
-            const matchRes = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/games`, {
+            const matchRes = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/rainbow/matches`, {
                 method: 'POST', 
                 headers: {
                     'Content-Type': 'application/json',
@@ -116,7 +82,7 @@ export const ValPlayerPage = () => {
                 body: JSON.stringify({team: foundPlayer?.team}) 
             });
             let games = await matchRes.json();
-            games.sort((a: ValorantGame, b: ValorantGame) => {
+            games.sort((a: RainbowGame, b: RainbowGame) => {
                 const dateA = new Date(a.date).getTime();
                 const dateB = new Date(b.date).getTime();
                 return dateB - dateA;
@@ -168,6 +134,7 @@ export const ValPlayerPage = () => {
                                     team={game.team1 === player?.team ? game.team2 : game.team1}
                                     date={formattedDate}
                                     extraText=''
+                                    mapsPlayed={game.maps.length}
                                 />
                             );
                         })}

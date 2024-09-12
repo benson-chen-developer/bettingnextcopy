@@ -1,7 +1,7 @@
 'use client';
 import React, { createContext, useContext, Dispatch, SetStateAction, useState, useEffect, ReactNode } from 'react';
 import { Game2 } from '../functions/players';
-import { CSPlayer, LolPlayer, PlayerType, ValorantPlayer, WNBAPlayer } from './PlayerTypes';
+import { CSPlayer, LolPlayer, PlayerType, RainbowPlayer, ValorantPlayer, WNBAPlayer } from './PlayerTypes';
 import {apiUrl} from '../data/data';
 
 interface ContextProps {
@@ -19,6 +19,9 @@ interface ContextProps {
   csPlayers: CSPlayer[],
   setCSPlayers: Dispatch<SetStateAction<CSPlayer[]>>,
   fetchCSPlayers: () => Promise<CSPlayer[]>,
+  rainbowPlayers: RainbowPlayer[],
+  setRainbowPlayers: Dispatch<SetStateAction<RainbowPlayer[]>>,
+  fetchRainbowPlayers: () => Promise<RainbowPlayer[]>,
   comboPopUp: boolean,
   setComboPopUp: Dispatch<SetStateAction<boolean>>,
   playersInCombo: PlayerType[],
@@ -40,6 +43,9 @@ const GlobalContext = createContext<ContextProps>({
   csPlayers: [],
   setCSPlayers: (): CSPlayer[] => [],
   fetchCSPlayers: async (): Promise<CSPlayer[]> => [] ,
+  rainbowPlayers: [],
+  setRainbowPlayers: (): CSPlayer[] => [],
+  fetchRainbowPlayers: async (): Promise<CSPlayer[]> => [] ,
   comboPopUp: false,
   setComboPopUp: (): boolean => false,
   playersInCombo: [],
@@ -51,6 +57,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
   const [valorantPlayers, setValorantPlayers] = useState<ValorantPlayer[]>([]);
   const [lolPlayers, setLolPlayers] = useState<LolPlayer[]>([]);
   const [csPlayers, setCSPlayers] = useState<CSPlayer[]>([]);
+  const [rainbowPlayers, setRainbowPlayers] = useState<RainbowPlayer[]>([]);
   const [games, setGames] = useState<Game2[]>([]);
   const [comboPopUp, setComboPopUp] = useState<boolean>(false);
   const [playersInCombo, setPlayersInCombo] = useState<PlayerType[]>([]);
@@ -127,6 +134,23 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       }
     }
   };
+  const fetchRainbowPlayers = async (): Promise<CSPlayer[]> => {
+    if(rainbowPlayers.length > 0){
+      return rainbowPlayers;
+    } else {
+      try {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/rainbow/players`);
+        if (!response.ok) throw new Error('Failed to fetch R6 players');
+        const data = await response.json();
+        console.log(data)
+        setRainbowPlayers(data);
+        return data;
+      } catch (error) {
+        console.error('Error fetching Lol players:', error);
+        return [];
+      }
+    }
+  };
 
   return (
     <GlobalContext.Provider value={{ 
@@ -134,6 +158,7 @@ export const GlobalContextProvider = ({ children }: { children: ReactNode }) => 
       valorantPlayers, setValorantPlayers, fetchValorantPlayers,
       lolPlayers, setLolPlayers, fetchLolPlayers,
       csPlayers, setCSPlayers, fetchCSPlayers,
+      rainbowPlayers, setRainbowPlayers, fetchRainbowPlayers,
       games, setGames, 
       comboPopUp, setComboPopUp,
       playersInCombo, setPlayersInCombo
