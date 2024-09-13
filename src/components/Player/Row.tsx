@@ -19,9 +19,9 @@ interface Props {
 export const Row:React.FC<Props> = ({displayedStats, team, date, extraText, compareTo, mapsPlayed}) => {
     return (
         <tr style={{display:'flex', minHeight: '35px', marginRight:'20px'}}>
-            <th style={{width:'250px', display:'flex',alignItems:'center'}}>
-                <div style={{width:'50%'}}>{date}</div>
-                <div style={{width:'25%'}}>@{team.slice(0,4)}</div>
+            <th className={mapsPlayed ? "datesAndTeamAndMaps" : "datesAndTeam"}>
+                <div style={{width:'50%', display:'flex', justifyContent:'flex-start'}}>{date}</div>
+                <div style={{width:'25%', display:'flex', justifyContent:'flex-start'}}>@{team.slice(0,4)}</div>
                 {mapsPlayed ?
                   <div style={{margin:0, display:'flex', justifyContent:'center', width:'25%'}}>{mapsPlayed}</div>
                     :

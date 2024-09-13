@@ -171,16 +171,16 @@ export const WNBAPlayerPage = () => {
                 allPickedBtns={allPickedBtns}
             />
 
-            <h1 style={{ marginLeft: '75px', marginBottom:'10px'}}>Games</h1>
+            <h1 className='GamesTitle'>Games</h1>
 
-            <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%', minHeight:'150px'}}>
+            {/* <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%', minHeight:'150px'}}>
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
                         <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
 
                         <TableHeader statsHeader={statsHeader} hasMaps={false}/>
                     </thead>
-                    <tbody>
+                    <tbody className='rowTable'>
                         {displayedRows.map((row, index) => {
                             // Is in UTC so use UTC functions or else its gonna be behind
                             let dateObject = new Date(allGames[index].date);
@@ -213,6 +213,35 @@ export const WNBAPlayerPage = () => {
                         loadGames();
                     }}
                 />
+            </div> */}
+            <div className="tableWrapper">
+                <table style={{ width: '50%', borderCollapse: "collapse"}}>
+                    <thead>
+                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
+                        <TableHeader statsHeader={statsHeader} hasMaps={false}/>
+                    </thead>
+                    <tbody className="rowTable">
+                        {displayedRows.map((row, index) => {
+                            // Is in UTC so use UTC functions or else its gonna be behind
+                            let dateObject = new Date(allGames[index].date);
+                            let month = dateObject.getUTCMonth() + 1;
+                            let day = dateObject.getUTCDate();
+                            let year = dateObject.getUTCFullYear();
+                            let formattedDate = `${month}/${day}/${year}`;
+                            
+                            return (
+                                <Row 
+                                    key={index} 
+                                    compareTo={compareTo}
+                                    displayedStats={row}
+                                    team={allGames[index].team1 === player.team ? allGames[index].team2 : allGames[index].team1}
+                                    date={formattedDate}
+                                    extraText=''
+                                />
+                            );
+                        })}
+                    </tbody>
+                </table>
             </div>
         </div>
     )

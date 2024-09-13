@@ -12,13 +12,13 @@ interface Props {
 export const TableHeader: React.FC<Props> = ({ statsHeader, hasMaps }) => {
     return (
         <tr style={{ display: 'flex' }}>
-            <div style={{width: '250px', display:'flex'}}>
-                <th style={{ width: '50%'}}>Date</th>
-                <th style={{ width: '25%' }}>Team</th>
+            <th className={false ? "statsHeaderAndMaps" : "statsHeader"}>
+                <div style={{width:'50%', display:'flex', justifyContent:'flex-start'}}>Date</div>
+                <div style={{width:'25%', display:'flex', justifyContent:'flex-start'}}>Team</div>
                 {hasMaps ? 
                     <th style={{ width: '25%' }}>Maps</th> : null
                 }
-            </div>
+            </th>
 
             {statsHeader.map((statObj, index) => (
                 <th 

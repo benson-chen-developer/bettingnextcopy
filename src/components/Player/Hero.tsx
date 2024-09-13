@@ -81,7 +81,7 @@ const StatBtn: React.FC<StatBtnProps> = ({ btnText, pickedBtn, onClick, index })
             }}
         >
             <p style={{
-                color: pickedBtn === btnText ? '#000' : '#fff', fontSize:12, fontWeight:'bold'
+                color: pickedBtn === btnText ? '#000' : '#fff', fontSize:12, fontWeight:'bold', margin: 0
             }}>
                 {btnText}
             </p>
