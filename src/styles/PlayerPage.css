@@ -48,12 +48,12 @@
     justify-content: space-evenly;
 }
 .datesAndTeamAndMaps{
-    width:150px; 
+    width:250px; 
     display:flex;
     align-items:center;
     justify-content: space-evenly;
 }
-.statCompareNoMap{
+.statCompareMap{
     width: 250px;
     display: flex;
     align-items: center;

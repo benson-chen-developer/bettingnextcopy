@@ -12,11 +12,11 @@ interface Props {
 export const TableHeader: React.FC<Props> = ({ statsHeader, hasMaps }) => {
     return (
         <tr style={{ display: 'flex' }}>
-            <th className={false ? "statsHeaderAndMaps" : "statsHeader"}>
-                <div style={{width:'40%', display:'flex', justifyContent:'flex-start'}}>Date</div>
-                <div style={{width:'25%', display:'flex', justifyContent:'flex-start'}}>Team</div>
+            <th className={hasMaps ? "statsHeaderAndMaps" : "statsHeader"}>
+                <div style={{width: '40%', display:'flex', justifyContent:'flex-start'}}>Date</div>
+                <div style={{width:'20%', display:'flex', justifyContent:'flex-start'}}>Team</div>
                 {hasMaps ? 
-                    <th style={{ width: '25%' }}>Maps</th> : null
+                    <div style={{ width: '20%', display:'flex', justifyContent:'center' }}>Maps</div> : null
                 }
             </th>
 

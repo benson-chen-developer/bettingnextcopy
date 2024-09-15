@@ -152,7 +152,7 @@ export const ValPlayerPage = () => {
             <div className='playerPageStatTableContainer'>
                 <table className='playerPageStatTable'>
                     <thead>
-                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo}/>
+                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} hasMaps={true}/>
                         <TableHeader statsHeader={statsHeader} hasMaps={true}/>
                     </thead>
                     <tbody>
@@ -168,6 +168,7 @@ export const ValPlayerPage = () => {
                                     team={game.team1 === player?.team ? game.team2 : game.team1}
                                     date={formattedDate}
                                     extraText=''
+                                    mapsPlayed={game.maps.length}
                                 />
                             );
                         })}
