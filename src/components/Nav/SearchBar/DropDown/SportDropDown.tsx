@@ -31,6 +31,7 @@ export const SportDropDown: React.FC<Props> = ({input, sport, setSport, dropDown
             top: '100%', left: 0, borderBottomLeftRadius: 10, borderBottomRightRadius: 10,
             borderLeft: '2px solid black', display:'flex', alignItems:'center',
             borderRight: '2px solid black', borderBottom: '2px solid black',
+            overflowX: 'auto'
         }}>
             {currentAllSports.map((option, index) => 
                 <SportSquare 
@@ -58,7 +59,8 @@ export const SportSquare: React.FC<SquareProps> = ({ selected, sport, setSport, 
         <div
             className={`sport-square ${selected ? 'selected' : ''}`}
             style={{
-                marginRight: index !== totalLen-1 ? "15px" : "0px",
+                marginRight: "15px",
+                marginLeft: index === 0 ? "10px" : "0px"
             }}
             onClick={handleClick}
         >

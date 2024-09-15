@@ -4,6 +4,8 @@
 .sport-square {
     width: 85px;
     height: 85px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     border-radius: 10px;
     border: 2px solid #B3B3B3;
     background: #7A7A7A;

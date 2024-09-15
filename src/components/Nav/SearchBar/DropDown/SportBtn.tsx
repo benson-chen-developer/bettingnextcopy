@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 interface SportBtnProps {
     sport: string,
@@ -73,6 +73,47 @@ export const SportBtn: React.FC<SportBtnProps> = ({ dropDown, setDropDown, sport
           document.removeEventListener('click', handleClickOutside);
       };
   }, [dropDown]);
+
+  /* Mobile Responsivness */
+  const [isMobile, setIsMobile] = useState(false); 
+  useEffect(() => {
+    const handleResize = () => {
+        setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+        window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+    if(isMobile) return(
+      <div style={{ position: 'relative', width:'15%', marginRight:'3px' }} className="sport-dropdown">
+        <button 
+          onClick={() => handleSportSelect()} 
+          style={{
+            width: '95%', borderRadius: 10,
+            background: '#000', border: 'none', 
+            display: 'flex', justifyContent: 'space-around', alignItems: 'center',
+            margin: 3, cursor: 'pointer', height:'45px'
+          }} 
+          type="button"
+        >
+          <LeagueIcon sport={sport} size="20px"/>
+
+          <svg 
+            xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 48 48"
+            style={{
+                transform: dropDown === "sports" ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.3s ease', // Optional: adds a smooth transition
+            }}
+          >
+            <path fill="#fff" stroke="#fff" stroke-linejoin="round" strokeWidth="4" d="m12 29l12-12l12 12z" />
+          </svg>
+
+        </button>
+      </div>
+    )
 
     return (
       <div style={{ position: 'relative', width:'22%' }} className="sport-dropdown">

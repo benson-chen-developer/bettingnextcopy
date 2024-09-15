@@ -67,12 +67,7 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
   }, [dropDown, playerName])
 
   return (
-    <div style={{
-      display:'flex', flexDirection:'column', 
-      width: widthSpacing ? widthSpacing : '30%',
-      marginLeft: marginLeftSpacing ? marginLeftSpacing : 30,
-      position: 'relative'
-    }}>
+    <div className='navBar'>
       
       <form onSubmit={handleSubmit} style={{ 
         display: 'flex', background:'#fff', 
@@ -80,7 +75,7 @@ export const SearchBar: React.FC<Props> = ({widthSpacing, marginLeftSpacing}) =>
         borderRadius: 10, border: '2px solid #000', alignItems:'center',
         borderBottom: botBorderHere ? 'none' : '2px solid #000',
         borderBottomLeftRadius: botBorderHere ? 0 : 10,
-        borderBottomRightRadius: botBorderHere ? 0 : 10
+        borderBottomRightRadius: botBorderHere ? 0 : 10, height:'50px'
       }}>
         <div style={{display:'flex', width:'70%'}}>
 
