@@ -6,13 +6,7 @@
     display: flex;
     overflow: hidden;
     justify-content: center;
-    align-items: flex-end;
-}
-@media (max-width: 768px) {
-    .playerPagePic {
-        width: 75px;
-        height: 75px;
-    }
+    align-items: flex-start;
 }
 
 .playerPageName{
@@ -39,33 +33,35 @@
 /* All the Match Stats Part (START) */
 .statsHeader{
     width: 200px;
-    display:'flex';
+    display:flex;
+    justify-content: space-evenly;
 }
 .statsHeaderAndMaps{
     width: 250px;
-    display:'flex';
+    display:flex;
+    justify-content: space-evenly;
 }
 .datesAndTeam{
     width:200px; 
     display:flex;
     align-items:center;
+    justify-content: space-evenly;
 }
 .datesAndTeamAndMaps{
-    width:250px; 
+    width:150px; 
     display:flex;
     align-items:center;
+    justify-content: space-evenly;
 }
 .statCompareNoMap{
     width: 250px;
-    display: 'flex';
-    justify-content: space-between;
-    align-items: flex-start
+    display: flex;
+    align-items: center;
 }
 .statCompare{
     width: 200px;
-    display: 'flex';
-    justify-content: space-between;
-    align-items: flex-start
+    display: flex;
+    align-items: center;
 }
 .GamesTitle{
     margin-left: 75px;

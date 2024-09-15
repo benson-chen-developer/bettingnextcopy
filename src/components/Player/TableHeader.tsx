@@ -13,7 +13,7 @@ export const TableHeader: React.FC<Props> = ({ statsHeader, hasMaps }) => {
     return (
         <tr style={{ display: 'flex' }}>
             <th className={false ? "statsHeaderAndMaps" : "statsHeader"}>
-                <div style={{width:'50%', display:'flex', justifyContent:'flex-start'}}>Date</div>
+                <div style={{width:'40%', display:'flex', justifyContent:'flex-start'}}>Date</div>
                 <div style={{width:'25%', display:'flex', justifyContent:'flex-start'}}>Team</div>
                 {hasMaps ? 
                     <th style={{ width: '25%' }}>Maps</th> : null

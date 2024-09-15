@@ -26,7 +26,7 @@ export const Hero: React.FC<Props> = ({
                     {picUrl !== "" ?
                         <Image
                             src={picUrl}
-                            style={{width: '150px', height: '110px'}}
+                            style={{width: '150px', height: '110px', display:'flex'}}
                             alt={`Pic of ${playerName}`} width={150} height={110}
                         /> 
                             :
