@@ -51,11 +51,11 @@ export const WNBAPlayerPage = () => {
 
     const FantasyScoring = (stat: string, amount: number): number => {
         if(stat === "PTS") return 1*amount;
-        else if(stat === "REB") return 1.2;
-        else if(stat === "AST") return 1.5;
-        else if(stat === "STL") return 3;
-        else if(stat === "BLK") return 3;
-        else if(stat === "TO") return -1;
+        else if(stat === "REB") return 1.2*amount;
+        else if(stat === "AST") return 1.5*amount;
+        else if(stat === "STL") return 3*amount;
+        else if(stat === "BLK") return 3*amount;
+        else if(stat === "TO") return -1*amount;
         else return 0;
     }
 
@@ -145,6 +145,7 @@ export const WNBAPlayerPage = () => {
                     return dateB - dateA;
                 });
 
+                console.log(allGames)
                 setAllGames(allGames);
                 setDisplayedRows(compareFunction('Whole Game', allGames)); 
             }
@@ -176,7 +177,7 @@ export const WNBAPlayerPage = () => {
             <div className="tableWrapper">
                 <table className='playerPageStatTable'>
                     <thead>
-                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
+                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} hasMaps={false}/>
                         <TableHeader statsHeader={statsHeader} hasMaps={false}/>
                     </thead>
                     <tbody className="rowTable">
@@ -196,6 +197,7 @@ export const WNBAPlayerPage = () => {
                                     team={allGames[index].team1 === player.team ? allGames[index].team2 : allGames[index].team1}
                                     date={formattedDate}
                                     extraText=''
+                                    showDNP='dont'
                                 />
                             );
                         })}

@@ -11,12 +11,15 @@ interface Props {
     displayedStats: number[],
     extraText: string
     mapsPlayed?: number
+    showDNP? : string
 }
 
 /*
   Displayed stats is the box score essentially. It should be an array so we can just loop through it
 */
-export const Row:React.FC<Props> = ({displayedStats, team, date, extraText, compareTo, mapsPlayed}) => {
+export const Row:React.FC<Props> = ({displayedStats, team, date, extraText, compareTo, mapsPlayed, showDNP}) => {
+    if(showDNP && showDNP === "dont" && displayedStats[0] === -1) return;
+
     return (
         <tr style={{display:'flex', minHeight: '35px', marginRight:'20px'}}>
             <th className={mapsPlayed ? "datesAndTeamAndMaps" : "datesAndTeam"}>
