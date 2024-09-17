@@ -58,7 +58,6 @@ export const Hero: React.FC<Props> = ({
                 )}
             </div>
         </div>
-
     </div>
 }
 

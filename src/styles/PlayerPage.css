@@ -6,7 +6,7 @@
     display: flex;
     overflow: hidden;
     justify-content: center;
-    align-items: flex-start;
+    align-items: flex-end;
 }
 
 .playerPageName{
@@ -63,15 +63,6 @@
     display: flex;
     align-items: center;
 }
-.GamesTitle{
-    margin-left: 75px;
-    margin-bottom:10px
-}
-@media (max-width: 768px) {
-    .GamesTitle {
-        margin-left: 20px;
-    }
-}
 .tableWrapper {
     width: 100vw; 
     overflow-x: auto; 
@@ -86,7 +77,11 @@
     width: 100%; 
     white-space: nowrap;
 }
+.rowBottomSpace{
+    margin-bottom: 30px;
+}
 /* All the Match Stats Part (END) */
+
 
 .playerPageHeroContainer {
     width: 100vw;
@@ -113,12 +108,18 @@
 }
 
 .playerPageStatTableContainer {
-    display: flex; 
+    display: flex;
     flex-direction: column;
     margin-left: 50px; /* Default margin-left for larger screens */
     width: calc(100vw - 50px); /* Default width calculation */
     overflow-x: auto; /* Enable horizontal scrolling if content overflows */
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For Internet Explorer and Edge */
 }
+.playerPageStatTableContainer::-webkit-scrollbar {
+    display: none; /* Hide on Chrome */
+}
+
 @media (max-width: 768px) {
     .playerPageStatTableContainer {
         margin-left: 0px; /* Reduced margin-left for mobile */

@@ -171,10 +171,10 @@ export const WNBAPlayerPage = () => {
                 allPickedBtns={allPickedBtns}
             />
 
-            <h1 className='GamesTitle'>Games</h1>
+            <p className="playerPageGamesHeader">Games</p>
 
             <div className="tableWrapper">
-                <table style={{ width: '50%', borderCollapse: "collapse"}}>
+                <table className='playerPageStatTable'>
                     <thead>
                         <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
                         <TableHeader statsHeader={statsHeader} hasMaps={false}/>
@@ -202,7 +202,7 @@ export const WNBAPlayerPage = () => {
                     </tbody>
                 </table>
 
-                <div style={{marginBottom:'20px'}}/> 
+                <div className='rowBottomSpace'/> 
             </div>
         </div>
     )

@@ -149,13 +149,13 @@ export const ValPlayerPage = () => {
 
             <p className="playerPageGamesHeader">Games</p>
 
-            <div className='playerPageStatTableContainer'>
+            <div className="tableWrapper">
                 <table className='playerPageStatTable'>
                     <thead>
                         <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} hasMaps={true}/>
                         <TableHeader statsHeader={statsHeader} hasMaps={true}/>
                     </thead>
-                    <tbody>
+                    <tbody className="rowTable">
                         {allGames.map((game, index) => {
                             const dateObj = new Date(game.date);
                             const formattedDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}/${dateObj.getFullYear()}`;
@@ -175,7 +175,7 @@ export const ValPlayerPage = () => {
                     </tbody>
                 </table>
 
-                <div style={{marginBottom: '50px'}}></div>        
+                <div className='rowBottomSpace'/>
             </div>
 
         </div>

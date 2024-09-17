@@ -28,7 +28,6 @@ export const LeaguePlayer = () => {
     const [allGames, setAllGames] = useState<LolGame[]>([]);
     const [displayedStats, setDisplayedStats] = useState<number[][]>([]);
     
-    const [allGamesLoaded, setAllGamesLoaded] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(true);
 
     const allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2", "Map 1+2+3", "Map 4", "Map 5"];
@@ -152,15 +151,15 @@ export const LeaguePlayer = () => {
                 allPickedBtns={allPickedBtns}
             />
 
-            <h1 style={{ marginLeft: '75px', marginBottom:'10px'}}>Games</h1>
+            <p className="playerPageGamesHeader">Games</p>
 
-            <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%'}}>
+            <div className="tableWrapper">
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
-                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
+                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} hasMaps={true}/>
                         <TableHeader statsHeader={statsHeader} hasMaps={true}/>
                     </thead>
-                    <tbody>
+                    <tbody className="rowTable">
                         {allGames.map((game, index) => {
                             let firstName = game.game.split("vs")[0].trim();
                             let secondName = game.game.split("vs")[1].trim();
@@ -183,17 +182,7 @@ export const LeaguePlayer = () => {
 
                 </table>
 
-                <EverythingLoaded 
-                    allLoaded={allGamesLoaded}
-                    onClickFunction={() => {
-                        const loadGames = async () => {
-                        };
-                
-                        setLoading(true);
-                        loadGames();
-                    }}
-                />
-
+                <div className='rowBottomSpace'/> 
             </div>
 
         </div>

@@ -137,19 +137,19 @@ export const CounterStrikePlayer = () => {
                 allPickedBtns={allPickedBtns}
             />
 
-            <h1 style={{ marginLeft: '75px', marginBottom:'10px'}}>Games</h1>
+            <p className="playerPageGamesHeader">Games</p>
 
-            <div style={{display:'flex', marginLeft:'50px',flexDirection:'column', width:'100%', minHeight:'150px'}}>
+            <div className="tableWrapper">
                 <table style={{ width: '50%', borderCollapse: "collapse"}}>
                     <thead>
-                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} />
+                        <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} hasMaps={true}/>
 
                         <TableHeader statsHeader={statsHeader} hasMaps={true}/>
                     </thead>
-                    <tbody>
+                    <tbody className="rowTable">
                         {displayedRows.map((row, index) => {
                             const formattedDate = new Date(allGames[index].date).toLocaleDateString("en-US", {
-                                year: "2-digit",
+                                year: "numeric",
                                 month: "numeric",
                                 day: "numeric",
                             });
@@ -169,16 +169,7 @@ export const CounterStrikePlayer = () => {
                     </tbody>
                 </table>
 
-                <EverythingLoaded 
-                    allLoaded={allGamesLoaded}
-                    onClickFunction={() => {
-                        const loadGames = async () => {
-                        };
-                
-                        setLoading(true);
-                        loadGames();
-                    }}
-                />
+                <div className='rowBottomSpace'/> 
             </div>
         </div>
     )

@@ -37,14 +37,19 @@ function App({ Component, pageProps }) {
           <link rel="icon" href="/taskBarLogo.svg" />
         </Head>
 
-        {!isMobile ? <NavBar /> : <LittleNavBar />}
+        <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          {/* Navigation bar */}
+          {!isMobile ? <NavBar /> : <LittleNavBar />}
 
-        <Component {...pageProps} />
+          {/* Main content area, takes up remaining space */}
+          <main style={{ flex: '1 0 auto' }}>
+            <Component {...pageProps} />
+          </main>
 
-        {/* <ComboBtn />
-        <PopUp /> */}
+          {/* Footer stays at the bottom */}
+          <Footer />
+        </main>
 
-        <Footer />
       </GlobalContextProvider>
     </>
   );
