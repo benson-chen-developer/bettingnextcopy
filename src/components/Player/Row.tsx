@@ -18,7 +18,7 @@ interface Props {
   Displayed stats is the box score essentially. It should be an array so we can just loop through it
 */
 export const Row:React.FC<Props> = ({displayedStats, team, date, extraText, compareTo, mapsPlayed, showDNP}) => {
-    if(showDNP && showDNP === "dont" && displayedStats[0] === -1) return;
+    if(showDNP && showDNP === "dont" && displayedStats[0] === -1) return null;
 
     return (
         <tr style={{display:'flex', minHeight: '35px', marginRight:'20px'}}>
