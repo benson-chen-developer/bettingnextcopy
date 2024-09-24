@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import { ClipLoader } from 'react-spinners';
 import { useGlobalContext } from '../../../Context/store';
-import { StatComparator } from '../StatComparator';
-import { Hero } from '../Hero';
-import { EverythingLoaded } from '../EverythingLoaded';
-import { TableHeader } from '../TableHeader';
+import { StatComparator } from '../Componenets/StatComparator';
+import { Hero } from '../Componenets/Hero';
+import { EverythingLoaded } from '../Componenets/EverythingLoaded';
+import { TableHeader } from '../Componenets/TableHeader';
 import { LolGame, LolPlayer } from '../../../Context/PlayerTypes';
-import { Row } from '../Row';
-import { NotFound } from '../NotFound';
+import { Row } from '../Componenets/Row';
+import { NotFound } from '../Componenets/NotFound';
 
 export type StatCompartorLeague = {
     kills: number, 

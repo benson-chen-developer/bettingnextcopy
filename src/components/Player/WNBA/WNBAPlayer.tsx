@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 import { ClipLoader } from 'react-spinners';
 import { useGlobalContext } from '../../../Context/store';
-import { StatComparator } from '../StatComparator';
-import { Hero } from '../Hero';
-import { EverythingLoaded } from '../EverythingLoaded';
-import { TableHeader } from '../TableHeader';
-import { Row } from '../Row';
-import { NotFound } from '../NotFound';
+import { StatComparator } from '../Componenets/StatComparator';
+import { Hero } from '../Componenets/Hero';
+import { EverythingLoaded } from '../Componenets/EverythingLoaded';
+import { TableHeader } from '../Componenets/TableHeader';
+import { Row } from '../Componenets/Row';
+import { NotFound } from '../Componenets/NotFound';
 import { WNBAGame, WNBAGamePlayer, WNBAPlayer } from '../../../Context/PlayerTypes';
 
 export const WNBAPlayerPage = () => {
@@ -22,7 +22,6 @@ export const WNBAPlayerPage = () => {
     const [allGames, setAllGames] = useState<WNBAGame[]>([]);
     const [displayedRows, setDisplayedRows] = useState<number[][]>([]);
     
-    const [allGamesLoaded, setAllGamesLoaded] = useState<boolean>(true);
     const [loading, setLoading] = useState<boolean>(true);
 
     const allPickedBtns = ["Whole Game", "1st Half", "2nd Half", "1st Quarter", "2nd Quarter", "3rd Quarter", "4th Quarter"];

@@ -16,12 +16,45 @@ export type PlayerType = {
     playerId: string,
     sport: string
 }
+export type PPlayer = {
+    city: string,
+    number: string,
+    position: string,
+}
 export type TrendingPlayer = PlayerType & {
     oppTeam: string,
     date: string,
     tournament: string
 }
 
+export type Game = {
+    team1: string,
+    team2: string,
+    url: string,
+    date: string
+}
+export type EGame = Game & {
+    maps: {
+        map: string,
+        didPlay: boolean,
+        players: {
+            name: string,
+            team: string,
+            stats: {name: string, count: number}[]
+        }[]
+    }[]
+}
+export type PGame = Game & {
+    players : PGamePlayer[]
+}
+export type PGamePlayer =  {
+    name: string,
+    team: string,
+    stats: {name: string, count: number}[]
+}
+
+
+/* */
 export type WNBAPlayer = PlayerType & {
     city: string;
     abbr: string;

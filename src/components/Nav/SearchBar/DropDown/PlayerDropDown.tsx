@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { ClipLoader } from 'react-spinners';
 import { useGlobalContext } from '../../../../Context/store';
 import { PlayerType } from '../../../../Context/PlayerTypes';
-import { findSimilarLastNames } from '../../../Player/NotFound';
+import { findSimilarLastNames } from '../../../Player/Componenets/NotFound';
 import { searchPlayer } from '../SearchBar';
 
 interface Props {
@@ -148,18 +148,7 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
                     onMouseEnter={e => e.currentTarget.style.backgroundColor = '#CAC9C9'} 
                     onMouseLeave={e => e.currentTarget.style.backgroundColor = '#eaeaea'} 
                 >
-                    {player.picId === "" ?
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 8 8" style={{marginLeft:'10px'}}>
-                            <path fill="#1D1D1D" d="M4 0C2.9 0 2 1.12 2 2.5S2.9 5 4 5s2-1.12 2-2.5S5.1 0 4 0M1.91 5C.85 5.05 0 5.92 0 7v1h8V7c0-1.08-.84-1.95-1.91-2c-.54.61-1.28 1-2.09 1c-.81 0-1.55-.39-2.09-1" />
-                        </svg>
-                            :
-                        <Image
-                            src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}
-                            alt={`Headshot of ${player.firstName} ${player.lastName}`}
-                            width={50} height={35}
-                            style={{marginLeft:'10px'}}
-                        />
-                    }
+                    <PlayerPic player={player} width='25' height='25' />
                     <p style={{marginLeft: '15px', fontWeight:'bold'}}>{player.firstName} {player.lastName}</p>
                     <p style={{marginLeft: '5px'}}>• {player.team}</p>
                 </div>
@@ -167,3 +156,32 @@ export const PlayerDropDown: React.FC<Props> = ({input, sport, dropDown, setDrop
         </div>
     )
 }
+
+
+type PlayerPicProps = {
+    player: PlayerType;
+    width: string;
+    height: string;
+};
+export const PlayerPic: React.FC<PlayerPicProps> = ({ player, width, height }) => {
+    return (
+        <>
+            {player.picId === "" ? (
+                <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 8 8" style={{ marginLeft: '10px' }}>
+                    <path
+                        fill="#1D1D1D"
+                        d="M4 0C2.9 0 2 1.12 2 2.5S2.9 5 4 5s2-1.12 2-2.5S5.1 0 4 0M1.91 5C.85 5.05 0 5.92 0 7v1h8V7c0-1.08-.84-1.95-1.91-2c-.54.61-1.28 1-2.09 1c-.81 0-1.55-.39-2.09-1"
+                    />
+                </svg>
+            ) : (
+                <Image
+                    src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}
+                    alt={`Headshot of ${player.firstName} ${player.lastName}`}
+                    width={50}
+                    height={35}
+                    style={{ marginLeft: '10px' }}
+                />
+            )}
+        </>
+    );
+};

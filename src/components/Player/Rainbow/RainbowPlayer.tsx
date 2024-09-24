@@ -3,10 +3,10 @@ import { useRouter } from 'next/router';
 import { ClipLoader } from 'react-spinners';
 import { useGlobalContext } from '../../../Context/store';
 import { RainbowGame, RainbowPlayer } from '../../../Context/PlayerTypes';
-import { Hero } from '../Hero';
-import { Row } from '../Row';
-import { StatComparator } from '../StatComparator';
-import { TableHeader } from '../TableHeader';
+import { Hero } from '../Componenets/Hero';
+import { Row } from '../Componenets/Row';
+import { StatComparator } from '../Componenets/StatComparator';
+import { TableHeader } from '../Componenets/TableHeader';
 
 export const RainbowPlayerPage = () => {
     const router = useRouter();

@@ -67,7 +67,7 @@ app.get("/lol/allPlayers", async (req, res) => {
             firstName : $(element).find('td a').first().text().trim(),
             lastName: '',
             picId: '',
-            id: $(element).find('td a').first().attr('href').match(/\/player-stats\/(\d+)\//)[1],
+            playerId: $(element).find('td a').first().attr('href').match(/\/player-stats\/(\d+)\//)[1],
             kills : $(element).find('td').eq(5).text().trim(),
             deaths : $(element).find('td').eq(6).text().trim(),
             assists : $(element).find('td').eq(7).text().trim(),
