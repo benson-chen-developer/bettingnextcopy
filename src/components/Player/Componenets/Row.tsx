@@ -24,7 +24,15 @@ export const Row:React.FC<Props> = ({displayedStats, team, date, extraText, comp
         <tr style={{display:'flex', minHeight: '35px', marginRight:'20px'}}>
             <th className={mapsPlayed ? "datesAndTeamAndMaps" : "datesAndTeam"}>
                 <div style={{width: '40%', display:'flex', justifyContent:'flex-start'}}>{date}</div>
-                <div style={{width: '20%', display:'flex', justifyContent:'flex-start'}}>@{team.slice(0,4)}</div>
+
+                {/* Team Name */}
+                <div style={{ position: 'relative', width: '20%', display: 'flex', justifyContent: 'flex-start' }}>
+                  @{team.slice(0, 4)}
+                  <div className="tooltip">
+                    {team}
+                  </div>
+                </div>
+
                 {mapsPlayed ?
                   <div style={{ width: '20%', display:'flex', justifyContent:'center' }}>{mapsPlayed}</div> : null
                 }

@@ -175,7 +175,7 @@ export const PlayerPic: React.FC<PlayerPicProps> = ({ player, width, height }) =
                 </svg>
             ) : (
                 <Image
-                    src={`https://cdn.wnba.com/headshots/wnba/latest/1040x760/${player.picId}.png`}
+                    src={player.picId}
                     alt={`Headshot of ${player.firstName} ${player.lastName}`}
                     width={50}
                     height={35}
