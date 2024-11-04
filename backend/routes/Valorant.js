@@ -102,5 +102,19 @@ router.post("/games", async (req, res) => {
 
     res.status(200).json(games);
 })
+router.get('/games/:playerName', async (req, res) => {
+    const { playerName } = req.params; 
+
+    try {
+        const games = await ValorantMatch.find({
+            'maps.players.name': playerName,  // Match based on player name
+        });
+
+        res.status(200).json(games);
+    } catch (error) {
+        console.error('Error fetching games:', error);
+        res.status(500).json({ message: 'Error fetching games', error });
+    }
+});
 
 module.exports = router;

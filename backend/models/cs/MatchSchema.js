@@ -29,6 +29,6 @@ const CSMatchSchema = new mongoose.Schema({
     }
 });
 
-const CSMatch = mongoose.model("csmatches", CSMatchSchema);
+// const CSMatch = mongoose.model("csmatches", CSMatchSchema);
 
-module.exports = CSMatch;
+// module.exports = CSMatch;

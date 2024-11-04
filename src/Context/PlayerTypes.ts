@@ -9,11 +9,9 @@
 */
 
 export type PlayerType = {
-    firstName: string,
-    lastName: string,
-    picId: string,
-    team: string,
+    name: string,
     playerId: string,
+    team: string,
     sport: string
 }
 export type PPlayer = {

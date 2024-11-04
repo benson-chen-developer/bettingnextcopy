@@ -5,6 +5,9 @@ import { CSPlayer, LolPlayer, PlayerType, RainbowPlayer, ValorantPlayer, WNBAPla
 import {apiUrl} from '../data/data';
 
 interface ContextProps {
+  // ePlayers: PlayerType[];
+  // setEPlayers:  Dispatch<SetStateAction<PlayerType[]>>;
+  // fetchEPlayers: () => Promise<PlayerType[]>;
   wnbaPlayers: WNBAPlayer[];
   setWnbaPlayers: Dispatch<SetStateAction<WNBAPlayer[]>>;
   fetchWnbaPlayer: () => Promise<WNBAPlayer[]>;
@@ -29,6 +32,10 @@ interface ContextProps {
 }
 
 const GlobalContext = createContext<ContextProps>({
+  // ePlayers: [],
+  // setWnbaPlayers: (): WNBAPlayer[] => [],
+  // fetchWnbaPlayer: async (): Promise<WNBAPlayer[]> => [],
+
   wnbaPlayers: [],
   setWnbaPlayers: (): WNBAPlayer[] => [],
   fetchWnbaPlayer: async (): Promise<WNBAPlayer[]> => [],

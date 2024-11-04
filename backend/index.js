@@ -10,6 +10,7 @@ const CSRoute = require('./routes/CS');
 const WNBARoute = require('./routes/WNBA');
 const RainbowRoute = require('./routes/Rainbow');
 const TrendingRoute = require('./routes/Trending');
+const EsportRoute = require('./routes/Esport');
 
 const app = express();
 app.use(cors());
@@ -19,6 +20,7 @@ app.use("/cs", CSRoute);
 app.use("/valorant", ValorantRoute);
 app.use("/wnba", WNBARoute);
 app.use('/rainbow', RainbowRoute);
+app.use('/esport', EsportRoute);
 
 app.get('/mlbSchedule', async (req, res) => {
     const startDate = req.headers.startdate;

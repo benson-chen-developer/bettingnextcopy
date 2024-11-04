@@ -8,7 +8,7 @@ import { ClipLoader } from 'react-spinners';
 import { useEffect } from 'react';
 import { PlayerType, WNBAPlayer } from '../../../Context/PlayerTypes';
 import { searchPlayer } from '../../Nav/SearchBar/SearchBar';
-import { PlayerPic } from '../../Nav/SearchBar/DropDown/PlayerDropDown';
+// import { PlayerPic } from '../../Nav/SearchBar/DropDown/PlayerDropDown';
 
 interface Props{
 }
@@ -46,7 +46,7 @@ const levenshteinDistance = (a: string, b: string): number => {
 /*
     Returns all the player names that are similar to the one we searched
 */
-export const findSimilarLastNames = (players: PlayerType[], input: string, maxAllowedDistance: number): any[] => {
+export const findSimilarPlayerName = (players: PlayerType[], input: string, maxAllowedDistance: number): any[] => {
     const trimmedInput = input.trim();
 
     let firstName = ''; let lastName = ''; 
@@ -58,24 +58,14 @@ export const findSimilarLastNames = (players: PlayerType[], input: string, maxAl
         lastName = trimmedInput.split(' ')[1];
     
         for (const player of players) {
-            if (levenshteinDistance(player.firstName, firstName) <= maxAllowedDistance) {
-                foundPlayers.add(player);
-            }
-            if (foundPlayers.size >= 5) break;
-
-            if (levenshteinDistance(player.lastName, lastName) <= maxAllowedDistance) {
+            if (levenshteinDistance(player.name, firstName) <= maxAllowedDistance) {
                 foundPlayers.add(player);
             }
             if (foundPlayers.size >= 5) break;
         }
     } else {
         for (const player of players) {
-            if (levenshteinDistance(player.firstName, trimmedInput) <= maxAllowedDistance) {
-                foundPlayers.add(player);
-            }
-            if (foundPlayers.size >= 5) break;
-
-            if (levenshteinDistance(player.lastName, trimmedInput) <= maxAllowedDistance) {
+            if (levenshteinDistance(player.name, trimmedInput) <= maxAllowedDistance) {
                 foundPlayers.add(player);
             }
             if (foundPlayers.size >= 5) break;
@@ -94,28 +84,28 @@ export const findSimilarNames = (players: PlayerType[], firstName: string, lastN
 
     if (firstName && lastName) {
         for (const player of players) {
-            if (levenshteinDistance(player.firstName, firstName) <= 2) {
+            if (levenshteinDistance(player.name, firstName) <= 2) {
                 foundPlayers.add(player);
             }
             if (foundPlayers.size >= 5) break;
 
-            if (levenshteinDistance(player.lastName, lastName) <= 2) {
-                foundPlayers.add(player);
-            }
-            if (foundPlayers.size >= 5) break;
+            // if (levenshteinDistance(player.lastName, lastName) <= 2) {
+            //     foundPlayers.add(player);
+            // }
+            // if (foundPlayers.size >= 5) break;
         }
     } else {
         /* This code runs if they typed one thing only so we have to check that name with the first and last name */
         for (const player of players) {
-            if (levenshteinDistance(player.firstName, firstName) <= 2) {
+            if (levenshteinDistance(player.name, firstName) <= 2) {
                 foundPlayers.add(player);
             }
             if (foundPlayers.size >= 5) break;
 
-            if (levenshteinDistance(player.lastName, firstName) <= 2) {
-                foundPlayers.add(player);
-            }
-            if (foundPlayers.size >= 5) break;
+            // if (levenshteinDistance(player.name, firstName) <= 2) {
+            //     foundPlayers.add(player);
+            // }
+            // if (foundPlayers.size >= 5) break;
         }
     }
     
@@ -192,11 +182,11 @@ export const NotFound: React.FC<Props> = ({}) => {
                 <div style={{display:'flex', alignItems:'center', flexDirection:'column', width:'100%'}}>
                     <h2>Did You Mean</h2>
                     
-                    <div style={{display:'flex'}}>
+                    {/* <div style={{display:'flex'}}>
                         {similarPlayers.map((player, index) => 
                             <PlayerBox player={player} key={index}/>
                         )}
-                    </div>
+                    </div> */}
                 </div>
             }
         </div>
@@ -207,21 +197,21 @@ type PlayerBoxProps = {
     player: PlayerType;
 };
   
-const PlayerBox: React.FC<PlayerBoxProps> = ({ player }) => {
-    return(
-        <div style={{
-            width:'200px', height:'100px', border:'2px solid #1E1E1E', borderRadius:20,
-            display:'flex', alignItems:'center', margin:'20px',
-            cursor:'pointer'
-        }} onClick={() => {
-            if(player.lastName){
-                searchPlayer(`${player.firstName}_${player.lastName}`, player.sport)
-            } else {
-                searchPlayer(`${player.firstName}_`, player.sport)
-            }
-        }}>
-            <PlayerPic player={player} width={"50%"} height={'75%'}/>
-            <p>{player.firstName} {player.lastName}</p>
-        </div>
-    )
-}
+// const PlayerBox: React.FC<PlayerBoxProps> = ({ player }) => {
+//     return(
+//         <div style={{
+//             width:'200px', height:'100px', border:'2px solid #1E1E1E', borderRadius:20,
+//             display:'flex', alignItems:'center', margin:'20px',
+//             cursor:'pointer'
+//         }} onClick={() => {
+//             if(player.name){
+//                 searchPlayer(`${player.firstName}_${player.lastName}`, player.sport)
+//             } else {
+//                 searchPlayer(`${player.firstName}_`, player.sport)
+//             }
+//         }}>
+//             <PlayerPic player={player} width={"50%"} height={'75%'}/>
+//             <p>{player.firstName} {player.lastName}</p>
+//         </div>
+//     )
+// }

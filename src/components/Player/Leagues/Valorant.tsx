@@ -1,4 +1,4 @@
-import { EGame, PlayerType, ValorantGame } from "../../../Context/PlayerTypes";
+import { EGame2 } from "../../../Context/ESport";
 
 export class Valorant {
     static allPickedBtns = ["All Maps", "Map 1", "Map 2", "Map 3", "Map 1+2"];
@@ -10,8 +10,8 @@ export class Valorant {
         {name: "FD", underName: "First Deaths"},
     ];
 
-    static compareFunction = (pickedBtn:string, newAllGames: ValorantGame[], name: string): number[][] => {
-        const addUpMaps = (pickedNumbers: number[], game: ValorantGame) => {
+    static compareFunction = (pickedBtn:string, newAllGames: EGame2[], name: string): number[][] => {
+        const addUpMaps = (pickedNumbers: number[], game: EGame2) => {
             let statsArr: number[] = Array(this.statsHeader.length).fill(0);
 
             /* Scenrio in which we pick map 3 but there was no played map 3 */
@@ -25,11 +25,11 @@ export class Valorant {
                 if(map.didPlay){
                     let playerStats = map.players.find(p => p.name === name)
                     if(playerStats){
-                        statsArr[0] += Number(playerStats!.kills)
-                        statsArr[1] += Number(playerStats!.deaths)
-                        statsArr[2] += Number(playerStats!.assists)
-                        statsArr[3] += Number(playerStats!.firstKills)
-                        statsArr[4] += Number(playerStats!.firstDeaths)
+                        statsArr[0] += Number(playerStats!.stats.kills)
+                        statsArr[1] += Number(playerStats!.stats.deaths)
+                        statsArr[2] += Number(playerStats!.stats.assists)
+                        statsArr[3] += Number(playerStats!.stats.firstKills)
+                        statsArr[4] += Number(playerStats!.stats.firstDeaths)
                     } else {
                         return [-1];
                     }
@@ -61,19 +61,20 @@ export class Valorant {
     }
 
 
-    static fetchMatches = async (foundPlayer: PlayerType): Promise<ValorantGame[]> => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/games`, {
-            method: 'POST', 
+    static fetchMatches = async (playerName: string): Promise<EGame2[]> => {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/valorant/games/${playerName}`, {
+            method: 'GET', 
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({team: foundPlayer?.team}) 
         });
+
         const allGames = await res.json();
         const sortedGames = allGames.sort((a: { date: string }, b: { date: string }) => {
             return new Date(b.date).getTime() - new Date(a.date).getTime();
         });
 
+        console.log("fetchMatches games", allGames)
         return sortedGames;
     }  
 }

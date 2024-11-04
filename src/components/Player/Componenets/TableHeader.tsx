@@ -14,7 +14,6 @@ export const TableHeader: React.FC<Props> = ({ statsHeader, hasMaps }) => {
         <tr style={{ display: 'flex' }}>
             <th className={hasMaps ? "statsHeaderAndMaps" : "statsHeader"}>
                 <div style={{width: '40%', display:'flex', justifyContent:'flex-start'}}>Date</div>
-                <div style={{width:'20%', display:'flex', justifyContent:'flex-start'}}>Team</div>
                 {hasMaps ? 
                     <div style={{ width: '20%', display:'flex', justifyContent:'center' }}>Maps</div> : null
                 }

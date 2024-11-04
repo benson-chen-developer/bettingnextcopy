@@ -44,6 +44,8 @@ const Player: React.FC<Props> = ({}) => {
         {(paramLeague as string)?.toLowerCase() === "cs" && <CounterStrikePlayer />}
         {(paramLeague as string)?.toLowerCase() === "rainbow" && <RainbowPlayerPage />} */}
         <PlayerPage 
+            playerName={paramPlayer as string} 
+            league={paramLeague as string}
         />
 
         </>
