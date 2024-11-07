@@ -19,6 +19,7 @@ export const DisplayedGame: React.FC<Props> = ({ game, player, pickedBtn, setPic
     let day = dateObject.getUTCDate();
     let year = dateObject.getUTCFullYear();
     let formattedDate = `${month}/${day}/${year}`;
+    let totalMapsPlayed = game.maps.filter((map) => map.didPlay).length;
     
     useEffect(() => {
         let totalStats: Record<string, number> = {};
@@ -61,8 +62,8 @@ export const DisplayedGame: React.FC<Props> = ({ game, player, pickedBtn, setPic
                 </div>
             </th>
 
+            {/* Right Part */}
             <div style={{ marginBottom:'20px' }}>
-
                 {/* Totals Map */}
                 <tr style={{ display: 'flex', width: '100%', marginBottom:'5px'}}>
                     {Object.keys(totalStats).length === 0 ? 
@@ -83,7 +84,7 @@ export const DisplayedGame: React.FC<Props> = ({ game, player, pickedBtn, setPic
                     ))}
 
                     <div>
-                        {pickedBtn} 
+                        {pickedBtn} {pickedBtn === "All Maps" ? `(${totalMapsPlayed})` : null}
 
                         <svg 
                             onClick={() => {

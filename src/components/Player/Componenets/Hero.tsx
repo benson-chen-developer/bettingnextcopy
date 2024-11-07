@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from "react";
 import Image from 'next/image';
+import { PreviousGamesBarChart } from "./PreviousGamesBarCharts";
 
 type Props = {
     playerName: string
@@ -11,7 +12,6 @@ type Props = {
     setPickedBtn: Dispatch<SetStateAction<string>>,
     allPickedBtns: string[]
 }
-  
 
 export const Hero: React.FC<Props> = ({
     playerName, number, team, position, picUrl, allPickedBtns, pickedBtn, setPickedBtn
@@ -45,6 +45,7 @@ export const Hero: React.FC<Props> = ({
                         {number !== "" ? `#${number}  -` : ""} {team !== "" ? `${team}` : ""} {position !== "" ? `- ${position}` : ""}
                     </h2>
                 </div>
+
             </div>
         </div>
 

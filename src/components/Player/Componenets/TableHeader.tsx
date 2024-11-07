@@ -1,4 +1,5 @@
 import React from 'react'
+import { PreviousGamesBarChart } from './PreviousGamesBarCharts'
 
 export type TableHeaderObject = {
     name: string,

@@ -7,12 +7,13 @@ type Game = {
 }
 
 export type EGame2 = Game & {
-    maps: {
-        players: EGamePlayer[],
-        score: string,
-        didPlay: boolean,
-        map: string,
-    }[]
+    maps: EGameMap[]
+}
+export type EGameMap = {
+    players: EGamePlayer[],
+    score: string,
+    didPlay: boolean,
+    map: string,
 }
 export type EGamePlayer = {
     name: string,

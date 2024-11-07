@@ -10,6 +10,8 @@ import { Game, LolGame, PGame, PlayerType } from '../../Context/PlayerTypes';
 import { EGame2 } from '../../Context/ESport';
 import { ESport } from './ESport/Match';
 import { DisplayedGame } from './Componenets/DisplayedGame';
+import { TeamMatchup } from './TeamMatchup/TeamMatchup';
+import { PreviousGamesBarChart } from './Componenets/PreviousGamesBarCharts';
 
 interface Props {
     league: string,
@@ -79,7 +81,7 @@ export const PlayerPage: React.FC<Props> = ({league, playerName}) => {
 
     if(!loading && player.playerId) return (
         <div>
-             <Hero 
+            <Hero 
                 playerName={player.name}
                 picUrl={''}
                 team={`${player?.team}`}
@@ -98,16 +100,35 @@ export const PlayerPage: React.FC<Props> = ({league, playerName}) => {
                         <StatComparator compareTo={compareTo} setCompareTo={setCompareTo} hasMaps={false}/>
                         <TableHeader statsHeader={statsHeader} hasMaps={false}/>
                     </thead>
-                    <tbody className="rowTable">
-                        {eGames.map((game, index) => {
-                            return <DisplayedGame
-                                key={index} 
-                                game={game}
-                                player={player}
-                                pickedBtn={pickedBtn}
-                                setPickedBtn={setPickedBtn}
+                    <tbody style={{
+                        width: "100%", whiteSpace:"noWrap", display:'flex'
+                    }}>
+                        <div>
+                            {eGames.map((game, index) => {
+                                return <DisplayedGame
+                                    key={index} 
+                                    game={game}
+                                    player={player}
+                                    pickedBtn={pickedBtn}
+                                    setPickedBtn={setPickedBtn}
+                                />
+                            })}
+                        </div>
+
+                        <div>
+                            <TeamMatchup 
+                                playerName={playerName}
+                                otherTeam='MOUZ'
+                                matches={eGames.filter((game) => game.team1 === "MOUZ" || game.team2 === "MOUZ")}
                             />
-                        })}
+                            <div style={{width:'500px', height:'200px'}}>
+                                <PreviousGamesBarChart 
+                                    maps={eGames.flatMap(game => game.maps)} 
+                                    pickedStat="kills" 
+                                    playerName={player.name}
+                                />
+                            </div>
+                        </div>
                     </tbody>
                 </table>
 

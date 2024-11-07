@@ -76,7 +76,8 @@ export class ESport {
 
 
     static fetchMatches = async (playerName: string, league: string): Promise<EGame2[]> => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/${league}/games/${playerName}`, {
+        // console.log("this shi", `${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/esport/matches/${league}/${playerName}`)
+        const res = await fetch(`${process.env.NEXT_PUBLIC_LOCAL_ROUTE}/esport/matches/${league}/${playerName}`, {
             method: 'GET', 
             headers: {
                 'Content-Type': 'application/json',

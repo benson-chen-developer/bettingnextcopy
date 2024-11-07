@@ -33,4 +33,22 @@ router.get("/players/cs", async (req, res) => {
     }
 });
 
+router.get("/matches/cs/:player", async (req, res) => {
+    const { player } = req.params; 
+
+    try {
+        const matches = await CSMatch.find({
+            "maps.players": { 
+                $elemMatch: { name: player }
+            }
+        });
+
+        res.status(200).json(matches);
+    } catch (err) {
+        console.error("Error fetching matches with player", err);
+        res.status(500).send({ message: "Error fetching matches with player" });
+    }
+});
+
+
 module.exports = router;
