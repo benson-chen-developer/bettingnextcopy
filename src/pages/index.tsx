@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { black } from '../data/colors'
 import Head from 'next/head';
 import { TrendingPage } from '../components/Home/Trending/TrendingPage';
-
+import '@fontsource/roboto'; // Defaults to weight 400
+import '@fontsource/comfortaa';
 
 const Trending = () => {
     const trendings = [

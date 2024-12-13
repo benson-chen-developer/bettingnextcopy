@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { ClipLoader } from 'react-spinners';
 import { useEffect } from 'react';
-import { PlayerType, WNBAPlayer } from '../../../Context/PlayerTypes';
+import { PlayerType, PPlayer, WNBAPlayer } from '../../../Context/PlayerTypes';
 import { searchPlayer } from '../../Nav/SearchBar/SearchBar';
 // import { PlayerPic } from '../../Nav/SearchBar/DropDown/PlayerDropDown';
 
@@ -110,6 +110,24 @@ export const findSimilarNames = (players: PlayerType[], firstName: string, lastN
     }
     
     return Array.from(foundPlayers);
+};
+
+export const findSimilarNamesNew = (players: PlayerType[], searchQuery: string): PlayerType[] => {
+    let foundPlayer = new Set<any>();
+    if(searchQuery.trim().length === 0) return [];
+
+    for (const player of players) {
+        const name = player.name;
+        const firstName = name.split(' ')[0];
+        const lastName = name.split(' ')[1] ? name.split(' ')[1] : '';
+
+        if (levenshteinDistance(firstName, searchQuery) <= 2) {
+            foundPlayer.add(player);
+        }
+        if (foundPlayer.size >= 5) break;
+    }
+    
+    return Array.from(foundPlayer);
 };
 
 /*

@@ -1,5 +1,5 @@
 import { SearchBar } from "../SearchBar/SearchBar"
-import { slide as Menu } from "react-burger-menu";
+// import { slide as Menu } from "react-burger-menu";
 
 export const LittleNavBar = () => {
     const showSettings = (event: React.MouseEvent<HTMLAnchorElement>) => {

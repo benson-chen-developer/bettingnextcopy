@@ -40,3 +40,10 @@
     top: 0;
     left: 0;
 }
+
+.suggestedPlayer{
+    background-color: #1E1E1E;
+}
+.suggestedPlayer:hover {
+    background-color: #2b2b2b;
+}

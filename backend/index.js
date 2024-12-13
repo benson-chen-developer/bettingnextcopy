@@ -11,6 +11,7 @@ const WNBARoute = require('./routes/WNBA');
 const RainbowRoute = require('./routes/Rainbow');
 const TrendingRoute = require('./routes/Trending');
 const EsportRoute = require('./routes/Esport');
+const PsportRoute = require('./routes/Psport');
 
 const app = express();
 app.use(cors());
@@ -21,6 +22,7 @@ app.use("/valorant", ValorantRoute);
 app.use("/wnba", WNBARoute);
 app.use('/rainbow', RainbowRoute);
 app.use('/esport', EsportRoute);
+app.use('/psport', PsportRoute);
 
 app.get('/mlbSchedule', async (req, res) => {
     const startDate = req.headers.startdate;

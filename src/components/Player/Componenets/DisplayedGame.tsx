@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { EGame2 } from "../../../Context/ESport"
 import { PlayerType } from "../../../Context/PlayerTypes"
-import { ESport } from "../ESport/Match"
+import { ESport } from "../SportClass/Esport"
 
 interface Props {
     game: EGame2

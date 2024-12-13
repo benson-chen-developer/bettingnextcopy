@@ -9,14 +9,13 @@
 */
 
 export type PlayerType = {
-    name: string,
+    name: string, //Either the gamername or full name
     playerId: string,
     team: string,
     sport: string
 }
-export type PPlayer = {
+export type PPlayer = PlayerType & {
     city: string,
-    number: string,
     position: string,
 }
 export type TrendingPlayer = PlayerType & {
@@ -43,14 +42,16 @@ export type EGame = Game & {
     }[]
 }
 export type PGame = Game & {
+    score: string,
     players : PGamePlayer[]
 }
 export type PGamePlayer =  {
     name: string,
     team: string,
-    stats: {name: string, count: number}[]
+    position? :string,
+    playerId: string,
+    periods: {name: string, value: number}[][]
 }
-
 
 /* */
 export type WNBAPlayer = PlayerType & {

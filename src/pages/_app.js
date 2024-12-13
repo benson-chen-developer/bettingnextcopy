@@ -6,6 +6,7 @@ import '../styles/SportDropDown.css';
 import '../styles/PlayerPage.css';
 import '../styles/Nav.css';
 import '../styles/Combo.css';
+import '@fontsource/roboto'; // Defaults to weight 400
 import { GlobalContextProvider } from '../Context/store'
 import Head from 'next/head';
 import { ComboBtn } from '../components/Combo/ComboBtn';
@@ -39,7 +40,7 @@ function App({ Component, pageProps }) {
 
         <main style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
           {/* Navigation bar */}
-          {!isMobile ? <NavBar /> : <LittleNavBar />}
+          {/* {!isMobile ? <NavBar /> : <LittleNavBar />} */}
 
           {/* Main content area, takes up remaining space */}
           <main style={{ flex: '1 0 auto' }}>

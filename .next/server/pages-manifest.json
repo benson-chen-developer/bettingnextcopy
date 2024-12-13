@@ -2,6 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/player/[paramLeague]/[paramPlayer]": "pages/player/[paramLeague]/[paramPlayer].js"
+  "/player/[paramSport]/[paramLeague]": "pages/player/[paramSport]/[paramLeague].js",
+  "/player/[paramSport]/[paramLeague]/[paramPlayer]": "pages/player/[paramSport]/[paramLeague]/[paramPlayer].js",
+  "/": "pages/index.js"
 }
